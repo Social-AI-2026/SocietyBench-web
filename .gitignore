@@ -1,0 +1,13 @@
+# Internal working docs - not for public
+uploads/
+screenshots/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Logs
+*.log
