@@ -25,7 +25,7 @@ class CrowdLinks {
 
     this.MAX_DX = 400;            // x-distance threshold between two people
     this.MAX_ALPHA = 0.5;
-    this.LINE_WIDTH = 1.5;
+    this.LINE_WIDTH = 3;
     this.PERSON_TARGET_MIN = 3;   // each person tries to keep 3-10 active links
     this.PERSON_TARGET_MAX = 10;
     this.SCAN_INTERVAL_MS = 300;  // how often we top up missing links per person
