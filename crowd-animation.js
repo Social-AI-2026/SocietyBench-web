@@ -294,12 +294,18 @@ class CrowdAnimation {
     // Store original duration for resume
     person.setAttribute('data-original-duration', `${speed}s`);
 
-    // Add image (flip horizontally for right-to-left). Use a CSS custom prop
-    // so the hover scale rule can compose with the flip.
+    // Add image (flip horizontally for right-to-left). Wrap in a bob layer
+    // so the walking translateX (outer) and bobbing translateY (wrapper)
+    // don't share a transform.
     const facingRight = direction === 'left-to-right';
     const flip = facingRight ? 1 : -1;
     person.style.setProperty('--flip', flip);
-    person.innerHTML = `<img src="figures/crowd/${randomImage}" style="transform: scaleX(${flip});" alt="person">`;
+    // Random negative delay so each person bobs out of phase with the rest.
+    const bobDelay = -Math.random() * 0.5;
+    person.innerHTML =
+      `<div class="crowd-person-bob" style="animation-delay: ${bobDelay}s;">` +
+        `<img src="figures/crowd/${randomImage}" style="transform: scaleX(${flip});" alt="person">` +
+      `</div>`;
 
     this.container.appendChild(person);
     this.people.push(person);
