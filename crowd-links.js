@@ -1,0 +1,220 @@
+// SocietyBench — Crowd Connection Lines
+// Draws fading colored lines between people's chest centers.
+
+class CrowdLinks {
+  constructor(container) {
+    this.container = container;
+    this.links = [];
+
+    this.canvas = document.createElement('canvas');
+    this.canvas.id = 'crowd-links';
+    this.ctx = this.canvas.getContext('2d');
+    container.insertBefore(this.canvas, container.firstChild);
+
+    // Color palette (RGB triples). Each new link picks one at random.
+    this.colors = [
+      [135, 206, 235], // sky blue
+      [33, 150, 243],  // bright blue
+      [255, 140, 0],   // orange
+      [156, 39, 176],  // purple
+      [233, 30, 99],   // pink
+      [76, 175, 80],   // green
+      [255, 215, 0],   // gold
+      [0, 188, 212],   // cyan
+    ];
+
+    this.MAX_DX = 400;            // x-distance threshold between two people
+    this.MAX_ALPHA = 0.5;
+    this.LINE_WIDTH = 1.5;
+    this.PERSON_TARGET_MIN = 3;   // each person tries to keep 3-10 active links
+    this.PERSON_TARGET_MAX = 10;
+    this.SCAN_INTERVAL_MS = 300;  // how often we top up missing links per person
+
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+
+    this._scanTimer = setInterval(() => this.tryAddLinks(), this.SCAN_INTERVAL_MS);
+    requestAnimationFrame((t) => this.draw(t));
+  }
+
+  resize() {
+    this.canvas.width = this.container.clientWidth;
+    this.canvas.height = this.container.clientHeight;
+  }
+
+  getPeople() {
+    return this.container.querySelectorAll('.crowd-person');
+  }
+
+  // Center point of a person, in viewport coords. Returns null if the
+  // element has been laid out to zero size (e.g. just removed).
+  getCenter(person) {
+    const rect = person.getBoundingClientRect();
+    if (rect.width === 0) return null;
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height * 0.55, // chest, slightly above geometric center
+    };
+  }
+
+  countActiveLinks(person) {
+    let n = 0;
+    for (let i = 0; i < this.links.length; i++) {
+      const l = this.links[i];
+      if (l.dying) continue;
+      if (l.a === person || l.b === person) n++;
+    }
+    return n;
+  }
+
+  hasLink(a, b) {
+    for (let i = 0; i < this.links.length; i++) {
+      const l = this.links[i];
+      if ((l.a === a && l.b === b) || (l.a === b && l.b === a)) return true;
+    }
+    return false;
+  }
+
+  tryAddLinks() {
+    const people = this.getPeople();
+    if (people.length < 2) return;
+
+    // Cache centers once per scan to avoid O(n^2) layout reads.
+    const centers = new Map();
+    for (let i = 0; i < people.length; i++) {
+      const c = this.getCenter(people[i]);
+      if (c) centers.set(people[i], c);
+    }
+
+    for (let i = 0; i < people.length; i++) {
+      const person = people[i];
+
+      // Assign a personal target once. Each person's "social appetite" varies.
+      if (person._targetLinks === undefined) {
+        const range = this.PERSON_TARGET_MAX - this.PERSON_TARGET_MIN + 1;
+        person._targetLinks = this.PERSON_TARGET_MIN + Math.floor(Math.random() * range);
+      }
+
+      const active = this.countActiveLinks(person);
+      if (active >= person._targetLinks) continue;
+
+      const aCenter = centers.get(person);
+      if (!aCenter) continue;
+
+      // Try a few random partners within x-distance threshold.
+      let partner = null;
+      for (let attempt = 0; attempt < 6; attempt++) {
+        const candidate = people[Math.floor(Math.random() * people.length)];
+        if (candidate === person) continue;
+        const cCenter = centers.get(candidate);
+        if (!cCenter) continue;
+        if (Math.abs(aCenter.x - cCenter.x) > this.MAX_DX) continue;
+        if (this.hasLink(person, candidate)) continue;
+        partner = candidate;
+        break;
+      }
+
+      if (partner) this.addLink(person, partner);
+    }
+  }
+
+  addLink(a, b) {
+    const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+    this.links.push({
+      a, b,
+      color,
+      bornAt: performance.now(),
+      fadeIn: 500,
+      hold: 2000 + Math.random() * 1000, // 2-3s hold
+      fadeOut: 800,
+      dying: false,
+      diedAt: 0,
+    });
+  }
+
+  draw(now) {
+    const ctx = this.ctx;
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    ctx.lineWidth = this.LINE_WIDTH;
+
+    const containerRect = this.container.getBoundingClientRect();
+    const containerLeft = containerRect.left;
+    const containerTop = containerRect.top;
+
+    // Per-frame center cache so two links sharing a person only do one
+    // getBoundingClientRect call.
+    const centerCache = new Map();
+    const getCachedCenter = (person) => {
+      let c = centerCache.get(person);
+      if (c === undefined) {
+        c = this.getCenter(person);
+        centerCache.set(person, c);
+      }
+      return c;
+    };
+
+    const survivors = [];
+    for (let i = 0; i < this.links.length; i++) {
+      const link = this.links[i];
+
+      // If either endpoint has been pulled from the DOM (person walked off
+      // and was removed by animationend), trigger graceful fadeout.
+      if (!link.a.isConnected || !link.b.isConnected) {
+        if (!link.dying) {
+          link.dying = true;
+          link.diedAt = now;
+        }
+      }
+
+      // Compute alpha based on lifecycle phase.
+      let alpha;
+      if (link.dying) {
+        const t = (now - link.diedAt) / link.fadeOut;
+        if (t >= 1) continue; // drop
+        alpha = (1 - t) * this.MAX_ALPHA;
+      } else {
+        const age = now - link.bornAt;
+        if (age < link.fadeIn) {
+          alpha = (age / link.fadeIn) * this.MAX_ALPHA;
+        } else if (age < link.fadeIn + link.hold) {
+          alpha = this.MAX_ALPHA;
+        } else if (age < link.fadeIn + link.hold + link.fadeOut) {
+          const t = (age - link.fadeIn - link.hold) / link.fadeOut;
+          alpha = (1 - t) * this.MAX_ALPHA;
+        } else {
+          continue; // drop
+        }
+      }
+
+      const aC = getCachedCenter(link.a);
+      const bC = getCachedCenter(link.b);
+      if (!aC || !bC) {
+        // Element gone but flag wasn't set yet; will be on next frame.
+        survivors.push(link);
+        continue;
+      }
+
+      const ax = aC.x - containerLeft;
+      const ay = aC.y - containerTop;
+      const bx = bC.x - containerLeft;
+      const by = bC.y - containerTop;
+
+      const c = link.color;
+      ctx.strokeStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha})`;
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(bx, by);
+      ctx.stroke();
+
+      survivors.push(link);
+    }
+    this.links = survivors;
+
+    requestAnimationFrame((t) => this.draw(t));
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('crowd-container');
+  if (container) new CrowdLinks(container);
+});
