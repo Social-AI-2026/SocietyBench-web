@@ -10,6 +10,8 @@ class CrowdAnimation {
     this.isDispersing = false; // Track if crowd is dispersing
     this._bubbleEl = null;
     this._bubbleTimer = null;
+    this._imageQueue = [];   // shuffled queue so all 36 images cycle before repeats
+    this._lastImage = null;
     this.questions = [
       // Markets & economy
       "Will it rain next week?",
@@ -358,6 +360,25 @@ class CrowdAnimation {
     if (this._bubbleEl) this._bubbleEl.classList.remove('show');
   }
 
+  nextImage() {
+    if (this._imageQueue.length === 0) {
+      // Fresh cycle: shuffle the full image list.
+      const imgs = this.getPersonImages().slice();
+      for (let i = imgs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [imgs[i], imgs[j]] = [imgs[j], imgs[i]];
+      }
+      // Avoid an obvious back-to-back repeat at the cycle boundary.
+      if (this._lastImage && imgs[0] === this._lastImage && imgs.length > 1) {
+        [imgs[0], imgs[1]] = [imgs[1], imgs[0]];
+      }
+      this._imageQueue = imgs;
+    }
+    const next = this._imageQueue.shift();
+    this._lastImage = next;
+    return next;
+  }
+
   // List of available person images
   getPersonImages() {
     return [
@@ -487,9 +508,8 @@ class CrowdAnimation {
     const person = document.createElement('div');
     person.className = `crowd-person crowd-walking crowd-${direction}`;
 
-    // Get random image from the list
-    const images = this.getPersonImages();
-    const randomImage = images[Math.floor(Math.random() * images.length)];
+    // Get next image from the shuffled queue (no repeats within a full cycle).
+    const randomImage = this.nextImage();
 
     const size = 200 + Math.random() * 100; // 200-300px (doubled from 100-150px)
     const speed = 15 + Math.random() * 15; // 15-30 seconds to cross screen
