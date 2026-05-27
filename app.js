@@ -49,6 +49,8 @@ function navigate(page, opts = {}) {
   document.body.removeAttribute("data-drawer");
   // scroll to top of main when switching pages
   window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  // Notify route-aware features (crowd, links) so they can start/stop.
+  window.dispatchEvent(new CustomEvent("sb:page-change", { detail: { page } }));
 }
 
 window.addEventListener("hashchange", () => navigate(parseHashRoute(), { silent: true }));

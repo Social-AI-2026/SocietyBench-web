@@ -35,8 +35,41 @@ class CrowdLinks {
     this.resize();
     window.addEventListener('resize', () => this.resize());
 
+    this._running = false;
+    this._rafId = null;
+    this.setupRouteSync();
+  }
+
+  isOnHomePage() {
+    const page = document.body.getAttribute('data-active-page');
+    return !page || page === 'overview';
+  }
+
+  setupRouteSync() {
+    window.addEventListener('sb:page-change', (e) => {
+      const page = e.detail && e.detail.page;
+      if (page === 'overview') this.start();
+      else this.stop();
+    });
+    if (this.isOnHomePage()) this.start();
+  }
+
+  start() {
+    if (this._running) return;
+    this._running = true;
+    this.canvas.style.display = '';
     this._scanTimer = setInterval(() => this.tryAddLinks(), this.SCAN_INTERVAL_MS);
-    requestAnimationFrame((t) => this.draw(t));
+    this._rafId = requestAnimationFrame((t) => this.draw(t));
+  }
+
+  stop() {
+    if (!this._running) return;
+    this._running = false;
+    if (this._scanTimer) { clearInterval(this._scanTimer); this._scanTimer = null; }
+    if (this._rafId) { cancelAnimationFrame(this._rafId); this._rafId = null; }
+    this.links = [];
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.canvas.style.display = 'none';
   }
 
   resize() {
@@ -291,7 +324,9 @@ class CrowdLinks {
     }
     this.links = survivors;
 
-    requestAnimationFrame((t) => this.draw(t));
+    if (this._running) {
+      this._rafId = requestAnimationFrame((t) => this.draw(t));
+    }
   }
 }
 

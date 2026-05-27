@@ -63,16 +63,54 @@ class CrowdAnimation {
   }
 
   init() {
-    this.startWalkingCrowd();
     this.setupMouseInteraction();
     this.setupScrollInteraction();
     this.setupClickDisperse();
-    // Page-load intro: people enter at 4x, then ease back to 1x over 5s.
+    this.setupRouteSync();
+  }
+
+  isOnHomePage() {
+    const page = document.body.getAttribute('data-active-page');
+    // Treat unset (very early boot) and 'overview' as the home page.
+    return !page || page === 'overview';
+  }
+
+  setupRouteSync() {
+    window.addEventListener('sb:page-change', (e) => {
+      const page = e.detail && e.detail.page;
+      if (page === 'overview') this.start();
+      else this.stop();
+    });
+    if (this.isOnHomePage()) this.start();
+  }
+
+  start() {
+    if (this._running) return;
+    this._running = true;
+    this.isDispersing = false;
+    this.container.style.display = '';
+    this.startWalkingCrowd();
+    // Page-load intro: people enter at 6x, then ease back to 1x over 5s.
+    this.currentRate = 6;
     this.tweenRate(1, 5000);
+  }
+
+  stop() {
+    if (!this._running) return;
+    this._running = false;
+    if (this.leftInterval) clearInterval(this.leftInterval);
+    if (this.rightInterval) clearInterval(this.rightInterval);
+    if (this._rateFrame) cancelAnimationFrame(this._rateFrame);
+    // Wipe everyone immediately so the canvas + DOM are clean for other pages.
+    this.people.forEach(p => p.remove());
+    this.people = [];
+    this.isDispersing = true;
+    this.container.style.display = 'none';
   }
 
   triggerDisperse() {
     if (this.isDispersing) return;
+    if (!this._running) return;
     this.isDispersing = true;
     if (this.leftInterval) clearInterval(this.leftInterval);
     if (this.rightInterval) clearInterval(this.rightInterval);
