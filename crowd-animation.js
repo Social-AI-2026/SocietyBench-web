@@ -83,7 +83,7 @@ class CrowdAnimation {
     // Any button or .btn click anywhere on the page kicks off the same
     // fast-disperse effect as scrolling past the threshold.
     document.addEventListener('click', (e) => {
-      const trigger = e.target.closest('button, .btn, .ctrl-btn');
+      const trigger = e.target.closest('button, .btn, .ctrl-btn, a, .sidebar nav li');
       if (!trigger) return;
       this.triggerDisperse();
     });
