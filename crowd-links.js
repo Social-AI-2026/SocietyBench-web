@@ -141,6 +141,9 @@ class CrowdLinks {
     const containerLeft = containerRect.left;
     const containerTop = containerRect.top;
 
+    // If any person is being hovered, only show that person's lines.
+    const hovered = this.container.querySelector('.crowd-person.highlighted');
+
     // Per-frame center cache so two links sharing a person only do one
     // getBoundingClientRect call.
     const centerCache = new Map();
@@ -165,6 +168,10 @@ class CrowdLinks {
           link.diedAt = now;
         }
       }
+
+      // When a person is hovered, hide all lines that don't touch them
+      // (but keep their lifecycle running so they resume cleanly on unhover).
+      const hiddenByFocus = hovered && link.a !== hovered && link.b !== hovered;
 
       // Compute alpha based on lifecycle phase.
       let alpha;
@@ -204,7 +211,7 @@ class CrowdLinks {
       ctx.beginPath();
       ctx.moveTo(ax, ay);
       ctx.lineTo(bx, by);
-      ctx.stroke();
+      if (!hiddenByFocus) ctx.stroke();
 
       survivors.push(link);
     }
