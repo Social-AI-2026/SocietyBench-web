@@ -8,6 +8,27 @@ class CrowdAnimation {
     this.currentRate = 6;     // start at 6x speed, eased back to 1x on load
     this._rateFrame = null;
     this.isDispersing = false; // Track if crowd is dispersing
+    this._bubbleEl = null;
+    this._bubbleTimer = null;
+    this.questions = [
+      "下周会下雨吗？",
+      "他会赢吗？",
+      "这事会成真吗？",
+      "趋势会延续吗？",
+      "加息还是降息？",
+      "谁是赢家？",
+      "政策什么时候出？",
+      "还能反弹吗？",
+      "会有黑天鹅吗？",
+      "这次能预测对吗？",
+      "多久能见分晓？",
+      "下一步去哪？",
+      "真的会变吗？",
+      "共识还是分歧？",
+      "明年会更好吗？",
+      "什么时候上市？",
+      "AI 会替代我吗？",
+    ];
     this.init();
   }
 
@@ -110,6 +131,8 @@ class CrowdAnimation {
     if (this.leftInterval) clearInterval(this.leftInterval);
     if (this.rightInterval) clearInterval(this.rightInterval);
     if (this._rateFrame) cancelAnimationFrame(this._rateFrame);
+    if (this._bubbleTimer) { clearTimeout(this._bubbleTimer); this._bubbleTimer = null; }
+    this.hideBubble();
     // Wipe everyone immediately so the canvas + DOM are clean for other pages.
     this.people.forEach(p => p.remove());
     this.people = [];
@@ -196,6 +219,9 @@ class CrowdAnimation {
       person._isHovered = true;
       this.container.classList.add('person-hovered');
       person.classList.add('highlighted');
+      // After things settle (scale-up + walk/bob pause), show a thought bubble.
+      if (this._bubbleTimer) clearTimeout(this._bubbleTimer);
+      this._bubbleTimer = setTimeout(() => this.showBubble(person), 500);
     });
 
     this.container.addEventListener('mouseout', (e) => {
@@ -206,7 +232,32 @@ class CrowdAnimation {
       person._isHovered = false;
       person.classList.remove('highlighted');
       this.container.classList.remove('person-hovered');
+      if (this._bubbleTimer) { clearTimeout(this._bubbleTimer); this._bubbleTimer = null; }
+      this.hideBubble();
     });
+  }
+
+  showBubble(person) {
+    if (!person.isConnected || !person._isHovered) return;
+    const q = this.questions[Math.floor(Math.random() * this.questions.length)];
+    if (!this._bubbleEl) {
+      this._bubbleEl = document.createElement('div');
+      this._bubbleEl.className = 'crowd-thought-bubble';
+      document.body.appendChild(this._bubbleEl);
+    }
+    this._bubbleEl.textContent = q;
+    const img = person.querySelector('img');
+    if (!img) return;
+    const rect = img.getBoundingClientRect();
+    this._bubbleEl.style.left = `${rect.left + rect.width / 2}px`;
+    this._bubbleEl.style.top = `${rect.top - 24}px`;
+    // Force reflow so the transition kicks in even on rapid re-show.
+    void this._bubbleEl.offsetWidth;
+    this._bubbleEl.classList.add('show');
+  }
+
+  hideBubble() {
+    if (this._bubbleEl) this._bubbleEl.classList.remove('show');
   }
 
   // List of available person images
