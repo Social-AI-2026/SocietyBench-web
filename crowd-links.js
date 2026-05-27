@@ -23,7 +23,9 @@ class CrowdLinks {
       [0, 188, 212],   // cyan
     ];
 
-    this.MAX_DX = 400;            // x-distance threshold between two people
+    this.NEAR_DX = 400;           // <= 400px: always eligible to connect
+    this.FAR_DX = 800;            // 400-800px: eligible with FAR_PROB chance
+    this.FAR_PROB = 0.5;          // probability of connecting in the far band
     this.MAX_ALPHA = 1;
     this.LINE_WIDTH = 4;
     this.ENDPOINT_RADIUS = 5;     // solid dot at each line endpoint
@@ -165,14 +167,17 @@ class CrowdLinks {
       const aCenter = centers.get(person);
       if (!aCenter) continue;
 
-      // Try a few random partners within x-distance threshold.
+      // Try a few random partners. Anyone within NEAR_DX is always fair game;
+      // anyone in the (NEAR_DX, FAR_DX] band is eligible with FAR_PROB.
       let partner = null;
       for (let attempt = 0; attempt < 6; attempt++) {
         const candidate = people[Math.floor(Math.random() * people.length)];
         if (candidate === person) continue;
         const cCenter = centers.get(candidate);
         if (!cCenter) continue;
-        if (Math.abs(aCenter.x - cCenter.x) > this.MAX_DX) continue;
+        const dx = Math.abs(aCenter.x - cCenter.x);
+        if (dx > this.FAR_DX) continue;
+        if (dx > this.NEAR_DX && Math.random() >= this.FAR_PROB) continue;
         if (this.hasLink(person, candidate)) continue;
         partner = candidate;
         break;
