@@ -301,7 +301,7 @@ class CrowdAnimation {
     const flip = facingRight ? 1 : -1;
     person.style.setProperty('--flip', flip);
     // Random negative delay so each person bobs out of phase with the rest.
-    const bobDelay = -Math.random() * 0.5;
+    const bobDelay = -Math.random() * 1;
     person.innerHTML =
       `<div class="crowd-person-bob" style="animation-delay: ${bobDelay}s;">` +
         `<img src="figures/crowd/${randomImage}" style="transform: scaleX(${flip});" alt="person">` +

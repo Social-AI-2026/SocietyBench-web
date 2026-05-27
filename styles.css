@@ -112,13 +112,18 @@ img { max-width: 100%; display: block; }
 .crowd-person-bob {
   width: 100%;
   height: 100%;
-  animation: crowd-bob 0.5s ease-in-out infinite alternate;
+  animation: crowd-bob 1s ease-in-out infinite alternate;
   will-change: transform;
 }
 
 @keyframes crowd-bob {
   from { transform: translateY(0); }
-  to   { transform: translateY(-4px); }
+  to   { transform: translateY(-5px); }
+}
+
+/* Pause bob when crowd is hovered, just like the walk slows to 0. */
+#crowd-container:hover .crowd-person-bob {
+  animation-play-state: paused;
 }
 
 /* Slowing down state - gradually reduce speed */
