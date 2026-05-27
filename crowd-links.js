@@ -139,9 +139,6 @@ class CrowdLinks {
   }
 
   tryAddLinks() {
-    // Freeze the whole link world while a person is being inspected.
-    if (this.container.querySelector('.crowd-person.highlighted')) return;
-
     const people = this.getPeople();
     if (people.length < 2) return;
 
@@ -212,21 +209,7 @@ class CrowdLinks {
 
     // If any person is being hovered, only show that person's lines.
     const hovered = this.container.querySelector('.crowd-person.highlighted');
-
-    // Freeze lifecycle math while hovered: when entering hover, remember the
-    // freeze start; when leaving, shift every link's bornAt/diedAt by the
-    // frozen duration so they resume exactly where they paused.
-    if (hovered && this._frozenAt === undefined) {
-      this._frozenAt = now;
-    } else if (!hovered && this._frozenAt !== undefined) {
-      const delta = now - this._frozenAt;
-      for (let i = 0; i < this.links.length; i++) {
-        this.links[i].bornAt += delta;
-        if (this.links[i].dying) this.links[i].diedAt += delta;
-      }
-      this._frozenAt = undefined;
-    }
-    const effNow = this._frozenAt !== undefined ? this._frozenAt : now;
+    const effNow = now;
 
     // Per-frame center cache so two links sharing a person only do one
     // getBoundingClientRect call.
