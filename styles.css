@@ -74,22 +74,26 @@ img { max-width: 100%; display: block; }
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   display: flex;
   align-items: flex-end;
-  transition: opacity 0.1s ease, transform 0.15s ease, filter 0.15s ease;
+  transition: opacity 0.1s ease, filter 0.15s ease;
   cursor: pointer;
+  will-change: transform;
 }
 
 /* When container has a hovered person, dim all people by default */
 #crowd-container.person-hovered .crowd-person {
   opacity: 0.3 !important;
-  transition: opacity 0.2s ease, transform 0.15s ease, filter 0.15s ease;
+  transition: opacity 0.2s ease, filter 0.15s ease;
 }
 
-/* The highlighted person stays bright and enlarged */
+/* The highlighted person: scale via inner img so we don't fight the
+   translateX walk animation on the outer element. */
 #crowd-container.person-hovered .crowd-person.highlighted {
   opacity: 1 !important;
-  transform: scale(1.2) !important;
   filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5)) !important;
   z-index: 100;
+}
+#crowd-container.person-hovered .crowd-person.highlighted img {
+  transform: scaleX(var(--flip, 1)) scale(1.2);
 }
 
 .crowd-person svg,
@@ -99,6 +103,8 @@ img { max-width: 100%; display: block; }
   display: block;
   object-fit: contain;
   object-position: bottom;
+  transform-origin: bottom center;
+  transition: transform 0.15s ease;
 }
 
 /* Slowing down state - gradually reduce speed */
@@ -111,34 +117,26 @@ img { max-width: 100%; display: block; }
   animation-play-state: paused !important;
 }
 
-/* Walking animation - left to right */
+/* Walking animation - left to right (GPU-composited via transform) */
 .crowd-left-to-right {
-  left: -500px;
+  left: 0;
   animation: walk-left-to-right linear forwards;
 }
 
 @keyframes walk-left-to-right {
-  0% {
-    left: -500px;
-  }
-  100% {
-    left: calc(100% + 500px);
-  }
+  0%   { transform: translateX(-500px); }
+  100% { transform: translateX(calc(100vw + 500px)); }
 }
 
 /* Walking animation - right to left */
 .crowd-right-to-left {
-  right: -500px;
+  right: 0;
   animation: walk-right-to-left linear forwards;
 }
 
 @keyframes walk-right-to-left {
-  0% {
-    right: -500px;
-  }
-  100% {
-    right: calc(100% + 500px);
-  }
+  0%   { transform: translateX(500px); }
+  100% { transform: translateX(calc(-100vw - 500px)); }
 }
 
 /* ============================== SHELL LAYOUT ===============================

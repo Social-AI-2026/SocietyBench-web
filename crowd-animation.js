@@ -17,21 +17,20 @@ class CrowdAnimation {
   }
 
   applyRateTo(person) {
-    const anims = person.getAnimations ? person.getAnimations() : [];
-    console.log(`Applying rate ${this.currentRate} to person, found ${anims.length} animations`);
+    let anims = person._cachedAnims;
+    if (!anims || anims.length === 0) {
+      anims = person.getAnimations ? person.getAnimations() : [];
+      if (anims.length > 0) person._cachedAnims = anims;
+    }
     if (anims.length === 0) {
-      // Fallback: directly modify animation via CSS if getAnimations doesn't work
-      const currentDuration = person.style.animationDuration;
-      if (currentDuration) {
-        const originalDuration = parseFloat(person.getAttribute('data-original-duration'));
-        if (originalDuration) {
-          const newDuration = originalDuration / this.currentRate;
-          person.style.animationDuration = `${newDuration}s`;
-          console.log(`Fallback: Changed duration from ${originalDuration}s to ${newDuration}s`);
-        }
+      const originalDuration = parseFloat(person.getAttribute('data-original-duration'));
+      if (originalDuration) {
+        person.style.animationDuration = `${originalDuration / this.currentRate}s`;
       }
-    } else {
-      anims.forEach(a => { a.playbackRate = this.currentRate; });
+      return;
+    }
+    for (let i = 0; i < anims.length; i++) {
+      anims[i].playbackRate = this.currentRate;
     }
   }
 
@@ -40,12 +39,20 @@ class CrowdAnimation {
     if (this._rateFrame) cancelAnimationFrame(this._rateFrame);
     const fromRate = this.currentRate;
     const startTime = performance.now();
+    let lastApplied = fromRate;
 
     const tick = (now) => {
       const t = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      const eased = 1 - Math.pow(1 - t, 3);
       this.currentRate = fromRate + (toRate - fromRate) * eased;
-      this.applyRateToAll();
+
+      // Only push rate to DOM when it actually shifts meaningfully — drops the
+      // 60fps-per-person DOM thrash during the 5s page-load ease-in.
+      if (Math.abs(this.currentRate - lastApplied) > 0.05 || t === 1) {
+        this.applyRateToAll();
+        lastApplied = this.currentRate;
+      }
+
       if (t < 1) {
         this._rateFrame = requestAnimationFrame(tick);
       } else {
@@ -64,26 +71,16 @@ class CrowdAnimation {
   }
 
   setupScrollInteraction() {
-    const scrollThreshold = 100; // Scroll down 100px to trigger
+    const scrollThreshold = 100;
 
     window.addEventListener('scroll', () => {
-      const currentScrollY = window.scrollY;
-
-      // If scrolled down more than threshold and hasn't started dispersing yet
-      if (currentScrollY > scrollThreshold && !this.isDispersing) {
-        console.log('📜 Scrolled down - stopping new people and accelerating existing to 35x speed');
+      if (window.scrollY > scrollThreshold && !this.isDispersing) {
         this.isDispersing = true;
-
-        // Stop generating new people
         if (this.leftInterval) clearInterval(this.leftInterval);
         if (this.rightInterval) clearInterval(this.rightInterval);
-
-        // Accelerate existing people to 35x speed to finish their journey
-        this.tweenRate(35, 500); // Quickly ramp up to 35x speed in 0.5s
-
-        // No container fadeout - people just exit naturally at high speed
+        this.tweenRate(35, 500);
       }
-    });
+    }, { passive: true });
   }
 
   disperseCrowd() {
@@ -117,42 +114,36 @@ class CrowdAnimation {
   }
 
   setupMouseInteraction() {
-    // Container-level interaction (slow down all people)
     this.container.addEventListener('mouseenter', () => {
-      console.log('🖱️ Mouse entered crowd area - slowing down');
-      this.tweenRate(0, 2000); // 2s smooth slowdown to a full stop
+      this.tweenRate(0, 2000);
     });
 
     this.container.addEventListener('mouseleave', () => {
-      console.log('🖱️ Mouse left crowd area - resuming');
-      this.tweenRate(1, 800); // 0.8s smooth resume to normal speed
+      this.tweenRate(1, 800);
     });
 
-    // Individual person hover interaction
     this.setupPersonHoverEffects();
   }
 
   setupPersonHoverEffects() {
-    // Add hover listeners to each person individually
-    const addHoverListeners = (person) => {
-      person.addEventListener('mouseenter', () => {
-        console.log('✨ Mouse entered person');
-        this.container.classList.add('person-hovered');
-        person.classList.add('highlighted');
-      });
+    // Event delegation: one set of listeners on the container, not 100 per-person.
+    this.container.addEventListener('mouseover', (e) => {
+      const person = e.target.closest('.crowd-person');
+      if (!person || person._isHovered) return;
+      person._isHovered = true;
+      this.container.classList.add('person-hovered');
+      person.classList.add('highlighted');
+    });
 
-      person.addEventListener('mouseleave', () => {
-        console.log('🔄 Mouse left person');
-        this.container.classList.remove('person-hovered');
-        person.classList.remove('highlighted');
-      });
-    };
-
-    // Add listeners to existing people
-    this.people.forEach(person => addHoverListeners(person));
-
-    // Store the function so we can use it for new people
-    this._addHoverListeners = addHoverListeners;
+    this.container.addEventListener('mouseout', (e) => {
+      const person = e.target.closest('.crowd-person');
+      if (!person) return;
+      // Ignore moves between child elements of the same person.
+      if (person.contains(e.relatedTarget)) return;
+      person._isHovered = false;
+      person.classList.remove('highlighted');
+      this.container.classList.remove('person-hovered');
+    });
   }
 
   // List of available person images
@@ -303,18 +294,15 @@ class CrowdAnimation {
     // Store original duration for resume
     person.setAttribute('data-original-duration', `${speed}s`);
 
-    // Add image (flip horizontally for right-to-left)
+    // Add image (flip horizontally for right-to-left). Use a CSS custom prop
+    // so the hover scale rule can compose with the flip.
     const facingRight = direction === 'left-to-right';
-    const flipStyle = facingRight ? '' : 'transform: scaleX(-1);';
-    person.innerHTML = `<img src="figures/crowd/${randomImage}" style="width: 100%; height: 100%; object-fit: contain; ${flipStyle}" alt="person">`;
+    const flip = facingRight ? 1 : -1;
+    person.style.setProperty('--flip', flip);
+    person.innerHTML = `<img src="figures/crowd/${randomImage}" style="transform: scaleX(${flip});" alt="person">`;
 
     this.container.appendChild(person);
     this.people.push(person);
-
-    // Add hover listeners to this new person
-    if (this._addHoverListeners) {
-      this._addHoverListeners(person);
-    }
 
     // Sync this new person to the current crowd-wide playback rate, so people
     // spawned while the mouse is hovering still come in slow.
@@ -438,7 +426,6 @@ class CrowdAnimation {
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('crowd-container');
   if (container) {
-    console.log('🎭 Initializing walking crowd animation');
     new CrowdAnimation(container);
   }
 });

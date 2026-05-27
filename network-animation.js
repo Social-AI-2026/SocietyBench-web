@@ -32,10 +32,8 @@ class NetworkAnimation {
   }
 
   init() {
-    console.log('🚀 Initializing network animation');
     this.resize();
     this.createNodes();
-    console.log(`✨ Created ${this.nodes.length} nodes`);
   }
 
   resize() {
@@ -104,115 +102,108 @@ class NetworkAnimation {
   }
 
   updateNodes() {
-    this.nodes.forEach(node => {
-      // Update position
+    const mx = this.mouse.x, my = this.mouse.y;
+    const hasMouse = mx !== null && my !== null;
+    const r = this.config.mouseRadius;
+    const r2 = r * r;
+    const w = this.canvas.width, h = this.canvas.height;
+
+    for (let i = 0; i < this.nodes.length; i++) {
+      const node = this.nodes[i];
       node.x += node.vx;
       node.y += node.vy;
 
-      // Bounce off edges
-      if (node.x < 0 || node.x > this.canvas.width) {
+      if (node.x < 0 || node.x > w) {
         node.vx *= -1;
-        node.x = Math.max(0, Math.min(this.canvas.width, node.x));
+        if (node.x < 0) node.x = 0; else if (node.x > w) node.x = w;
       }
-      if (node.y < 0 || node.y > this.canvas.height) {
+      if (node.y < 0 || node.y > h) {
         node.vy *= -1;
-        node.y = Math.max(0, Math.min(this.canvas.height, node.y));
+        if (node.y < 0) node.y = 0; else if (node.y > h) node.y = h;
       }
 
-      // Mouse interaction - nodes move away from cursor
-      if (this.mouse.x !== null && this.mouse.y !== null) {
-        const dx = node.x - this.mouse.x;
-        const dy = node.y - this.mouse.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < this.config.mouseRadius) {
-          const force = (this.config.mouseRadius - distance) / this.config.mouseRadius;
+      // Cache mouse distance once per frame for reuse in drawConnections/drawNodes.
+      if (hasMouse) {
+        const dx = node.x - mx, dy = node.y - my;
+        const d2 = dx * dx + dy * dy;
+        node._d2 = d2;
+        node._near = d2 < r2;
+        if (node._near) {
+          const distance = Math.sqrt(d2);
+          const force = (r - distance) / r;
           node.x += (dx / distance) * force * 2;
           node.y += (dy / distance) * force * 2;
         }
+      } else {
+        node._d2 = Infinity;
+        node._near = false;
       }
-    });
+    }
   }
 
   drawConnections() {
-    const { connectionDistance, colors } = this.config;
+    const { connectionDistance } = this.config;
+    const cd2 = connectionDistance * connectionDistance;
+    const ctx = this.ctx;
+    const nodes = this.nodes;
 
-    for (let i = 0; i < this.nodes.length; i++) {
-      for (let j = i + 1; j < this.nodes.length; j++) {
-        const nodeA = this.nodes[i];
-        const nodeB = this.nodes[j];
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 >= cd2) continue;
 
-        const dx = nodeA.x - nodeB.x;
-        const dy = nodeA.y - nodeB.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distance = Math.sqrt(d2);
+        const opacity = 1 - distance / connectionDistance;
+        const isActive = a._near || b._near;
 
-        if (distance < connectionDistance) {
-          const opacity = 1 - (distance / connectionDistance);
-
-          // Check if either node is near mouse
-          let isActive = false;
-          if (this.mouse.x !== null && this.mouse.y !== null) {
-            const distA = Math.sqrt(
-              Math.pow(nodeA.x - this.mouse.x, 2) +
-              Math.pow(nodeA.y - this.mouse.y, 2)
-            );
-            const distB = Math.sqrt(
-              Math.pow(nodeB.x - this.mouse.x, 2) +
-              Math.pow(nodeB.y - this.mouse.y, 2)
-            );
-            isActive = distA < this.config.mouseRadius || distB < this.config.mouseRadius;
-          }
-
-          this.ctx.beginPath();
-          this.ctx.moveTo(nodeA.x, nodeA.y);
-          this.ctx.lineTo(nodeB.x, nodeB.y);
-          this.ctx.strokeStyle = isActive
-            ? colors.lineActive.replace('0.4', `${opacity * 0.6}`)
-            : colors.line.replace('0.15', `${opacity * 0.15}`);
-          this.ctx.lineWidth = isActive ? 1.5 : 1;
-          this.ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        if (isActive) {
+          ctx.strokeStyle = `rgba(33, 150, 243, ${opacity * 0.6})`;
+          ctx.lineWidth = 1.5;
+        } else {
+          ctx.strokeStyle = `rgba(33, 150, 243, ${opacity * 0.15})`;
+          ctx.lineWidth = 1;
         }
+        ctx.stroke();
       }
     }
   }
 
   drawNodes() {
     const { colors, mouseRadius } = this.config;
+    const ctx = this.ctx;
+    const nodes = this.nodes;
 
-    this.nodes.forEach(node => {
-      let isNearMouse = false;
-      let distanceToMouse = Infinity;
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      const isNearMouse = node._near;
 
-      if (this.mouse.x !== null && this.mouse.y !== null) {
-        const dx = node.x - this.mouse.x;
-        const dy = node.y - this.mouse.y;
-        distanceToMouse = Math.sqrt(dx * dx + dy * dy);
-        isNearMouse = distanceToMouse < mouseRadius;
-      }
-
-      // Draw glow for nodes near mouse
       if (isNearMouse) {
+        const distanceToMouse = Math.sqrt(node._d2);
         const glowSize = node.radius + 8 * (1 - distanceToMouse / mouseRadius);
-        this.ctx.beginPath();
-        this.ctx.arc(node.x, node.y, glowSize, 0, Math.PI * 2);
-        this.ctx.fillStyle = colors.highlight + '40'; // 25% opacity
-        this.ctx.fill();
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, glowSize, 0, Math.PI * 2);
+        ctx.fillStyle = colors.highlight + '40';
+        ctx.fill();
       }
 
-      // Draw main node with its own color
-      this.ctx.beginPath();
-      this.ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-      this.ctx.fillStyle = isNearMouse ? colors.highlight : node.color;
-      this.ctx.fill();
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      ctx.fillStyle = isNearMouse ? colors.highlight : node.color;
+      ctx.fill();
 
-      // Draw subtle glow using node's own color
       if (!isNearMouse) {
-        this.ctx.beginPath();
-        this.ctx.arc(node.x, node.y, node.radius + 2, 0, Math.PI * 2);
-        this.ctx.fillStyle = node.color + '30'; // 20% opacity
-        this.ctx.fill();
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius + 2, 0, Math.PI * 2);
+        ctx.fillStyle = node.color + '30';
+        ctx.fill();
       }
-    });
+    }
   }
 
   draw() {
@@ -235,13 +226,6 @@ class NetworkAnimation {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🎨 Network animation script loaded');
   const canvas = document.getElementById('network-canvas');
-  console.log('📍 Canvas element:', canvas);
-  if (canvas) {
-    console.log('✅ Starting network animation...');
-    new NetworkAnimation(canvas);
-  } else {
-    console.error('❌ Canvas element not found!');
-  }
+  if (canvas) new NetworkAnimation(canvas);
 });
