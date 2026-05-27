@@ -48,14 +48,40 @@ class CrowdLinks {
     return this.container.querySelectorAll('.crowd-person');
   }
 
-  // Center point of a person, in viewport coords. Returns null if the
-  // element has been laid out to zero size (e.g. just removed).
+  // Center point of a person's actual rendered figure, in viewport coords.
+  // The container is a tall box and the image uses object-fit:contain with
+  // object-position:bottom — so for shorter figures the visible art sits in
+  // the bottom slice of the container. We compute the real rendered area
+  // from naturalWidth/Height and return its center, not the container's.
   getCenter(person) {
     const rect = person.getBoundingClientRect();
     if (rect.width === 0) return null;
+
+    const img = person.querySelector('img');
+    if (!img || !img.naturalWidth || !img.naturalHeight) {
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height * 0.5 };
+    }
+    const imgRect = img.getBoundingClientRect();
+    const boxW = imgRect.width;
+    const boxH = imgRect.height;
+    const natRatio = img.naturalWidth / img.naturalHeight;
+    const boxRatio = boxW / boxH;
+
+    let renderedW, renderedH;
+    if (natRatio > boxRatio) {
+      renderedW = boxW;
+      renderedH = boxW / natRatio;
+    } else {
+      renderedH = boxH;
+      renderedW = boxH * natRatio;
+    }
+    // object-position: bottom — art is anchored to bottom of imgRect.
+    const renderedBottom = imgRect.bottom;
+    const renderedTop = renderedBottom - renderedH;
+    const renderedLeft = imgRect.left + (boxW - renderedW) / 2;
     return {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height * 0.5, // geometric center of the figure
+      x: renderedLeft + renderedW / 2,
+      y: renderedTop + renderedH / 2,
     };
   }
 
