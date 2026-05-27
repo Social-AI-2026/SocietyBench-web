@@ -12,6 +12,21 @@
 </head>
 <body data-active-page="overview">
 
+  <!-- Password gate (private preview) -->
+  <div id="auth-gate" aria-hidden="false">
+    <form id="auth-form" autocomplete="off">
+      <div class="auth-brand">
+        <span class="brand-mark"></span>
+        SOCIETYBENCH
+      </div>
+      <h1 class="auth-title">PRIVATE PREVIEW</h1>
+      <p class="auth-sub">Project page in development. Enter the access password to continue.</p>
+      <input type="password" id="auth-input" placeholder="Password" autocomplete="off" autofocus />
+      <button type="submit" class="auth-btn">▸ UNLOCK</button>
+      <p class="auth-err" id="auth-err">Wrong password.</p>
+    </form>
+  </div>
+
   <!-- Network animation canvas (background layer) -->
   <canvas id="network-canvas"></canvas>
 
@@ -777,5 +792,52 @@ Accepted events join the official catalog and ship in the next benchmark version
   <script src="app.js"></script>
   <script src="network-animation.js"></script>
   <script src="crowd-animation.js"></script>
+
+  <script>
+    (function () {
+      var EXPECTED = '91bc9e0e236a85c2c19c60a66e6431f1929a67f34c8160bd64023e63a1689778';
+      var STORAGE_KEY = 'sb_unlocked_v1';
+      var gate = document.getElementById('auth-gate');
+      var form = document.getElementById('auth-form');
+      var input = document.getElementById('auth-input');
+      var err = document.getElementById('auth-err');
+
+      function unlock() {
+        gate.classList.add('auth-fadeout');
+        setTimeout(function () { gate.remove(); }, 400);
+        document.documentElement.classList.remove('auth-locked');
+      }
+
+      async function sha256(text) {
+        var buf = new TextEncoder().encode(text);
+        var hash = await crypto.subtle.digest('SHA-256', buf);
+        return Array.from(new Uint8Array(hash))
+          .map(function (b) { return b.toString(16).padStart(2, '0'); })
+          .join('');
+      }
+
+      if (localStorage.getItem(STORAGE_KEY) === '1') {
+        unlock();
+        return;
+      }
+      document.documentElement.classList.add('auth-locked');
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var hex = await sha256(input.value);
+        if (hex === EXPECTED) {
+          localStorage.setItem(STORAGE_KEY, '1');
+          unlock();
+        } else {
+          err.style.opacity = '1';
+          input.value = '';
+          input.focus();
+          form.classList.remove('auth-shake');
+          void form.offsetWidth;
+          form.classList.add('auth-shake');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
