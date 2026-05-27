@@ -89,10 +89,19 @@ class CrowdAnimation {
     this._running = true;
     this.isDispersing = false;
     this.container.style.display = '';
-    this.startWalkingCrowd();
-    // Page-load intro: people enter at 6x, then ease back to 1x over 5s.
-    this.currentRate = 6;
-    this.tweenRate(1, 5000);
+    if (this._hasBooted) {
+      // Re-entry from another page: keep playback at normal speed, no
+      // 6x-into-1x intro replay.
+      this.currentRate = 1;
+      this.startWalkingCrowd();
+      this.applyRateToAll();
+    } else {
+      // First boot: 6x intro that eases back to 1x over 5s.
+      this._hasBooted = true;
+      this.currentRate = 6;
+      this.startWalkingCrowd();
+      this.tweenRate(1, 5000);
+    }
   }
 
   stop() {
