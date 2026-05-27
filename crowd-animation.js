@@ -66,19 +66,35 @@ class CrowdAnimation {
     this.startWalkingCrowd();
     this.setupMouseInteraction();
     this.setupScrollInteraction();
+    this.setupClickDisperse();
     // Page-load intro: people enter at 4x, then ease back to 1x over 5s.
     this.tweenRate(1, 5000);
+  }
+
+  triggerDisperse() {
+    if (this.isDispersing) return;
+    this.isDispersing = true;
+    if (this.leftInterval) clearInterval(this.leftInterval);
+    if (this.rightInterval) clearInterval(this.rightInterval);
+    this.tweenRate(35, 500);
+  }
+
+  setupClickDisperse() {
+    // Any button or .btn click anywhere on the page kicks off the same
+    // fast-disperse effect as scrolling past the threshold.
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('button, .btn, .ctrl-btn');
+      if (!trigger) return;
+      this.triggerDisperse();
+    });
   }
 
   setupScrollInteraction() {
     const scrollThreshold = 100;
 
     window.addEventListener('scroll', () => {
-      if (window.scrollY > scrollThreshold && !this.isDispersing) {
-        this.isDispersing = true;
-        if (this.leftInterval) clearInterval(this.leftInterval);
-        if (this.rightInterval) clearInterval(this.rightInterval);
-        this.tweenRate(35, 500);
+      if (window.scrollY > scrollThreshold) {
+        this.triggerDisperse();
       }
     }, { passive: true });
   }
