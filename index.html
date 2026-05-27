@@ -796,7 +796,7 @@ Accepted events join the official catalog and ship in the next benchmark version
   <script>
     (function () {
       var EXPECTED = '88818f9de5d9aaf7489e3735e17671196e5c64ffc92131706878e01ae890d8d9';
-      var STORAGE_KEY = 'sb_unlocked_v1';
+      var STORAGE_KEY = 'sb_pwd_hash';
       var gate = document.getElementById('auth-gate');
       var form = document.getElementById('auth-form');
       var input = document.getElementById('auth-input');
@@ -816,7 +816,9 @@ Accepted events join the official catalog and ship in the next benchmark version
           .join('');
       }
 
-      if (localStorage.getItem(STORAGE_KEY) === '1') {
+      // Check if stored hash matches current expected hash
+      var storedHash = localStorage.getItem(STORAGE_KEY);
+      if (storedHash === EXPECTED) {
         unlock();
         return;
       }
@@ -826,7 +828,7 @@ Accepted events join the official catalog and ship in the next benchmark version
         e.preventDefault();
         var hex = await sha256(input.value);
         if (hex === EXPECTED) {
-          localStorage.setItem(STORAGE_KEY, '1');
+          localStorage.setItem(STORAGE_KEY, hex);
           unlock();
         } else {
           err.style.opacity = '1';
