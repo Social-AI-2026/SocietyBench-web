@@ -76,6 +76,9 @@ class CrowdLinks {
   }
 
   tryAddLinks() {
+    // Freeze the whole link world while a person is being inspected.
+    if (this.container.querySelector('.crowd-person.highlighted')) return;
+
     const people = this.getPeople();
     if (people.length < 2) return;
 
@@ -144,6 +147,21 @@ class CrowdLinks {
     // If any person is being hovered, only show that person's lines.
     const hovered = this.container.querySelector('.crowd-person.highlighted');
 
+    // Freeze lifecycle math while hovered: when entering hover, remember the
+    // freeze start; when leaving, shift every link's bornAt/diedAt by the
+    // frozen duration so they resume exactly where they paused.
+    if (hovered && this._frozenAt === undefined) {
+      this._frozenAt = now;
+    } else if (!hovered && this._frozenAt !== undefined) {
+      const delta = now - this._frozenAt;
+      for (let i = 0; i < this.links.length; i++) {
+        this.links[i].bornAt += delta;
+        if (this.links[i].dying) this.links[i].diedAt += delta;
+      }
+      this._frozenAt = undefined;
+    }
+    const effNow = this._frozenAt !== undefined ? this._frozenAt : now;
+
     // Per-frame center cache so two links sharing a person only do one
     // getBoundingClientRect call.
     const centerCache = new Map();
@@ -165,7 +183,7 @@ class CrowdLinks {
       if (!link.a.isConnected || !link.b.isConnected) {
         if (!link.dying) {
           link.dying = true;
-          link.diedAt = now;
+          link.diedAt = effNow;
         }
       }
 
@@ -176,11 +194,11 @@ class CrowdLinks {
       // Compute alpha based on lifecycle phase.
       let alpha;
       if (link.dying) {
-        const t = (now - link.diedAt) / link.fadeOut;
+        const t = (effNow - link.diedAt) / link.fadeOut;
         if (t >= 1) continue; // drop
         alpha = (1 - t) * this.MAX_ALPHA;
       } else {
-        const age = now - link.bornAt;
+        const age = effNow - link.bornAt;
         if (age < link.fadeIn) {
           alpha = (age / link.fadeIn) * this.MAX_ALPHA;
         } else if (age < link.fadeIn + link.hold) {
