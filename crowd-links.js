@@ -215,9 +215,9 @@ class CrowdLinks {
         }
       }
 
-      // When a person is hovered, hide all lines that don't touch them
-      // (but keep their lifecycle running so they resume cleanly on unhover).
-      const hiddenByFocus = hovered && link.a !== hovered && link.b !== hovered;
+      // Lines are invisible until a person is hovered. Only render lines
+      // that touch the hovered person.
+      const visible = hovered && (link.a === hovered || link.b === hovered);
 
       // Compute alpha based on lifecycle phase.
       let alpha;
@@ -253,7 +253,7 @@ class CrowdLinks {
       const by = bC.y - containerTop;
 
       const c = link.color;
-      if (!hiddenByFocus) {
+      if (visible) {
         // Soft glow halo at each endpoint (drawn first, behind dot + line).
         const glowGrad = (cx, cy) => {
           const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, this.ENDPOINT_GLOW);
