@@ -24,7 +24,7 @@ class CrowdLinks {
     ];
 
     this.MAX_DX = 400;            // x-distance threshold between two people
-    this.MAX_ALPHA = 0.85;
+    this.MAX_ALPHA = 1;
     this.LINE_WIDTH = 4;
     this.ENDPOINT_RADIUS = 5;     // solid dot at each line endpoint
     this.ENDPOINT_GLOW = 14;      // soft glow halo around the dot
