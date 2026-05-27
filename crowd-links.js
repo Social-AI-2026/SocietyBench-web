@@ -24,8 +24,10 @@ class CrowdLinks {
     ];
 
     this.MAX_DX = 400;            // x-distance threshold between two people
-    this.MAX_ALPHA = 0.5;
-    this.LINE_WIDTH = 3;
+    this.MAX_ALPHA = 0.85;
+    this.LINE_WIDTH = 4;
+    this.ENDPOINT_RADIUS = 5;     // solid dot at each line endpoint
+    this.ENDPOINT_GLOW = 14;      // soft glow halo around the dot
     this.PERSON_TARGET_MIN = 3;   // each person tries to keep 3-10 active links
     this.PERSON_TARGET_MAX = 10;
     this.SCAN_INTERVAL_MS = 300;  // how often we top up missing links per person
@@ -225,11 +227,39 @@ class CrowdLinks {
       const by = bC.y - containerTop;
 
       const c = link.color;
-      ctx.strokeStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha})`;
-      ctx.beginPath();
-      ctx.moveTo(ax, ay);
-      ctx.lineTo(bx, by);
-      if (!hiddenByFocus) ctx.stroke();
+      if (!hiddenByFocus) {
+        // Soft glow halo at each endpoint (drawn first, behind dot + line).
+        const glowGrad = (cx, cy) => {
+          const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, this.ENDPOINT_GLOW);
+          g.addColorStop(0, `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha * 0.9})`);
+          g.addColorStop(1, `rgba(${c[0]}, ${c[1]}, ${c[2]}, 0)`);
+          return g;
+        };
+        ctx.fillStyle = glowGrad(ax, ay);
+        ctx.beginPath();
+        ctx.arc(ax, ay, this.ENDPOINT_GLOW, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = glowGrad(bx, by);
+        ctx.beginPath();
+        ctx.arc(bx, by, this.ENDPOINT_GLOW, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Connecting line.
+        ctx.strokeStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha})`;
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(bx, by);
+        ctx.stroke();
+
+        // Solid endpoint dot on top.
+        ctx.fillStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(ax, ay, this.ENDPOINT_RADIUS, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(bx, by, this.ENDPOINT_RADIUS, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
       survivors.push(link);
     }
