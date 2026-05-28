@@ -197,8 +197,13 @@ class CrowdAnimation {
   setupRouteSync() {
     window.addEventListener('sb:page-change', (e) => {
       const page = e.detail && e.detail.page;
-      if (page === 'overview') this.start();
-      else this.stop();
+      if (page === 'overview') {
+        // First visit only — once the user has navigated away from overview,
+        // the crowd does not regenerate on return.
+        if (!this._hasBooted) this.start();
+      } else {
+        this.stop();
+      }
     });
     if (this.isOnHomePage()) this.start();
   }

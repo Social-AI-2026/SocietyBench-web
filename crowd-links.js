@@ -50,8 +50,13 @@ class CrowdLinks {
   setupRouteSync() {
     window.addEventListener('sb:page-change', (e) => {
       const page = e.detail && e.detail.page;
-      if (page === 'overview') this.start();
-      else this.stop();
+      if (page === 'overview') {
+        // First visit only — match crowd-animation: do not regenerate links
+        // when the user returns to overview after navigating away.
+        if (!this._hasBooted) this.start();
+      } else {
+        this.stop();
+      }
     });
     if (this.isOnHomePage()) this.start();
   }
@@ -59,6 +64,7 @@ class CrowdLinks {
   start() {
     if (this._running) return;
     this._running = true;
+    this._hasBooted = true;
     this.canvas.style.display = '';
     this._scanTimer = setInterval(() => this.tryAddLinks(), this.SCAN_INTERVAL_MS);
     this._rafId = requestAnimationFrame((t) => this.draw(t));
