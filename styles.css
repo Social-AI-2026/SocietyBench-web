@@ -559,23 +559,23 @@ section:last-of-type { border-bottom: none; }
   isolation: isolate;
 }
 
-/* Video background — sits behind .hero-content, in front of page bg.
-   The poster image is also set as a background-image, so if the <video>
-   element fails to play (autoplay blocked, codec issue, network drop, etc.)
-   the user still sees the same still frame as a static hero background. */
+/* Animated WebP background — sits behind .hero-content, in front of page bg.
+   We use an <img> tag with an animated WebP (videos/hero.webp) rather than a
+   <video> tag: browsers treat WebP as an image, so it isn't subject to
+   Chrome's strict autoplay policy and just loops on every page load —
+   including for returning visitors whose password gate auto-unlocks during
+   page-load (which is not a user gesture). */
 .hero-video-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  /* Static fallback if the .webp itself fails to load. */
   background-image: url('figures/hero-poster.jpg');
   background-size: cover;
   background-position: center;
 }
-/* When JS detects autoplay failure (video stays paused), it adds .video-failed
-   on the wrapper to hide the unrendered <video> and let the poster show. */
-.hero-video-bg.video-failed .hero-video { display: none; }
 .hero-video {
   position: absolute;
   top: 50%; left: 50%;
@@ -583,11 +583,8 @@ section:last-of-type { border-bottom: none; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Placeholder gradient if mp4 not yet present */
-  background:
-    radial-gradient(ellipse at 20% 30%, rgba(58, 90, 200, 0.35), transparent 60%),
-    radial-gradient(ellipse at 80% 70%, rgba(255, 140, 70, 0.30), transparent 55%),
-    linear-gradient(135deg, #0e1530 0%, #1a1f3a 50%, #2a1e3a 100%);
+  user-select: none;
+  -webkit-user-drag: none;
 }
 /* Overlay: a soft wash so the video stays visible but text stays readable. */
 .hero-video-overlay {
@@ -615,9 +612,9 @@ section:last-of-type { border-bottom: none; }
     0 1px 2px rgba(255, 255, 255, 0.95),
     0 0 18px rgba(255, 255, 255, 0.85);
 }
-/* Respect users who prefer reduced motion — show a still poster instead of looping video */
+/* Respect users who prefer reduced motion — hide the animated WebP and let the
+   static poster (background-image on .hero-video-bg) take over. */
 @media (prefers-reduced-motion: reduce) {
-  .hero-video { animation: none; }
   .hero-video { display: none; }
 }
 

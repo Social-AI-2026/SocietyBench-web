@@ -109,11 +109,12 @@
 
     <!-- ================================ HERO ============================== -->
     <section class="page-section reveal hero" data-page="overview" id="about">
-      <!-- Video background layer. Drop your 8-10s looping mp4 at videos/hero.mp4 -->
+      <!-- Animated WebP background. Browsers treat this as an image, so it
+           plays on every visit without hitting Chrome's autoplay policy — the
+           previous <video> tag stayed paused when the password gate auto-
+           unlocked on returning visitors (page-load is not a user gesture). -->
       <div class="hero-video-bg" aria-hidden="true">
-        <video class="hero-video" playsinline autoplay muted loop preload="metadata" poster="figures/hero-poster.jpg">
-          <source src="videos/hero.mp4?v=20260528b" type="video/mp4" />
-        </video>
+        <img class="hero-video" src="videos/hero.webp?v=20260528c" alt="" decoding="async" />
         <div class="hero-video-overlay"></div>
       </div>
 
@@ -806,41 +807,6 @@ Accepted events join the official catalog and ship in the next benchmark version
   <script src="crowd-animation.js"></script>
   <script src="crowd-links.js"></script>
 
-  <!-- Hero video autoplay kick-start: some browsers/extensions still block
-       autoplay even with muted+autoplay attributes, so we explicitly call
-       play() and retry on the first user interaction. If autoplay never
-       succeeds, mark the wrapper .video-failed so CSS falls back to the
-       poster image as a static hero background. -->
-  <script>
-    (function () {
-      var v = document.querySelector('.hero-video');
-      if (!v) return;
-      var wrap = document.querySelector('.hero-video-bg');
-      v.muted = true;
-      v.setAttribute('muted', '');
-      v.setAttribute('playsinline', '');
-      function tryPlay() {
-        var p = v.play();
-        if (p && typeof p.catch === 'function') p.catch(function () {});
-      }
-      tryPlay();
-      v.addEventListener('loadedmetadata', tryPlay);
-      v.addEventListener('canplay', tryPlay);
-      v.addEventListener('playing', function () {
-        if (wrap) wrap.classList.remove('video-failed');
-      });
-      ['click', 'scroll', 'keydown', 'touchstart', 'pointerdown'].forEach(function (ev) {
-        document.addEventListener(ev, tryPlay, { once: true, passive: true });
-      });
-      // Last-resort fallback: if 2.5s after load the video is still paused
-      // (and has at least HAVE_CURRENT_DATA), assume autoplay is blocked and
-      // surface the poster as a static background instead.
-      setTimeout(function () {
-        if (v.paused && wrap) wrap.classList.add('video-failed');
-      }, 2500);
-    })();
-  </script>
-
   <script>
     (function () {
       var EXPECTED = 'e54fc6b51915e222ba6196747a19ebb8dfa651fd2b46a385a0ded647fbfefda0';
@@ -854,15 +820,6 @@ Accepted events join the official catalog and ship in the next benchmark version
         gate.classList.add('auth-fadeout');
         setTimeout(function () { gate.remove(); }, 400);
         document.documentElement.classList.remove('auth-locked');
-        // Kick the hero video on this user-gesture boundary. Chrome's strict
-        // autoplay policy blocks muted-autoplay in some configurations; the
-        // password-submit click is the first real user gesture on the page,
-        // so calling play() here is the most reliable place to satisfy it.
-        var heroVid = document.querySelector('.hero-video');
-        if (heroVid) {
-          var hp = heroVid.play();
-          if (hp && typeof hp.catch === 'function') hp.catch(function () {});
-        }
       }
 
       async function sha256(text) {
