@@ -806,6 +806,29 @@ Accepted events join the official catalog and ship in the next benchmark version
   <script src="crowd-animation.js"></script>
   <script src="crowd-links.js"></script>
 
+  <!-- Hero video autoplay kick-start: some browsers/extensions still block
+       autoplay even with muted+autoplay attributes, so we explicitly call
+       play() and retry on the first user interaction. -->
+  <script>
+    (function () {
+      var v = document.querySelector('.hero-video');
+      if (!v) return;
+      v.muted = true;
+      v.setAttribute('muted', '');
+      v.setAttribute('playsinline', '');
+      function tryPlay() {
+        var p = v.play();
+        if (p && typeof p.catch === 'function') p.catch(function () {});
+      }
+      tryPlay();
+      v.addEventListener('loadedmetadata', tryPlay);
+      v.addEventListener('canplay', tryPlay);
+      ['click', 'scroll', 'keydown', 'touchstart', 'pointerdown'].forEach(function (ev) {
+        document.addEventListener(ev, tryPlay, { once: true, passive: true });
+      });
+    })();
+  </script>
+
   <script>
     (function () {
       var EXPECTED = 'e54fc6b51915e222ba6196747a19ebb8dfa651fd2b46a385a0ded647fbfefda0';
