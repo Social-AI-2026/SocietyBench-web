@@ -249,6 +249,11 @@ class CrowdAnimation {
     this.isDispersing = true;
     if (this.leftInterval) clearInterval(this.leftInterval);
     if (this.rightInterval) clearInterval(this.rightInterval);
+    // Once the crowd starts dispersing, the bottom-fixed container should no
+    // longer intercept pointer events — otherwise the user can't select text
+    // or click links in the area the container overlays (z-index 9998, 400px
+    // tall, position:fixed at bottom).
+    this.container.style.pointerEvents = 'none';
     this.tweenRate(35, 500);
   }
 
