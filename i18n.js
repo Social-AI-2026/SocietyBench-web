@@ -593,20 +593,20 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // ---- Abstract -------------------------------------------------------
       'about.title': '摘要',
-      'about.p1': '我们提出首个能够评测真实世界社会事件预测能力的基准——所用真相数据来自网页新闻与社交媒体，并经过匿名化处理。',
-      'about.p2.html': '我们的方法跨五个平台采集网页新闻与社媒帖子,通过六步智能体驱动的处理链将每条来源蒸馏为按日期编排的时间线,再合并为一条统一编年史——其中事实性事件与公众舆论被清晰分开。我们对每条真实事件弧应用匿名化流程,将其改造为<strong>反事实社会世界</strong>,确保评测衡量的是预测能力本身、而非搜索真实事件的能力。在此之上,我们自动生成经智能体审计的题库,支持两条互不相关的评测轴:概率校准与时间精度。',
+      'about.p1': '我们提出首个能评测大模型前瞻真实社会事件能力的 benchmark——所用真值数据来自 Web 新闻与社媒,并已经过匿名化处理。',
+      'about.p2.html': '我们并行从 Web 新闻与五个社媒平台采集帖子,通过一条六步 agent 链将每一源蒸馏为日期索引时间线,再合并为一份显式区分事实事件与公众舆论的统一年表。再经一道匿名化流程,把每段真实事件弧渲染为<strong>反事实社会世界</strong>——结构上与真实发生的完全一致,但剥去了模型能与预训练记忆比对的表面标签,使评测度量的是对社会世界演化的前向推理,而非记忆调取。在此之上,我们自动生成由 agent 审核的题库,支持两条正交的评测轴:概率校准与时间精度。',
 
       // ---- Key Contributions ---------------------------------------------
       'contrib.title': '关键贡献',
       'contrib.c01.num': '01',
       'contrib.c01.title': '反事实匿名化',
-      'contrib.c01.body.html': '三阶段的实体与日期匿名化(规则替换 → LLM 对抗审计循环,最多 5 轮,在 <strong>high = 0</strong> 与 <strong>mid = 0</strong> 时收敛 → 一致性校验)。将每条真实事件弧改造为去标识化的反事实世界——结构同构,但已剥离任何可被预训练记忆匹配的表层标签。',
+      'contrib.c01.body.html': '三阶段实体与日期匿名化(规则替换 → LLM 对抗审计循环,最多 5 轮,在 <strong>high = 0</strong> 与 <strong>mid = 0</strong> 处收敛 → 一致性校验)。把每段真实弧渲染为去标识化的反事实世界——结构上与真实发生的完全一致,但剥去了能与预训练记忆比对的表面标签。',
       'contrib.c02.num': '02',
       'contrib.c02.title': '双轴评测',
-      'contrib.c02.body.html': '每个事件给出两个正交的 0–100 分:<strong>校准</strong>(对比二元真值的加权 MAE,以均匀 50% 预测器为底线)与<strong>时间精度</strong>(按天的 MAE,以 30 天时窗中点为基线)。一个模型可能校准良好却对日期失灵,反之亦然;两者都需报告。',
+      'contrib.c02.body.html': '每个事件给出两个正交的 0–100 分:<strong>校准</strong>(以均匀 50% 预测器为 0 分基准,用加权 MAE 对照二元真值打分)与<strong>时间精度</strong>(以 30 天桶中点为 50 分基线,用按天 MAE 打分)。一个模型可能校准良好却对日期失灵,反之亦然;两者都需报告。',
       'contrib.c03.num': '03',
       'contrib.c03.title': '双源时间线',
-      'contrib.c03.body.html': '对每个事件,流水线并行采集网页新闻与五个社媒平台,并合并为一条统一编年史——其中<strong>事实性事件</strong>与<strong>舆论层</strong>明确分开,从而评测社会动态本身,而不仅是新闻事实。',
+      'contrib.c03.body.html': '对每个事件,流水线并行从 Web 新闻与五个社媒平台采集数据,合并为一份显式区分<strong>事实事件</strong>与<strong>公众舆论</strong>的统一年表——评测的是社会动态本身,而不仅是新闻事实。',
 
       // ---- Method --------------------------------------------------------
       'method.title': '方法',
@@ -631,7 +631,7 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // Three-phase anonymization
       'method.3anon.title': '三阶段匿名化',
-      'method.3anon.intro.html': '在任何候选模型看到内容之前,匿名化流水线先将每条合并后的时间线改造为反事实世界。审计循环在 <strong>high = 0 与 mid = 0</strong> 时收敛,最多 5 轮。',
+      'method.3anon.intro.html': '在任何候选模型看到内容之前,匿名化流水线先把每条合并后的时间线渲染为反事实世界。审计循环在 <strong>high = 0 与 mid = 0</strong> 处收敛,最多 5 轮。',
       'method.3anon.p01.num': '01',
       'method.3anon.p01.title': '基于规则的替换',
       'method.3anon.p01.body': '按事件级替换表用最长匹配规则替换实体;将每个日期统一平移一个偏移量 δ ~ U(±180 天),从而抹去绝对日历位置,但完整保留任意两事件间的间隔。',
@@ -652,8 +652,8 @@ Accepted events join the official catalog and ship in the next benchmark version
       'method.dual.a1.scale.100.html': '<b>100</b> 完美预测器',
       'method.dual.a2.tag': '轴 02 — 时间',
       'method.dual.a2.title': '时间精度。',
-      'method.dual.a2.metric.html': '对窗内每个事件,预测其日历日期。以 30 天时窗中点为基线,采用<strong>按天 MAE</strong>评分。',
-      'method.dual.a2.scale.50.html': '<b>50</b> 时窗中点基线',
+      'method.dual.a2.metric.html': '对窗内每个事件,预测其日历日期。以 30 天桶中点为基线,采用<strong>按天 MAE</strong>评分。',
+      'method.dual.a2.scale.50.html': '<b>50</b> 桶中点基线',
       'method.dual.a2.scale.100.html': '<b>100</b> 完美时间',
 
       // ---- Events covered ------------------------------------------------
