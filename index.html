@@ -10,20 +10,20 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body data-active-page="overview">
+<body data-active-page="overview" data-lang="en">
 
   <!-- Password gate (private preview) -->
   <div id="auth-gate" aria-hidden="false">
     <form id="auth-form" autocomplete="off">
       <div class="auth-brand">
         <span class="brand-mark"></span>
-        SOCIETYBENCH
+        <span data-i18n="auth.brand">SOCIETYBENCH</span>
       </div>
-      <h1 class="auth-title">PRIVATE PREVIEW</h1>
-      <p class="auth-sub">Project page in development. Enter the access password to continue.</p>
-      <input type="password" id="auth-input" placeholder="Password" autocomplete="off" autofocus />
-      <button type="submit" class="auth-btn">▸ UNLOCK</button>
-      <p class="auth-err" id="auth-err">Wrong password.</p>
+      <h1 class="auth-title" data-i18n="auth.title">PRIVATE PREVIEW</h1>
+      <p class="auth-sub" data-i18n="auth.sub">Project page in development. Enter the access password to continue.</p>
+      <input type="password" id="auth-input" placeholder="Password" autocomplete="off" autofocus data-i18n-attr="placeholder:auth.placeholder" />
+      <button type="submit" class="auth-btn" data-i18n="auth.btn">▸ UNLOCK</button>
+      <p class="auth-err" id="auth-err" data-i18n="auth.err">Wrong password.</p>
     </form>
   </div>
 
@@ -36,40 +36,46 @@
     <aside class="sidebar" id="sidebar" aria-label="Section navigation">
       <a class="sb-brand" href="#/overview">
         <span class="brand-mark" aria-hidden="true"></span>
-        SOCIETYBENCH
-        <span class="ver">V0.1</span>
+        <span data-i18n="nav.brand">SOCIETYBENCH</span>
+        <span class="ver" data-i18n="nav.ver">V0.1</span>
       </a>
 
+      <!-- Language toggle (EN / 中) -->
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" class="lang-btn active" data-lang="en" data-i18n="lang.en" data-i18n-attr="title:lang.toggle.title" aria-pressed="true">EN</button>
+        <button type="button" class="lang-btn" data-lang="zh" data-i18n="lang.zh" data-i18n-attr="title:lang.toggle.title" aria-pressed="false">中</button>
+      </div>
+
       <nav>
-        <div class="sb-group">START</div>
-        <a class="sb-link" href="#/overview" data-route="overview">Overview</a>
+        <div class="sb-group" data-i18n="nav.group.start">START</div>
+        <a class="sb-link" href="#/overview" data-route="overview" data-i18n="nav.overview">Overview</a>
 
-        <div class="sb-group">BENCHMARK</div>
-        <a class="sb-link" href="#/method" data-route="method">Method</a>
-        <a class="sb-link" href="#/try" data-route="try">Try it ★</a>
-        <a class="sb-link" href="#/contribute" data-route="contribute">Contribute</a>
+        <div class="sb-group" data-i18n="nav.group.benchmark">BENCHMARK</div>
+        <a class="sb-link" href="#/method" data-route="method" data-i18n="nav.method">Method</a>
+        <a class="sb-link" href="#/try" data-route="try" data-i18n="nav.try">Try it ★</a>
+        <a class="sb-link" href="#/contribute" data-route="contribute" data-i18n="nav.contribute">Contribute</a>
 
-        <div class="sb-group">RESULTS</div>
-        <a class="sb-link" href="#/leaderboard" data-route="leaderboard">Leaderboard</a>
-        <a class="sb-link" href="#/deepdive" data-route="deepdive">Deep-dive</a>
-        <a class="sb-link" href="#/qualitative" data-route="qualitative">Qualitative</a>
+        <div class="sb-group" data-i18n="nav.group.results">RESULTS</div>
+        <a class="sb-link" href="#/leaderboard" data-route="leaderboard" data-i18n="nav.leaderboard">Leaderboard</a>
+        <a class="sb-link" href="#/deepdive" data-route="deepdive" data-i18n="nav.deepdive">Deep-dive</a>
+        <a class="sb-link" href="#/qualitative" data-route="qualitative" data-i18n="nav.qualitative">Qualitative</a>
 
-        <div class="sb-group">ABOUT</div>
-        <a class="sb-link" href="#/limitations" data-route="limitations">Limitations</a>
-        <a class="sb-link" href="#/cite" data-route="cite">Citation</a>
+        <div class="sb-group" data-i18n="nav.group.about">ABOUT</div>
+        <a class="sb-link" href="#/limitations" data-route="limitations" data-i18n="nav.limitations">Limitations</a>
+        <a class="sb-link" href="#/cite" data-route="cite" data-i18n="nav.cite">Citation</a>
       </nav>
 
       <div class="sb-external">
-        <a href="#">Paper (PDF) <span class="arr">↗</span></a>
-        <a href="#">arXiv <span class="arr">↗</span></a>
-        <a href="https://github.com/Zhenran-Wang/societybench" target="_blank">Code <span class="arr">↗</span></a>
-        <a href="#">Dataset <span class="arr">↗</span></a>
-        <a href="#">Video <span class="arr">↗</span></a>
+        <a href="#"><span data-i18n="nav.external.paper">Paper (PDF)</span> <span class="arr">↗</span></a>
+        <a href="#"><span data-i18n="nav.external.arxiv">arXiv</span> <span class="arr">↗</span></a>
+        <a href="https://github.com/Zhenran-Wang/societybench" target="_blank"><span data-i18n="nav.external.code">Code</span> <span class="arr">↗</span></a>
+        <a href="#"><span data-i18n="nav.external.dataset">Dataset</span> <span class="arr">↗</span></a>
+        <a href="#"><span data-i18n="nav.external.video">Video</span> <span class="arr">↗</span></a>
       </div>
 
       <div class="sb-footer">
-        <div class="blind">ANONYMOUS</div>
-        DATA: CC-BY-NC 4.0 · CODE: MIT
+        <div class="blind" data-i18n="nav.footer.blind">ANONYMOUS</div>
+        <span data-i18n="nav.footer.license">DATA: CC-BY-NC 4.0 · CODE: MIT</span>
       </div>
     </aside>
 
@@ -78,24 +84,24 @@
 
       <!-- Mobile-only top bar (drawer toggle) -->
       <div class="mobile-bar" aria-hidden="false">
-        <a class="mb-brand" href="#/overview"><span class="brand-mark" aria-hidden="true"></span>SOCIETYBENCH</a>
-        <button class="mb-toggle" type="button" id="drawer-toggle" aria-controls="sidebar" aria-expanded="false">▤ MENU</button>
+        <a class="mb-brand" href="#/overview"><span class="brand-mark" aria-hidden="true"></span><span data-i18n="mb.brand">SOCIETYBENCH</span></a>
+        <button class="mb-toggle" type="button" id="drawer-toggle" aria-controls="sidebar" aria-expanded="false" data-i18n="mb.toggle">▤ MENU</button>
       </div>
 
       <!-- Sticky page header / breadcrumb + quick links -->
       <header class="page-header" role="banner">
         <div class="ph-left">
-          <div class="ph-crumb">SOCIETYBENCH &nbsp;/&nbsp; <b id="ph-crumb-page">OVERVIEW</b></div>
+          <div class="ph-crumb"><span data-i18n="ph.crumb.root">SOCIETYBENCH</span> &nbsp;/&nbsp; <b id="ph-crumb-page" data-i18n="ph.crumb.overview">OVERVIEW</b></div>
           <div class="ph-tags">
-            [&nbsp;<span>V0.1</span><span class="dot">/</span>
-            <span>ANONYMOUS</span>&nbsp;]
+            [&nbsp;<span data-i18n="ph.tag.version">V0.1</span><span class="dot">/</span>
+            <span data-i18n="ph.tag.blind">ANONYMOUS</span>&nbsp;]
           </div>
         </div>
         <div class="ph-buttons">
-          <a class="ph-btn primary" href="#">▸ Paper</a>
-          <a class="ph-btn" href="#">▸ arXiv</a>
-          <a class="ph-btn" href="https://github.com/Zhenran-Wang/societybench" target="_blank">▸ Code</a>
-          <a class="ph-btn" href="#/cite">▸ BibTeX</a>
+          <a class="ph-btn primary" href="#" data-i18n="ph.btn.paper">▸ Paper</a>
+          <a class="ph-btn" href="#" data-i18n="ph.btn.arxiv">▸ arXiv</a>
+          <a class="ph-btn" href="https://github.com/Zhenran-Wang/societybench" target="_blank" data-i18n="ph.btn.code">▸ Code</a>
+          <a class="ph-btn" href="#/cite" data-i18n="ph.btn.bibtex">▸ BibTeX</a>
         </div>
       </header>
 
@@ -104,16 +110,16 @@
     <!-- ================================ HERO ============================== -->
     <section class="page-section reveal hero" data-page="overview" id="about">
       <div class="wrap">
-        <h1>Society-Bench</h1>
-        <p class="pitch">Can Language Models Forecast Real-World Social Events?<span class="cursor" aria-hidden="true">_</span></p>
+        <h1 data-i18n="hero.title">Society-Bench</h1>
+        <p class="pitch"><span data-i18n="hero.pitch">Can Language Models Forecast Real-World Social Events?</span><span class="cursor" aria-hidden="true">_</span></p>
 
         <div class="btnrow">
-          <a class="btn primary" href="#"><span class="glyph">▸</span> Paper (PDF)</a>
-          <a class="btn" href="#"><span class="glyph">▸</span> arXiv</a>
-          <a class="btn" href="https://github.com/Zhenran-Wang/societybench" target="_blank"><span class="glyph">▸</span> Code</a>
-          <a class="btn" href="#"><span class="glyph">▸</span> Dataset <span class="badge">SOON</span></a>
-          <a class="btn" href="#"><span class="glyph">▸</span> Video</a>
-          <a class="btn" href="#cite"><span class="glyph">▸</span> BibTeX</a>
+          <a class="btn primary" href="#"><span class="glyph">▸</span> <span data-i18n="hero.btn.paper">Paper (PDF)</span></a>
+          <a class="btn" href="#"><span class="glyph">▸</span> <span data-i18n="hero.btn.arxiv">arXiv</span></a>
+          <a class="btn" href="https://github.com/Zhenran-Wang/societybench" target="_blank"><span class="glyph">▸</span> <span data-i18n="hero.btn.code">Code</span></a>
+          <a class="btn" href="#"><span class="glyph">▸</span> <span data-i18n="hero.btn.dataset">Dataset</span> <span class="badge" data-i18n="hero.btn.dataset.badge">SOON</span></a>
+          <a class="btn" href="#"><span class="glyph">▸</span> <span data-i18n="hero.btn.video">Video</span></a>
+          <a class="btn" href="#cite"><span class="glyph">▸</span> <span data-i18n="hero.btn.bibtex">BibTeX</span></a>
         </div>
       </div>
     </section>
@@ -121,10 +127,10 @@
     <!-- ============================== ABSTRACT ============================ -->
     <section class="page-section reveal" data-page="overview">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Abstract</h2>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="about.title">Abstract</span></h2>
         <div class="abstract-body">
-          <p>We present the first benchmark capable of measuring the ability to forecast real-world social events using anonymized ground truth from Web news and social-media.</p>
-          <p>Our approach collects Web news and social-media posts across five platforms, distills each source into date-indexed timelines via a six-step agent-driven processing chain, and merges them into a unified chronology that separates factual events from public opinion. We apply an anonymization procedure that renders each real event arc into a <strong>counterfactual social world</strong>, ensuring the evaluation measures forecasting ability rather than the ability to search for the real event. We then automatically generate an agent-audited question bank supporting two orthogonal evaluation axes: probability calibration and temporal accuracy.</p>
+          <p data-i18n="about.p1">We present the first benchmark capable of measuring the ability to forecast real-world social events using anonymized ground truth from Web news and social-media.</p>
+          <p data-i18n-html="about.p2.html">Our approach collects Web news and social-media posts across five platforms, distills each source into date-indexed timelines via a six-step agent-driven processing chain, and merges them into a unified chronology that separates factual events from public opinion. We apply an anonymization procedure that renders each real event arc into a <strong>counterfactual social world</strong>, ensuring the evaluation measures forecasting ability rather than the ability to search for the real event. We then automatically generate an agent-audited question bank supporting two orthogonal evaluation axes: probability calibration and temporal accuracy.</p>
         </div>
 
         <figure class="figbox fig-frame" style="margin-top: 40px;">
@@ -136,22 +142,22 @@
     <!-- ============================ CONTRIBUTIONS ========================== -->
     <section class="page-section reveal" data-page="overview">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Key Contributions</h2>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="contrib.title">Key Contributions</span></h2>
         <div class="cards cards-3">
           <article class="card">
-            <div class="numeral">01</div>
-            <h3 class="card-title">Counterfactual Anonymization</h3>
-            <p class="card-body">Three-phase entity-and-date anonymization (rule replacement → LLM adversarial audit loop, ≤ 5 rounds, stops at <strong>high = 0</strong> and <strong>mid = 0</strong> → consistency check). Renders each real arc into a deidentified counterfactual world — structurally identical, stripped of pre-training-matchable surface labels.</p>
+            <div class="numeral" data-i18n="contrib.c01.num">01</div>
+            <h3 class="card-title" data-i18n="contrib.c01.title">Counterfactual Anonymization</h3>
+            <p class="card-body" data-i18n-html="contrib.c01.body.html">Three-phase entity-and-date anonymization (rule replacement → LLM adversarial audit loop, ≤ 5 rounds, stops at <strong>high = 0</strong> and <strong>mid = 0</strong> → consistency check). Renders each real arc into a deidentified counterfactual world — structurally identical, stripped of pre-training-matchable surface labels.</p>
           </article>
           <article class="card">
-            <div class="numeral">02</div>
-            <h3 class="card-title">Dual-Axis Scoring</h3>
-            <p class="card-body">Two orthogonal 0–100 scores per event: <strong>Calibration</strong> (weighted MAE against binary ground truth, vs. a uniform 50% predictor) and <strong>Temporal accuracy</strong> (day-MAE vs. a 30-day bucket-midpoint baseline). A model can be well-calibrated but date-blind, or vice versa; both are reported.</p>
+            <div class="numeral" data-i18n="contrib.c02.num">02</div>
+            <h3 class="card-title" data-i18n="contrib.c02.title">Dual-Axis Scoring</h3>
+            <p class="card-body" data-i18n-html="contrib.c02.body.html">Two orthogonal 0–100 scores per event: <strong>Calibration</strong> (weighted MAE against binary ground truth, vs. a uniform 50% predictor) and <strong>Temporal accuracy</strong> (day-MAE vs. a 30-day bucket-midpoint baseline). A model can be well-calibrated but date-blind, or vice versa; both are reported.</p>
           </article>
           <article class="card">
-            <div class="numeral">03</div>
-            <h3 class="card-title">Dual-Source Timelines</h3>
-            <p class="card-body">Per event, the pipeline collects in parallel Web news + five social-media platforms, and merges them into a unified chronology that explicitly separates <strong>factual events</strong> from a <strong>public-opinion layer</strong> — measuring social dynamics, not just news facts.</p>
+            <div class="numeral" data-i18n="contrib.c03.num">03</div>
+            <h3 class="card-title" data-i18n="contrib.c03.title">Dual-Source Timelines</h3>
+            <p class="card-body" data-i18n-html="contrib.c03.body.html">Per event, the pipeline collects in parallel Web news + five social-media platforms, and merges them into a unified chronology that explicitly separates <strong>factual events</strong> from a <strong>public-opinion layer</strong> — measuring social dynamics, not just news facts.</p>
           </article>
         </div>
       </div>
@@ -160,35 +166,35 @@
     <!-- =============================== METHOD ============================== -->
     <section class="page-section reveal" data-page="method" id="method">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Method</h2>
-        <h3 class="subsection-title" style="margin-top: 24px;">Four-Phase Pipeline</h3>
-        <p class="abstract-body" style="margin-bottom: 32px;">
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="method.title">Method</span></h2>
+        <h3 class="subsection-title" style="margin-top: 24px;" data-i18n="method.4phase.title">Four-Phase Pipeline</h3>
+        <p class="abstract-body" style="margin-bottom: 32px;" data-i18n="method.4phase.intro">
           Our benchmark operates through a four-phase pipeline: collecting multi-source data, distilling timelines, merging and anonymizing them into counterfactual worlds, and evaluating models on probability calibration and temporal accuracy.
         </p>
 
         <table class="method-table" style="width: 100%;">
           <thead>
             <tr>
-              <th style="width: 30%;">Phase</th>
-              <th>What it does</th>
+              <th style="width: 30%;" data-i18n="method.4phase.th1">Phase</th>
+              <th data-i18n="method.4phase.th2">What it does</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="phase-cell"><span class="ph-num">00</span>Collection</td>
-              <td>Collects Web news and social-media posts across five platforms</td>
+              <td class="phase-cell"><span class="ph-num" data-i18n="method.4phase.p00.num">00</span><span data-i18n="method.4phase.p00.name">Collection</span></td>
+              <td data-i18n="method.4phase.p00.desc">Collects Web news and social-media posts across five platforms</td>
             </tr>
             <tr>
-              <td class="phase-cell"><span class="ph-num">01</span>Per-source</td>
-              <td>Distills each source into date-indexed timelines</td>
+              <td class="phase-cell"><span class="ph-num" data-i18n="method.4phase.p01.num">01</span><span data-i18n="method.4phase.p01.name">Per-source</span></td>
+              <td data-i18n="method.4phase.p01.desc">Distills each source into date-indexed timelines</td>
             </tr>
             <tr>
-              <td class="phase-cell"><span class="ph-num">02</span>Merge</td>
-              <td>Merges streams into unified chronology separating facts from opinion</td>
+              <td class="phase-cell"><span class="ph-num" data-i18n="method.4phase.p02.num">02</span><span data-i18n="method.4phase.p02.name">Merge</span></td>
+              <td data-i18n="method.4phase.p02.desc">Merges streams into unified chronology separating facts from opinion</td>
             </tr>
             <tr>
-              <td class="phase-cell"><span class="ph-num">03</span>Evaluation</td>
-              <td>Anonymizes, generates questions, and scores on two axes</td>
+              <td class="phase-cell"><span class="ph-num" data-i18n="method.4phase.p03.num">03</span><span data-i18n="method.4phase.p03.name">Evaluation</span></td>
+              <td data-i18n="method.4phase.p03.desc">Anonymizes, generates questions, and scores on two axes</td>
             </tr>
           </tbody>
         </table>
@@ -199,29 +205,29 @@
           </figure>
         </div>
 
-        <h3 class="subsection-title">Three-Phase Anonymization</h3>
-        <p style="max-width: 80ch; font-size: 14.5px; margin: 0 auto 22px; text-align: center;">The anonymization pipeline renders each merged timeline into a counterfactual world before any candidate model sees it. The auditor loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.</p>
+        <h3 class="subsection-title" data-i18n="method.3anon.title">Three-Phase Anonymization</h3>
+        <p style="max-width: 80ch; font-size: 14.5px; margin: 0 auto 22px; text-align: center;" data-i18n-html="method.3anon.intro.html">The anonymization pipeline renders each merged timeline into a counterfactual world before any candidate model sees it. The auditor loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.</p>
 
         <div class="phase-list">
           <div class="phase-row">
-            <div class="ph-big">01</div>
+            <div class="ph-big" data-i18n="method.3anon.p01.num">01</div>
             <div>
-              <h4>Rule-based Replacement</h4>
-              <p>Replace entities by longest-match against a per-event substitution table; shift every date uniformly by a single offset δ ~ U(±180 d), destroying absolute calendar position while preserving every inter-event gap.</p>
+              <h4 data-i18n="method.3anon.p01.title">Rule-based Replacement</h4>
+              <p data-i18n="method.3anon.p01.body">Replace entities by longest-match against a per-event substitution table; shift every date uniformly by a single offset δ ~ U(±180 d), destroying absolute calendar position while preserving every inter-event gap.</p>
             </div>
           </div>
           <div class="phase-row">
-            <div class="ph-big">02</div>
+            <div class="ph-big" data-i18n="method.3anon.p02.num">02</div>
             <div>
-              <h4>LLM Adversarial Audit Loop</h4>
-              <p>An auditor LLM reads the anonymized text and reports residual search-key leakage (<em>high</em>) and substitution-quality issues (<em>mid</em>). New replacement rules are auto-derived from findings and Phase 01 re-runs from the raw original. Loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.</p>
+              <h4 data-i18n="method.3anon.p02.title">LLM Adversarial Audit Loop</h4>
+              <p data-i18n-html="method.3anon.p02.body.html">An auditor LLM reads the anonymized text and reports residual search-key leakage (<em>high</em>) and substitution-quality issues (<em>mid</em>). New replacement rules are auto-derived from findings and Phase 01 re-runs from the raw original. Loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.</p>
             </div>
           </div>
           <div class="phase-row">
-            <div class="ph-big">03</div>
+            <div class="ph-big" data-i18n="method.3anon.p03.num">03</div>
             <div>
-              <h4>Consistency Check</h4>
-              <p>Paragraph-, event-, and narrative-level comparison against the original, repairing any substitution damage while preserving anonymized entities and shifted dates.</p>
+              <h4 data-i18n="method.3anon.p03.title">Consistency Check</h4>
+              <p data-i18n="method.3anon.p03.body">Paragraph-, event-, and narrative-level comparison against the original, repairing any substitution damage while preserving anonymized entities and shifted dates.</p>
             </div>
           </div>
         </div>
@@ -232,26 +238,26 @@
           </figure>
         </div>
 
-        <h3 class="subsection-title">Dual-Axis Evaluation</h3>
-        <p style="max-width: 80ch; font-size: 14.5px; margin: 0 auto 22px; text-align: center;">At each accepted prediction point, the candidate sees the context up to a cutoff date and answers two orthogonal question types.</p>
+        <h3 class="subsection-title" data-i18n="method.dual.title">Dual-Axis Evaluation</h3>
+        <p style="max-width: 80ch; font-size: 14.5px; margin: 0 auto 22px; text-align: center;" data-i18n="method.dual.intro">At each accepted prediction point, the candidate sees the context up to a cutoff date and answers two orthogonal question types.</p>
 
         <div class="dual-axis-grid">
           <div class="axis-card">
-            <span class="axis-tag">AXIS 01 — CALIBRATION</span>
-            <h4>Probability Calibration.</h4>
-            <p class="metric">For an event E in a time window W, the model outputs P(E occurs in W) ∈ [0,1]. Scored by <strong>weighted MAE</strong> against binary ground truth.</p>
+            <span class="axis-tag" data-i18n="method.dual.a1.tag">AXIS 01 — CALIBRATION</span>
+            <h4 data-i18n="method.dual.a1.title">Probability Calibration.</h4>
+            <p class="metric" data-i18n-html="method.dual.a1.metric.html">For an event E in a time window W, the model outputs P(E occurs in W) ∈ [0,1]. Scored by <strong>weighted MAE</strong> against binary ground truth.</p>
             <div class="scale">
-              <span><b>0</b> uniform 50%</span>
-              <span><b>100</b> perfect predictor</span>
+              <span data-i18n-html="method.dual.a1.scale.0.html"><b>0</b> uniform 50%</span>
+              <span data-i18n-html="method.dual.a1.scale.100.html"><b>100</b> perfect predictor</span>
             </div>
           </div>
           <div class="axis-card">
-            <span class="axis-tag">AXIS 02 — TEMPORAL</span>
-            <h4>Temporal Accuracy.</h4>
-            <p class="metric">For each in-window event, predict its calendar date. Scored by <strong>day-MAE</strong> against a 30-day bucket-midpoint baseline.</p>
+            <span class="axis-tag" data-i18n="method.dual.a2.tag">AXIS 02 — TEMPORAL</span>
+            <h4 data-i18n="method.dual.a2.title">Temporal Accuracy.</h4>
+            <p class="metric" data-i18n-html="method.dual.a2.metric.html">For each in-window event, predict its calendar date. Scored by <strong>day-MAE</strong> against a 30-day bucket-midpoint baseline.</p>
             <div class="scale">
-              <span><b>50</b> bucket-midpoint baseline</span>
-              <span><b>100</b> perfect timing</span>
+              <span data-i18n-html="method.dual.a2.scale.50.html"><b>50</b> bucket-midpoint baseline</span>
+              <span data-i18n-html="method.dual.a2.scale.100.html"><b>100</b> perfect timing</span>
             </div>
           </div>
         </div>
@@ -261,38 +267,38 @@
     <!-- =============================== EVENTS ============================== -->
     <section class="page-section reveal" data-page="method" id="events">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Events Covered</h2>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="events.title">Events Covered</span></h2>
 
         <div class="cards cards-5">
           <article class="card">
-            <div class="numeral">01</div>
-            <h3 class="card-title">Public Controversy</h3>
-            <p class="card-body">Online dispute at a major university.</p>
-            <div class="pts">[ 26 PTS ]</div>
+            <div class="numeral" data-i18n="events.c01.num">01</div>
+            <h3 class="card-title" data-i18n="events.c01.title">Public Controversy</h3>
+            <p class="card-body" data-i18n="events.c01.body">Online dispute at a major university.</p>
+            <div class="pts" data-i18n="events.c01.pts">[ 26 PTS ]</div>
           </article>
           <article class="card">
-            <div class="numeral">02</div>
-            <h3 class="card-title">Trade Policy</h3>
-            <p class="card-body">Reciprocal-tariff escalation between two major economies.</p>
-            <div class="pts">[ 25 PTS ]</div>
+            <div class="numeral" data-i18n="events.c02.num">02</div>
+            <h3 class="card-title" data-i18n="events.c02.title">Trade Policy</h3>
+            <p class="card-body" data-i18n="events.c02.body">Reciprocal-tariff escalation between two major economies.</p>
+            <div class="pts" data-i18n="events.c02.pts">[ 25 PTS ]</div>
           </article>
           <article class="card">
-            <div class="numeral">03</div>
-            <h3 class="card-title">Technology Policy</h3>
-            <p class="card-body">National divestiture / ban ruling on an online platform.</p>
-            <div class="pts">[ 20 PTS ]</div>
+            <div class="numeral" data-i18n="events.c03.num">03</div>
+            <h3 class="card-title" data-i18n="events.c03.title">Technology Policy</h3>
+            <p class="card-body" data-i18n="events.c03.body">National divestiture / ban ruling on an online platform.</p>
+            <div class="pts" data-i18n="events.c03.pts">[ 20 PTS ]</div>
           </article>
           <article class="card">
-            <div class="numeral">04</div>
-            <h3 class="card-title">Geopolitical Conflict</h3>
-            <p class="card-body">Cross-border military confrontation between two states.</p>
-            <div class="pts">[ 30 PTS ]</div>
+            <div class="numeral" data-i18n="events.c04.num">04</div>
+            <h3 class="card-title" data-i18n="events.c04.title">Geopolitical Conflict</h3>
+            <p class="card-body" data-i18n="events.c04.body">Cross-border military confrontation between two states.</p>
+            <div class="pts" data-i18n="events.c04.pts">[ 30 PTS ]</div>
           </article>
           <article class="card">
-            <div class="numeral">05</div>
-            <h3 class="card-title">Financial Markets</h3>
-            <p class="card-body">Delisting crisis of an exchange-listed firm.</p>
-            <div class="pts">[ 11 PTS ]</div>
+            <div class="numeral" data-i18n="events.c05.num">05</div>
+            <h3 class="card-title" data-i18n="events.c05.title">Financial Markets</h3>
+            <p class="card-body" data-i18n="events.c05.body">Delisting crisis of an exchange-listed firm.</p>
+            <div class="pts" data-i18n="events.c05.pts">[ 11 PTS ]</div>
           </article>
         </div>
       </div>
@@ -301,38 +307,38 @@
     <!-- =============================== LEADERBOARD ========================= -->
     <section class="page-section reveal" data-page="leaderboard" id="leaderboard">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Leaderboard</h2>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="lb.title">Leaderboard</span></h2>
 
         <div class="lb-stamp">
-          <span class="lb-stamp-item"><span class="dot"></span>DATA REFRESHED &nbsp;<b id="lb-updated">—</b></span>
-          <span class="lb-stamp-item">NEXT REVIEW &nbsp;<b id="lb-next">—</b></span>
-          <span class="lb-stamp-item">SCHEMA &nbsp;<b id="lb-schema">v—</b></span>
+          <span class="lb-stamp-item"><span class="dot"></span><span data-i18n="lb.stamp.refreshed">DATA REFRESHED</span> &nbsp;<b id="lb-updated">—</b></span>
+          <span class="lb-stamp-item"><span data-i18n="lb.stamp.nextreview">NEXT REVIEW</span> &nbsp;<b id="lb-next">—</b></span>
+          <span class="lb-stamp-item"><span data-i18n="lb.stamp.schema">SCHEMA</span> &nbsp;<b id="lb-schema">v—</b></span>
         </div>
 
-        <p class="lb-caption">Want your model on this table? &nbsp;→&nbsp; see <a href="#/contribute">EXPAND THE BENCHMARK</a> below.</p>
+        <p class="lb-caption" data-i18n-html="lb.caption.html">Want your model on this table? &nbsp;→&nbsp; see <a href="#/contribute">EXPAND THE BENCHMARK</a> below.</p>
 
         <!-- Sub-tabs: Models / Bars / Events / (future: Contributors) -->
         <div class="tabs" role="tablist" aria-label="Leaderboard views">
-          <button type="button" class="tab active" role="tab" aria-selected="true" data-lbtab="models" id="lbtab-models"><span class="glyph">▸</span>[ MODELS ]</button>
-          <button type="button" class="tab" role="tab" aria-selected="false" data-lbtab="bars" id="lbtab-bars"><span class="glyph">▸</span>[ BARS ]</button>
-          <button type="button" class="tab" role="tab" aria-selected="false" data-lbtab="events" id="lbtab-events"><span class="glyph">▸</span>[ EVENTS ]</button>
-          <button type="button" class="tab" disabled style="opacity: 0.45; cursor: not-allowed;" title="Coming soon — populated as community contributions land."><span class="glyph">▸</span>[ CONTRIBUTORS ] <span style="font-size:9px;letter-spacing:0.18em;background:var(--ink);color:var(--orange);padding:2px 5px;margin-left:6px;">SOON</span></button>
+          <button type="button" class="tab active" role="tab" aria-selected="true" data-lbtab="models" id="lbtab-models"><span class="glyph">▸</span><span data-i18n="lb.tab.models">[ MODELS ]</span></button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-lbtab="bars" id="lbtab-bars"><span class="glyph">▸</span><span data-i18n="lb.tab.bars">[ BARS ]</span></button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-lbtab="events" id="lbtab-events"><span class="glyph">▸</span><span data-i18n="lb.tab.events">[ EVENTS ]</span></button>
+          <button type="button" class="tab" disabled style="opacity: 0.45; cursor: not-allowed;" data-i18n-attr="title:lb.tab.contributors.title" title="Coming soon — populated as community contributions land."><span class="glyph">▸</span><span data-i18n-html="lb.tab.contributors.html">[ CONTRIBUTORS ] <span style="font-size:9px;letter-spacing:0.18em;background:var(--ink);color:var(--orange);padding:2px 5px;margin-left:6px;">SOON</span></span></button>
         </div>
 
         <!-- =============== MODELS TAB =============== -->
         <div class="lb-tab-pane active" data-lbpane="models">
-          <div class="callout">
+          <div class="callout" data-i18n-html="lb.callout.html">
             ★ Strongest validated LLM reaches only <span class="big">33.6 / 100</span> on the calibration axis — significant headroom remains.
           </div>
 
           <div class="lb-wrap" id="lb-unified">
-            <table class="lb"><tbody><tr><td>Loading…</td></tr></tbody></table>
+            <table class="lb"><tbody><tr><td data-i18n="lb.loading">Loading…</td></tr></tbody></table>
           </div>
 
           <div class="lb-notes">
-            <p><span class="sym">†</span> Kimi-K2.5 generated the question banks; self-evaluation bias bounded at ≈ +0.9 on cross-event Cal. (App. D.4).</p>
-            <p><span class="sym">★</span> Gemini-3.1-pro was evaluated on a preview API; absolute numbers may shift on the GA build.</p>
-            <p style="margin-top: 10px;">Per-event cells: <code>Cal | Time</code>. Higher is better; 100 = perfect, 50 = uniform 50% / bucket-midpoint baseline. Per-event labels: PUB = Public Controversy · GEO = Geopolitical · TECH = Tech Policy · MKT = Markets · TRADE = Trade. Italic rows + <code>proj</code> badges are projected, pending experimental validation.</p>
+            <p data-i18n-html="lb.note.dagger.html"><span class="sym">†</span> Kimi-K2.5 generated the question banks; self-evaluation bias bounded at ≈ +0.9 on cross-event Cal. (App. D.4).</p>
+            <p data-i18n-html="lb.note.star.html"><span class="sym">★</span> Gemini-3.1-pro was evaluated on a preview API; absolute numbers may shift on the GA build.</p>
+            <p style="margin-top: 10px;" data-i18n-html="lb.note.legend.html">Per-event cells: <code>Cal | Time</code>. Higher is better; 100 = perfect, 50 = uniform 50% / bucket-midpoint baseline. Per-event labels: PUB = Public Controversy · GEO = Geopolitical · TECH = Tech Policy · MKT = Markets · TRADE = Trade. Italic rows + <code>proj</code> badges are projected, pending experimental validation.</p>
           </div>
         </div>
 
@@ -340,39 +346,39 @@
         <div class="lb-tab-pane" data-lbpane="bars">
           <div class="bars-toolbar">
             <div class="ctrl-group">
-              <span class="ctrl-label">Event</span>
+              <span class="ctrl-label" data-i18n="lb.bars.ctrl.event">Event</span>
               <div class="ctrl-row" id="bars-event">
-                <button class="ctrl-btn active" data-val="__avg">Overall</button>
-                <button class="ctrl-btn" data-val="Wuhan Lib.">PUB</button>
-                <button class="ctrl-btn" data-val="US-Iran">GEO</button>
-                <button class="ctrl-btn" data-val="TikTok">TECH</button>
-                <button class="ctrl-btn" data-val="SMCI">MKT</button>
-                <button class="ctrl-btn" data-val="Trump Tariff">TRADE</button>
+                <button class="ctrl-btn active" data-val="__avg" data-i18n="lb.bars.btn.overall">Overall</button>
+                <button class="ctrl-btn" data-val="Wuhan Lib." data-i18n="lb.bars.btn.pub">PUB</button>
+                <button class="ctrl-btn" data-val="US-Iran" data-i18n="lb.bars.btn.geo">GEO</button>
+                <button class="ctrl-btn" data-val="TikTok" data-i18n="lb.bars.btn.tech">TECH</button>
+                <button class="ctrl-btn" data-val="SMCI" data-i18n="lb.bars.btn.mkt">MKT</button>
+                <button class="ctrl-btn" data-val="Trump Tariff" data-i18n="lb.bars.btn.trade">TRADE</button>
               </div>
             </div>
 
             <div class="ctrl-group">
-              <span class="ctrl-label">Axis</span>
+              <span class="ctrl-label" data-i18n="lb.bars.ctrl.axis">Axis</span>
               <div class="ctrl-row" id="bars-axis">
-                <button class="ctrl-btn active" data-val="cal">Cal</button>
-                <button class="ctrl-btn" data-val="time">Time</button>
+                <button class="ctrl-btn active" data-val="cal" data-i18n="lb.bars.btn.cal">Cal</button>
+                <button class="ctrl-btn" data-val="time" data-i18n="lb.bars.btn.time">Time</button>
               </div>
             </div>
 
             <div class="ctrl-group">
-              <span class="ctrl-label">Sort</span>
+              <span class="ctrl-label" data-i18n="lb.bars.ctrl.sort">Sort</span>
               <div class="ctrl-row" id="bars-sort">
-                <button class="ctrl-btn active" data-sort-by="score" data-dir="desc">Score <span class="arr">↓</span></button>
-                <button class="ctrl-btn" data-sort-by="alpha" data-dir="asc">Name <span class="arr">A→Z</span></button>
+                <button class="ctrl-btn active" data-sort-by="score" data-dir="desc" data-i18n-html="lb.bars.btn.sort.score.html">Score <span class="arr">↓</span></button>
+                <button class="ctrl-btn" data-sort-by="alpha" data-dir="asc" data-i18n-html="lb.bars.btn.sort.name.html">Name <span class="arr">A→Z</span></button>
               </div>
             </div>
 
             <div class="ctrl-group">
-              <span class="ctrl-label">Include</span>
+              <span class="ctrl-label" data-i18n="lb.bars.ctrl.include">Include</span>
               <div class="ctrl-row" id="bars-include">
-                <button class="ctrl-btn active" data-val="validated">Validated</button>
-                <button class="ctrl-btn" data-val="all">+ Projected</button>
-                <button class="ctrl-btn" data-val="ref">+ Baselines</button>
+                <button class="ctrl-btn active" data-val="validated" data-i18n="lb.bars.btn.validated">Validated</button>
+                <button class="ctrl-btn" data-val="all" data-i18n="lb.bars.btn.projected">+ Projected</button>
+                <button class="ctrl-btn" data-val="ref" data-i18n="lb.bars.btn.baselines">+ Baselines</button>
               </div>
             </div>
           </div>
@@ -382,19 +388,19 @@
           <div class="bars-chart" id="bars-chart"></div>
 
           <div class="bars-legend">
-            <span class="lg lg-best"><i></i> Best in selection</span>
-            <span class="lg lg-llm"><i></i> Validated LLM</span>
-            <span class="lg lg-proj"><i></i> Projected</span>
-            <span class="lg lg-ref"><i></i> Baseline / Human</span>
-            <span class="lg lg-baseline-mark"><i></i> Baseline tick</span>
+            <span class="lg lg-best"><i></i> <span data-i18n="lb.bars.legend.best">Best in selection</span></span>
+            <span class="lg lg-llm"><i></i> <span data-i18n="lb.bars.legend.llm">Validated LLM</span></span>
+            <span class="lg lg-proj"><i></i> <span data-i18n="lb.bars.legend.proj">Projected</span></span>
+            <span class="lg lg-ref"><i></i> <span data-i18n="lb.bars.legend.ref">Baseline / Human</span></span>
+            <span class="lg lg-baseline-mark"><i></i> <span data-i18n="lb.bars.legend.baseline-mark">Baseline tick</span></span>
           </div>
         </div>
 
         <!-- =============== EVENTS TAB =============== -->
         <div class="lb-tab-pane" data-lbpane="events">
-          <p style="max-width: 75ch; font-size: 14.5px; margin-bottom: 24px; color: var(--muted);">Five anonymized arcs. Each card shows the arc description, prediction-point count, and the question volume that point supplies to the bank.</p>
+          <p style="max-width: 75ch; font-size: 14.5px; margin-bottom: 24px; color: var(--muted);" data-i18n="lb.events.intro">Five anonymized arcs. Each card shows the arc description, prediction-point count, and the question volume that point supplies to the bank.</p>
           <div class="cards cards-5" id="lb-events-grid"></div>
-          <p style="margin-top: 24px; font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.04em;">
+          <p style="margin-top: 24px; font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.04em;" data-i18n-html="lb.events.footer.html">
             ▸ More events expected via community contributions — see <a href="#/contribute" style="color: var(--orange-ink); border-bottom: 2px solid var(--orange); text-decoration: none; font-weight: 700;">EXPAND THE BENCHMARK</a>.
           </p>
         </div>
@@ -404,13 +410,13 @@
     <!-- =========================== TRY THE BENCHMARK ======================= -->
     <section class="page-section reveal" data-page="try" id="try">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Try the Benchmark <span style="color: var(--orange);">★</span></h2>
-        <p style="max-width: 75ch; font-size: 15.5px; margin-bottom: 24px;">Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth.</p>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n-html="try.title.html">Try the Benchmark <span style="color: var(--orange);">★</span></span></h2>
+        <p style="max-width: 75ch; font-size: 15.5px; margin-bottom: 24px;" data-i18n="try.subtitle">Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth.</p>
 
         <!-- Mode tabs -->
         <div class="tabs" role="tablist" aria-label="Try modes">
-          <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="cached" id="tab-cached"><span class="glyph">▸</span>[ CACHED MODE ]</button>
-          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="live" id="tab-live"><span class="glyph">▸</span>[ LIVE MODE ]</button>
+          <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="cached" id="tab-cached"><span class="glyph">▸</span><span data-i18n="try.tab.cached">[ CACHED MODE ]</span></button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="live" id="tab-live"><span class="glyph">▸</span><span data-i18n="try.tab.live">[ LIVE MODE ]</span></button>
         </div>
 
         <!-- Global banner area (fallback messages) -->
@@ -421,20 +427,20 @@
           <div class="try-grid">
             <!-- LEFT panel: selectors + model buttons -->
             <aside class="panel">
-              <span class="panel-label">▸ CONTROLS · CACHED</span>
+              <span class="panel-label" data-i18n="try.cached.controls.label">▸ CONTROLS · CACHED</span>
 
               <div class="field">
-                <label class="field-label" for="evt-select">EVENT</label>
+                <label class="field-label" for="evt-select" data-i18n="try.field.event">EVENT</label>
                 <select class="select" id="evt-select"></select>
               </div>
 
               <div class="field">
-                <label class="field-label" for="pt-select">PREDICTION POINT</label>
+                <label class="field-label" for="pt-select" data-i18n="try.field.point">PREDICTION POINT</label>
                 <select class="select" id="pt-select"></select>
               </div>
 
               <div class="field" style="margin-bottom: 0;">
-                <span class="field-label">MODEL</span>
+                <span class="field-label" data-i18n="try.field.model">MODEL</span>
                 <div class="model-btns" id="model-btns"></div>
               </div>
             </aside>
@@ -443,32 +449,32 @@
             <div>
               <div class="view-grid">
                 <div class="view-block full">
-                  <span class="vb-label">CONTEXT (UP TO CUTOFF) — <span class="meta" id="ctx-meta">—</span></span>
+                  <span class="vb-label" data-i18n-html="try.view.ctx.html">CONTEXT (UP TO CUTOFF) — <span class="meta" id="ctx-meta">—</span></span>
                   <div class="context-box" id="ctx-text">—</div>
                 </div>
 
                 <div class="view-block qbox">
-                  <span class="vb-label">CALIBRATION QUESTION</span>
+                  <span class="vb-label" data-i18n="try.view.cal-q">CALIBRATION QUESTION</span>
                   <p class="q" id="cal-q">—</p>
                   <p class="qmeta" id="cal-meta">—</p>
                 </div>
 
                 <div class="view-block qbox">
-                  <span class="vb-label">TEMPORAL QUESTION</span>
+                  <span class="vb-label" data-i18n="try.view.time-q">TEMPORAL QUESTION</span>
                   <p class="q" id="time-q">—</p>
                   <p class="qmeta" id="time-meta">—</p>
                 </div>
 
                 <div class="view-block full">
-                  <span class="vb-label">MODEL OUTPUT — <span class="meta" id="mout-name">—</span></span>
+                  <span class="vb-label" data-i18n-html="try.view.model-output.html">MODEL OUTPUT — <span class="meta" id="mout-name">—</span></span>
                   <div class="output-row">
                     <div class="output-cell">
-                      <span class="num-label">P̂  ·  CALIBRATION</span>
+                      <span class="num-label" data-i18n="try.view.phat-label">P̂  ·  CALIBRATION</span>
                       <div class="num" id="phat">—</div>
                       <div class="reason" id="phat-reason">—</div>
                     </div>
                     <div class="output-cell">
-                      <span class="num-label">D̂  ·  TEMPORAL DAY</span>
+                      <span class="num-label" data-i18n="try.view.dhat-label">D̂  ·  TEMPORAL DAY</span>
                       <div class="num" id="dhat">—</div>
                       <div class="reason" id="dhat-reason">—</div>
                     </div>
@@ -476,19 +482,19 @@
                 </div>
 
                 <div class="view-block full">
-                  <span class="vb-label">GROUND TRUTH</span>
+                  <span class="vb-label" data-i18n="try.view.gt">GROUND TRUTH</span>
                   <div class="reveal-row">
-                    <button class="btn primary" id="reveal-btn"><span class="glyph">▸</span> REVEAL GT</button>
-                    <span class="gt-pending" id="gt-pending">— click to compare model output against the true outcome</span>
+                    <button class="btn primary" id="reveal-btn" data-i18n-html="try.btn.reveal-gt.html"><span class="glyph">▸</span> REVEAL GT</button>
+                    <span class="gt-pending" id="gt-pending" data-i18n="try.gt-pending">— click to compare model output against the true outcome</span>
                     <div class="gt-values hidden" id="gt-values">
-                      <span class="gv">CALIBRATION GT &nbsp;·&nbsp; <b id="gt-cal">—</b> <span style="color:var(--muted)" id="gt-cal-note"></span></span>
-                      <span class="gv">TEMPORAL GT &nbsp;·&nbsp; <b id="gt-time">—</b></span>
+                      <span class="gv" data-i18n-html="try.gv.cal.html">CALIBRATION GT &nbsp;·&nbsp; <b id="gt-cal">—</b> <span style="color:var(--muted)" id="gt-cal-note"></span></span>
+                      <span class="gv" data-i18n-html="try.gv.time.html">TEMPORAL GT &nbsp;·&nbsp; <b id="gt-time">—</b></span>
                     </div>
                   </div>
                 </div>
 
                 <div class="view-block full">
-                  <span class="vb-label">VERDICT</span>
+                  <span class="vb-label" data-i18n="try.view.verdict">VERDICT</span>
                   <div class="verdict" id="verdict">—</div>
                 </div>
               </div>
@@ -499,77 +505,78 @@
 
         <!-- ============ LIVE MODE PANE ============ -->
         <div class="tab-pane" data-pane="live" role="tabpanel" aria-labelledby="tab-live">
-          <div class="mode-banner info"><span class="dot"></span>LIVE MODE — calls a real model API via <code style="margin: 0 4px;">/api/predict</code>. Daily budget applies.</div>
+          <div class="mode-banner info" data-i18n-html="try.live.banner.html"><span class="dot"></span>LIVE MODE — calls a real model API via <code style="margin: 0 4px;">/api/predict</code>. Daily budget applies.</div>
 
           <div class="live-grid">
             <!-- LEFT: selectors + question + run -->
             <aside class="panel">
-              <span class="panel-label">▸ CONTROLS · LIVE</span>
+              <span class="panel-label" data-i18n="try.live.controls.label">▸ CONTROLS · LIVE</span>
 
               <div class="field">
-                <label class="field-label" for="live-evt-select">EVENT</label>
+                <label class="field-label" for="live-evt-select" data-i18n="try.field.event">EVENT</label>
                 <select class="select" id="live-evt-select"></select>
               </div>
 
               <div class="field">
-                <label class="field-label" for="live-pt-select">PREDICTION POINT</label>
+                <label class="field-label" for="live-pt-select" data-i18n="try.field.point">PREDICTION POINT</label>
                 <select class="select" id="live-pt-select"></select>
-                <button type="button" class="preview-gt-btn" id="preview-gt-btn" aria-expanded="false">
+                <button type="button" class="preview-gt-btn" id="preview-gt-btn" aria-expanded="false" data-i18n-html="try.live.preview-gt-btn.html">
                   <span class="pv-glyph">▸</span> PREVIEW GT FOR THIS POINT
                 </button>
                 <div class="preview-gt-card" id="preview-gt-card" hidden>
                   <div class="pgt-row">
-                    <span class="pgt-label">CAL GT</span>
+                    <span class="pgt-label" data-i18n="try.live.pgt.cal">CAL GT</span>
                     <b id="pgt-cal">—</b>
                     <span class="pgt-note" id="pgt-cal-note"></span>
                   </div>
                   <div class="pgt-row">
-                    <span class="pgt-label">TIME GT</span>
+                    <span class="pgt-label" data-i18n="try.live.pgt.time">TIME GT</span>
                     <b id="pgt-time">—</b>
                   </div>
-                  <p class="pgt-hint">▸ The widget hides GT from the model cards until you click REVEAL GT. This preview is for the operator only.</p>
+                  <p class="pgt-hint" data-i18n="try.live.pgt.hint">▸ The widget hides GT from the model cards until you click REVEAL GT. This preview is for the operator only.</p>
                 </div>
               </div>
 
               <div class="field">
-                <span class="field-label">QUESTION (PICK ONE OR WRITE YOUR OWN)</span>
+                <span class="field-label" data-i18n="try.live.q-field">QUESTION (PICK ONE OR WRITE YOUR OWN)</span>
                 <div class="qchoice-list" id="qchoice-list"></div>
                 <div class="custom-q">
-                  <label class="custom-q-label" for="custom-q-input">
+                  <label class="custom-q-label" for="custom-q-input" data-i18n-html="try.live.custom-q.or.html">
                     <span class="cq-or">— or write your own —</span>
                   </label>
                   <textarea
                     id="custom-q-input"
                     class="custom-q-input"
                     placeholder="Type a custom calibration question (yes/no within a time window) or temporal question (predict a calendar day). The /api/predict backend will receive {question_id: 'custom', question_text: '…'}."
+                    data-i18n-attr="placeholder:try.live.custom-q.placeholder"
                     rows="3"></textarea>
                   <div class="custom-q-meta">
                     <label class="cq-toggle">
-                      <input type="radio" name="cq-type" value="calibration" checked /> CAL
+                      <input type="radio" name="cq-type" value="calibration" checked /> <span data-i18n="try.live.cq.cal">CAL</span>
                     </label>
                     <label class="cq-toggle">
-                      <input type="radio" name="cq-type" value="temporal" /> TIME
+                      <input type="radio" name="cq-type" value="temporal" /> <span data-i18n="try.live.cq.time">TIME</span>
                     </label>
-                    <span class="cq-hint" id="cq-hint">Typing here clears the preset selection above.</span>
+                    <span class="cq-hint" id="cq-hint" data-i18n="try.live.cq.hint">Typing here clears the preset selection above.</span>
                   </div>
                 </div>
               </div>
 
               <div class="field" style="margin-bottom: 0;">
-                <span class="field-label">MODELS — SIDE BY SIDE</span>
+                <span class="field-label" data-i18n="try.live.models-field">MODELS — SIDE BY SIDE</span>
                 <div class="model-pair">
                   <div>
-                    <label for="live-model-a"><span class="side-tag">A</span>MODEL A</label>
+                    <label for="live-model-a" data-i18n-html="try.live.model-a.label.html"><span class="side-tag">A</span>MODEL A</label>
                     <select class="select" id="live-model-a"></select>
                   </div>
                   <div>
-                    <label for="live-model-b"><span class="side-tag b">B</span>MODEL B</label>
+                    <label for="live-model-b" data-i18n-html="try.live.model-b.label.html"><span class="side-tag b">B</span>MODEL B</label>
                     <select class="select" id="live-model-b"></select>
                   </div>
                 </div>
-                <button type="button" class="run-btn" id="run-btn">▶ RUN PREDICTION</button>
+                <button type="button" class="run-btn" id="run-btn" data-i18n="try.live.run-btn">▶ RUN PREDICTION</button>
                 <div class="budget-bar" id="budget-bar" style="display:none;">
-                  <span>Daily budget</span>
+                  <span data-i18n="try.live.budget">Daily budget</span>
                   <span class="meter"><span class="fill" id="budget-fill"></span></span>
                   <span id="budget-pct">—</span>
                 </div>
@@ -580,30 +587,30 @@
             <div>
               <div class="view-grid">
                 <div class="view-block full">
-                  <span class="vb-label">CONTEXT (UP TO CUTOFF) — <span class="meta" id="live-ctx-meta">—</span></span>
+                  <span class="vb-label" data-i18n-html="try.live.ctx.html">CONTEXT (UP TO CUTOFF) — <span class="meta" id="live-ctx-meta">—</span></span>
                   <div class="context-box" id="live-ctx-text">—</div>
                 </div>
 
                 <div class="view-block full">
-                  <span class="vb-label">RESULT — <span class="meta" id="live-result-meta">awaiting run</span></span>
+                  <span class="vb-label" data-i18n-html="try.live.result.label.html">RESULT — <span class="meta" id="live-result-meta">awaiting run</span></span>
                   <div class="live-result-grid" id="live-result-grid">
                     <div class="live-card" id="live-card-a">
-                      <div class="lc-header"><span class="lc-name">Model A</span><span class="lc-side">A</span></div>
-                      <span class="lc-num-label">Pick a question and 2 models, then hit RUN ▶ to call the live API</span>
+                      <div class="lc-header"><span class="lc-name" data-i18n="try.live.lc.name.a">Model A</span><span class="lc-side">A</span></div>
+                      <span class="lc-num-label" data-i18n="try.live.lc.num-label.before-run">Pick a question and 2 models, then hit RUN ▶ to call the live API</span>
                       <div class="lc-num" style="color: var(--muted); font-size: 32px;">—</div>
-                      <div class="lc-reason" style="color: var(--muted);">Each Run calls the model API in real time (~5–30s). Daily budget applies.</div>
+                      <div class="lc-reason" style="color: var(--muted);" data-i18n="try.live.lc.reason.before-run">Each Run calls the model API in real time (~5–30s). Daily budget applies.</div>
                     </div>
                     <div class="live-card" id="live-card-b">
-                      <div class="lc-header"><span class="lc-name">Model B</span><span class="lc-side b">B</span></div>
-                      <span class="lc-num-label">Pick a question and 2 models, then hit RUN ▶ to call the live API</span>
+                      <div class="lc-header"><span class="lc-name" data-i18n="try.live.lc.name.b">Model B</span><span class="lc-side b">B</span></div>
+                      <span class="lc-num-label" data-i18n="try.live.lc.num-label.before-run">Pick a question and 2 models, then hit RUN ▶ to call the live API</span>
                       <div class="lc-num" style="color: var(--muted); font-size: 32px;">—</div>
-                      <div class="lc-reason" style="color: var(--muted);">Each Run calls the model API in real time (~5–30s). Daily budget applies.</div>
+                      <div class="lc-reason" style="color: var(--muted);" data-i18n="try.live.lc.reason.before-run">Each Run calls the model API in real time (~5–30s). Daily budget applies.</div>
                     </div>
                   </div>
 
                   <div id="live-gt-host" style="display:none;"></div>
                   <div id="live-reveal-row" style="margin-top: 18px; display:none;">
-                    <button class="btn primary" id="live-reveal-btn"><span class="glyph">▸</span> REVEAL GT</button>
+                    <button class="btn primary" id="live-reveal-btn" data-i18n-html="try.live.reveal-btn.html"><span class="glyph">▸</span> REVEAL GT</button>
                   </div>
                 </div>
               </div>
@@ -617,18 +624,18 @@
     <!-- ========================== EXPAND THE BENCHMARK ===================== -->
     <section class="page-section reveal" data-page="contribute" id="expand">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Contribute</h2>
-        <p style="max-width: 75ch; font-size: 15px; margin-bottom: 32px;">Everything you submit is reviewed and added to the public leaderboard.</p>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="cb.title">Contribute</span></h2>
+        <p style="max-width: 75ch; font-size: 15px; margin-bottom: 32px;" data-i18n="cb.subtitle">Everything you submit is reviewed and added to the public leaderboard.</p>
 
         <div class="cards cards-3">
           <article class="card expand-card">
-            <div class="numeral">01</div>
-            <h3 class="card-title">Bring Your Model</h3>
-            <p class="ec-body">Run our 5 events on your LLM or agent, submit your scorecard via PR. The team replays your raw answers with our scoring code — no honor system.</p>
-            <a class="ec-action" href="#">Submission guide →</a>
-            <button type="button" class="drawer-toggle" data-drawer-id="dr-model" aria-expanded="false">[ SHOW SUBMISSION DETAILS ▾ ]</button>
+            <div class="numeral" data-i18n="cb.c1.num">01</div>
+            <h3 class="card-title" data-i18n="cb.c1.title">Bring Your Model</h3>
+            <p class="ec-body" data-i18n="cb.c1.body">Run our 5 events on your LLM or agent, submit your scorecard via PR. The team replays your raw answers with our scoring code — no honor system.</p>
+            <a class="ec-action" href="#" data-i18n="cb.c1.action">Submission guide →</a>
+            <button type="button" class="drawer-toggle" data-drawer-id="dr-model" aria-expanded="false" data-i18n="cb.c1.drawer-toggle">[ SHOW SUBMISSION DETAILS ▾ ]</button>
             <div class="drawer" id="dr-model">
-<pre class="drawer-pre">WHAT TO SUBMIT  <span class="dim">(place in submissions/&lt;your-name&gt;/&lt;model-name&gt;/)</span>
+<pre class="drawer-pre" data-i18n-html="cb.c1.drawer.html">WHAT TO SUBMIT  <span class="dim">(place in submissions/&lt;your-name&gt;/&lt;model-name&gt;/)</span>
   <span class="kw">▸</span> model_card.md         <span class="dim">— name, version, params, training cutoff</span>
   <span class="kw">▸</span> predictions.jsonl     <span class="dim">— one line per question: {point_id, q_id, p_hat or d_hat}</span>
   <span class="kw">▸</span> run_metadata.json     <span class="dim">— reasoning depth, decoding params, API provider, dates</span>
@@ -642,18 +649,18 @@ PROCESS
 
 The team replays your raw answers with our official scoring code.
 Match → added to the leaderboard. No honor system.</pre>
-              <a class="drawer-cta" href="#">[ OPEN PR ON GITHUB → ]</a>
+              <a class="drawer-cta" href="#" data-i18n="cb.c1.drawer-cta">[ OPEN PR ON GITHUB → ]</a>
             </div>
           </article>
 
           <article class="card expand-card">
-            <div class="numeral">02</div>
-            <h3 class="card-title">Bring a New Event</h3>
-            <p class="ec-body">Use our public pipeline (web-crawl → media-crawl → merge → anonymize → questionbank) to construct a new anonymized event. Submit it via PR; if accepted it joins the official 5+.</p>
-            <a class="ec-action" href="#">Pipeline guide →</a>
-            <button type="button" class="drawer-toggle" data-drawer-id="dr-event" aria-expanded="false">[ SHOW SUBMISSION DETAILS ▾ ]</button>
+            <div class="numeral" data-i18n="cb.c2.num">02</div>
+            <h3 class="card-title" data-i18n="cb.c2.title">Bring a New Event</h3>
+            <p class="ec-body" data-i18n="cb.c2.body">Use our public pipeline (web-crawl → media-crawl → merge → anonymize → questionbank) to construct a new anonymized event. Submit it via PR; if accepted it joins the official 5+.</p>
+            <a class="ec-action" href="#" data-i18n="cb.c2.action">Pipeline guide →</a>
+            <button type="button" class="drawer-toggle" data-drawer-id="dr-event" aria-expanded="false" data-i18n="cb.c2.drawer-toggle">[ SHOW SUBMISSION DETAILS ▾ ]</button>
             <div class="drawer" id="dr-event">
-<pre class="drawer-pre">WHAT TO SUBMIT  <span class="dim">(place in submissions/&lt;your-name&gt;/event-&lt;slug&gt;/)</span>
+<pre class="drawer-pre" data-i18n-html="cb.c2.drawer.html">WHAT TO SUBMIT  <span class="dim">(place in submissions/&lt;your-name&gt;/event-&lt;slug&gt;/)</span>
   <span class="kw">▸</span> event_meta.json       <span class="dim">— slug, domain, arc dates, source platforms</span>
   <span class="kw">▸</span> timeline_anon.md      <span class="dim">— final anonymized timeline</span>
   <span class="kw">▸</span> replacements.json     <span class="dim">— substitution table (for audit)</span>
@@ -667,54 +674,54 @@ PROCESS
   <span class="kw">03</span>  Open a PR adding the event folder
 
 Accepted events join the official catalog and ship in the next benchmark version.</pre>
-              <a class="drawer-cta" href="#">[ OPEN PR ON GITHUB → ]</a>
+              <a class="drawer-cta" href="#" data-i18n="cb.c2.drawer-cta">[ OPEN PR ON GITHUB → ]</a>
             </div>
           </article>
 
           <article class="card expand-card">
-            <div class="numeral">03</div>
-            <h3 class="card-title">Suggest a Topic</h3>
-            <p class="ec-body">Have an event idea but no compute? Send us the topic and rough timespan. We'll run the pipeline on accepted suggestions and credit you on the contributor list.</p>
-            <button type="button" class="ec-action" id="suggest-toggle">Submit topic →</button>
+            <div class="numeral" data-i18n="cb.c3.num">03</div>
+            <h3 class="card-title" data-i18n="cb.c3.title">Suggest a Topic</h3>
+            <p class="ec-body" data-i18n="cb.c3.body">Have an event idea but no compute? Send us the topic and rough timespan. We'll run the pipeline on accepted suggestions and credit you on the contributor list.</p>
+            <button type="button" class="ec-action" id="suggest-toggle" data-i18n="cb.c3.action">Submit topic →</button>
 
             <form class="suggest-form" id="suggest-form" novalidate>
               <div>
-                <label for="sf-name">Event name / one-line topic</label>
-                <input id="sf-name" name="name" type="text" required placeholder="e.g. Cross-border data-localization policy rollout" />
+                <label for="sf-name" data-i18n="cb.sf.name.label">Event name / one-line topic</label>
+                <input id="sf-name" name="name" type="text" required placeholder="e.g. Cross-border data-localization policy rollout" data-i18n-attr="placeholder:cb.sf.name.placeholder" />
               </div>
               <div class="field-pair">
                 <div>
-                  <label for="sf-from">Rough start</label>
-                  <input id="sf-from" name="from" type="text" placeholder="YYYY-MM" />
+                  <label for="sf-from" data-i18n="cb.sf.from.label">Rough start</label>
+                  <input id="sf-from" name="from" type="text" placeholder="YYYY-MM" data-i18n-attr="placeholder:cb.sf.from.placeholder" />
                 </div>
                 <div>
-                  <label for="sf-to">Rough end</label>
-                  <input id="sf-to" name="to" type="text" placeholder="YYYY-MM" />
+                  <label for="sf-to" data-i18n="cb.sf.to.label">Rough end</label>
+                  <input id="sf-to" name="to" type="text" placeholder="YYYY-MM" data-i18n-attr="placeholder:cb.sf.to.placeholder" />
                 </div>
               </div>
               <div>
-                <label for="sf-email">Your email</label>
-                <input id="sf-email" name="email" type="email" required placeholder="you@domain" />
+                <label for="sf-email" data-i18n="cb.sf.email.label">Your email</label>
+                <input id="sf-email" name="email" type="email" required placeholder="you@domain" data-i18n-attr="placeholder:cb.sf.email.placeholder" />
               </div>
               <div>
-                <label for="sf-why">Why this event (2–3 lines)</label>
-                <textarea id="sf-why" name="why" required placeholder="What makes this event a worthwhile addition? Domain coverage? Failure mode for current models?"></textarea>
+                <label for="sf-why" data-i18n="cb.sf.why.label">Why this event (2–3 lines)</label>
+                <textarea id="sf-why" name="why" required placeholder="What makes this event a worthwhile addition? Domain coverage? Failure mode for current models?" data-i18n-attr="placeholder:cb.sf.why.placeholder"></textarea>
               </div>
-              <button class="submit" type="submit">▸ SUBMIT TOPIC</button>
+              <button class="submit" type="submit" data-i18n="cb.sf.submit">▸ SUBMIT TOPIC</button>
             </form>
           </article>
         </div>
 
-        <p class="expand-note">Contributors and event-growth statistics will appear here as the benchmark grows · current: <strong>5 events</strong> · <strong>6 systems</strong> on the leaderboard</p>
-        <p class="discussions-line">Questions about format, methodology, or scoring? &nbsp;→&nbsp; Join the discussion on <a href="#">GitHub Discussions ↗</a></p>
+        <p class="expand-note" data-i18n-html="cb.expand-note.html">Contributors and event-growth statistics will appear here as the benchmark grows · current: <strong>5 events</strong> · <strong>6 systems</strong> on the leaderboard</p>
+        <p class="discussions-line" data-i18n-html="cb.discussions.html">Questions about format, methodology, or scoring? &nbsp;→&nbsp; Join the discussion on <a href="#">GitHub Discussions ↗</a></p>
       </div>
     </section>
 
     <!-- ========================== RESULTS DEEP-DIVE ========================= -->
     <section class="page-section reveal" data-page="deepdive" id="deepdive">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Deep Dive</h2>
-        <p style="max-width: 80ch; font-size: 15px; margin-bottom: 40px;">Five tables behind the headline number. Stress cases isolate where models break; four ablations isolate where the benchmark's difficulty comes from.</p>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="dd.title">Deep Dive</span></h2>
+        <p style="max-width: 80ch; font-size: 15px; margin-bottom: 40px;" data-i18n="dd.intro">Five tables behind the headline number. Stress cases isolate where models break; four ablations isolate where the benchmark's difficulty comes from.</p>
 
         <div id="dd-stress"></div>
         <div class="dd-divider"></div>
@@ -731,8 +738,8 @@ Accepted events join the official catalog and ship in the next benchmark version
     <!-- ========================== QUALITATIVE COMPARISON =================== -->
     <section class="page-section reveal" data-page="qualitative">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Qualitative</h2>
-        <p style="max-width: 75ch; font-size: 15px; margin-bottom: 28px;">A single anonymized geopolitical prediction point (Day 22 cutoff). The same point queried twice — once for calibration probability, once for temporal date — across four candidates: the strongest LLM, two LLMs that bracket the dominant failure modes (near-term over-extension, uniform-collapse), and the strongest projected agent setup.</p>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="qual.title">Qualitative</span></h2>
+        <p style="max-width: 75ch; font-size: 15px; margin-bottom: 28px;" data-i18n="qual.intro">A single anonymized geopolitical prediction point (Day 22 cutoff). The same point queried twice — once for calibration probability, once for temporal date — across four candidates: the strongest LLM, two LLMs that bracket the dominant failure modes (near-term over-extension, uniform-collapse), and the strongest projected agent setup.</p>
 
         <figure class="figbox fig-frame" style="margin: 0 auto;">
           <img src="figures/fig_qualitative-1.png" alt="Qualitative comparison" loading="lazy" />
@@ -740,14 +747,14 @@ Accepted events join the official catalog and ship in the next benchmark version
 
         <div class="qual-grid">
           <div class="pullquote">
-            <div class="pq-label">▸ STRONGEST LLM &nbsp; · &nbsp; CALIBRATED</div>
-            <blockquote>Naval drill positioning combined with escalating rhetoric across Days 22–29 indicates intent; absence of public de-escalation channels makes a kinetic response within 14 days likely.</blockquote>
-            <p class="pq-meta">P̂ = 0.78  ·  GT: strike occurred Day 31 (within window)  ·  CALIBRATED</p>
+            <div class="pq-label" data-i18n="qual.q1.label">▸ STRONGEST LLM &nbsp; · &nbsp; CALIBRATED</div>
+            <blockquote data-i18n="qual.q1.text">Naval drill positioning combined with escalating rhetoric across Days 22–29 indicates intent; absence of public de-escalation channels makes a kinetic response within 14 days likely.</blockquote>
+            <p class="pq-meta" data-i18n="qual.q1.meta">P̂ = 0.78  ·  GT: strike occurred Day 31 (within window)  ·  CALIBRATED</p>
           </div>
           <div class="pullquote">
-            <div class="pq-label">▸ WEAK LLM &nbsp; · &nbsp; UNIFORM COLLAPSE</div>
-            <blockquote>Signals point in opposing directions; insufficient basis to deviate from the prior.</blockquote>
-            <p class="pq-meta">P̂ = 0.50  ·  GT: strike occurred Day 31  ·  DATE-BLIND (Δ ≈ 44 days)</p>
+            <div class="pq-label" data-i18n="qual.q2.label">▸ WEAK LLM &nbsp; · &nbsp; UNIFORM COLLAPSE</div>
+            <blockquote data-i18n="qual.q2.text">Signals point in opposing directions; insufficient basis to deviate from the prior.</blockquote>
+            <p class="pq-meta" data-i18n="qual.q2.meta">P̂ = 0.50  ·  GT: strike occurred Day 31  ·  DATE-BLIND (Δ ≈ 44 days)</p>
           </div>
         </div>
       </div>
@@ -756,11 +763,11 @@ Accepted events join the official catalog and ship in the next benchmark version
     <!-- =============================== LIMITATIONS ========================= -->
     <section class="page-section reveal" data-page="limitations">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Limitations</h2>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="lim.title">Limitations</span></h2>
         <ul class="lim-list">
-          <li><strong>Censored social-media signal.</strong> The Chinese social-media layer is censored and platform-curated; the opinion layer measures "opinion as visible on platform," not ground-truth population sentiment.</li>
-          <li><strong>Forecasting-only scoring.</strong> The two scoring lines target forecasting; an LLM-as-judge quality axis (narrative coherence, justification rigor) is excluded for now.</li>
-          <li><strong>Five events is a small sample.</strong> Per-event scores are released alongside the mean so a single long-horizon event cannot silently dominate cross-event conclusions; multi-event evaluation is strongly motivated.</li>
+          <li data-i18n-html="lim.item1.html"><strong>Censored social-media signal.</strong> The Chinese social-media layer is censored and platform-curated; the opinion layer measures "opinion as visible on platform," not ground-truth population sentiment.</li>
+          <li data-i18n-html="lim.item2.html"><strong>Forecasting-only scoring.</strong> The two scoring lines target forecasting; an LLM-as-judge quality axis (narrative coherence, justification rigor) is excluded for now.</li>
+          <li data-i18n-html="lim.item3.html"><strong>Five events is a small sample.</strong> Per-event scores are released alongside the mean so a single long-horizon event cannot silently dominate cross-event conclusions; multi-event evaluation is strongly motivated.</li>
         </ul>
       </div>
     </section>
@@ -768,9 +775,9 @@ Accepted events join the official catalog and ship in the next benchmark version
     <!-- =============================== CITATION ============================ -->
     <section class="page-section reveal" data-page="cite" id="cite">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> Citation</h2>
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="cite.title">Citation</span></h2>
         <div class="cite-block">
-          <button class="copy-btn" id="copy-bib" type="button">▸ COPY</button>
+          <button class="copy-btn" id="copy-bib" type="button" data-i18n="cite.copy">▸ COPY</button>
 <pre id="bibtex"><span class="kw">@misc</span>{societybench2026,
   title  = {SocietyBench: Forecasting Counterfactual Social-World Evolution},
   author = {Anonymous Authors},
@@ -786,6 +793,7 @@ Accepted events join the official catalog and ship in the next benchmark version
     </div><!-- /.main-col -->
   </div><!-- /.shell -->
 
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
   <script src="crowd-animation.js"></script>
   <script src="crowd-links.js"></script>

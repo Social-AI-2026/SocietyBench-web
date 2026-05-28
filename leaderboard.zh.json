@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-05-23",
+  "next_review": "2026-06-15",
+  "notes": "来源:论文 tab_main_result.tex + tab_main_projected.tex。每个 per_event 条目格式为 [校准, 时间]。除位于 `projected` 节内,数字均为已验证结果。",
+  "events": ["Wuhan Lib.", "US-Iran", "TikTok", "SMCI", "Trump Tariff"],
+  "axes": {
+    "calibration": {"label": "校准 (Cal)", "range": [0, 100], "baseline": 0, "perfect": 100, "baseline_label": "均匀 50% 预测器 = 0"},
+    "temporal":    {"label": "时间 (Time)", "range": [0, 100], "baseline": 50, "perfect": 100, "baseline_label": "时窗中点基线 = 50"}
+  },
+  "validated": [
+    {
+      "system": "Gemini-3.1-pro",
+      "footnote": "预览版 API",
+      "is_best_overall": true,
+      "per_event": {
+        "Wuhan Lib.":   [24.9, 58.5],
+        "US-Iran":      [26.2, 60.5],
+        "TikTok":       [48.2, 74.7],
+        "SMCI":         [49.1, 83.7],
+        "Trump Tariff": [19.5, 69.3]
+      },
+      "avg": [33.6, 69.3]
+    },
+    {
+      "system": "GPT-5.4",
+      "per_event": {
+        "Wuhan Lib.":   [17.3, 54.6],
+        "US-Iran":      [21.2, 56.5],
+        "TikTok":       [39.6, 70.2],
+        "SMCI":         [37.8, 76.1],
+        "Trump Tariff": [18.7, 70.1]
+      },
+      "avg": [26.9, 65.5]
+    },
+    {
+      "system": "Doubao Seed 2.0 lite",
+      "per_event": {
+        "Wuhan Lib.":   [25.2, 61.1],
+        "US-Iran":      [21.8, 62.0],
+        "TikTok":       [31.6, 63.1],
+        "SMCI":         [24.9, 53.2],
+        "Trump Tariff": [19.9, 61.2]
+      },
+      "avg": [24.7, 60.1]
+    },
+    {
+      "system": "Kimi-K2.5",
+      "footnote": "题库生成方;自评偏置上界 ≈+0.9 (附录 D.4)",
+      "per_event": {
+        "Wuhan Lib.":   [14.9, 52.5],
+        "US-Iran":      [19.7, 61.7],
+        "TikTok":       [27.6, 65.4],
+        "SMCI":         [24.1, 48.9],
+        "Trump Tariff": [18.4, 62.8]
+      },
+      "avg": [20.9, 58.3]
+    },
+    {
+      "system": "Qwen3-235B-A22B",
+      "per_event": {
+        "Wuhan Lib.":   [21.5, 61.4],
+        "US-Iran":      [16.1, 53.4],
+        "TikTok":       [20.2, 61.1],
+        "SMCI":         [20.9, 53.7],
+        "Trump Tariff": [14.5, 24.4]
+      },
+      "avg": [18.6, 50.8]
+    }
+  ],
+  "projected": {
+    "notes": "以下数字均为预估,尚待实验验证。表格中以斜体呈现。",
+    "additional_llms": [
+      {
+        "system": "Claude Sonnet 4.6",
+        "per_event": {
+          "Wuhan Lib.":   [22.5, 57.0],
+          "US-Iran":      [23.5, 59.0],
+          "TikTok":       [44.5, 72.0],
+          "SMCI":         [45.0, 80.0],
+          "Trump Tariff": [17.0, 67.0]
+        },
+        "avg": [30.5, 67.0]
+      }
+    ],
+    "agents_on_doubao": [
+      {"system": "LangGraph + Doubao",  "per_event": {"Wuhan Lib.":[26.5,61.5],"US-Iran":[23.0,62.5],"TikTok":[33.5,63.5],"SMCI":[26.0,53.5],"Trump Tariff":[22.0,62.0]}, "avg":[26.2,60.6]},
+      {"system": "AutoGen + Doubao",    "per_event": {"Wuhan Lib.":[28.5,60.5],"US-Iran":[24.5,61.0],"TikTok":[35.0,62.5],"SMCI":[28.5,53.0],"Trump Tariff":[23.5,60.0]}, "avg":[28.0,59.4]},
+      {"system": "MiroFish + Doubao",   "per_event": {"Wuhan Lib.":[31.0,63.5],"US-Iran":[27.5,64.0],"TikTok":[38.0,65.5],"SMCI":[31.0,55.5],"Trump Tariff":[26.5,63.0]}, "avg":[30.8,62.3]}
+    ],
+    "agents_on_qwen3": [
+      {"system": "LangGraph + Qwen3",   "per_event": {"Wuhan Lib.":[23.5,62.5],"US-Iran":[18.5,55.5],"TikTok":[22.5,63.0],"SMCI":[23.0,55.5],"Trump Tariff":[16.5,27.0]}, "avg":[20.8,52.7]},
+      {"system": "AutoGen + Qwen3",     "per_event": {"Wuhan Lib.":[25.0,61.5],"US-Iran":[20.5,53.5],"TikTok":[24.5,61.5],"SMCI":[25.0,54.0],"Trump Tariff":[17.5,24.5]}, "avg":[22.5,51.0]},
+      {"system": "MiroFish + Qwen3",    "per_event": {"Wuhan Lib.":[28.5,64.5],"US-Iran":[24.0,57.5],"TikTok":[28.5,64.5],"SMCI":[29.0,57.5],"Trump Tariff":[22.0,29.0]}, "avg":[26.4,54.6]}
+    ],
+    "baselines_and_human": [
+      {"system": "频率基线 (经验基率)",        "kind": "non-llm", "avg": [12.4, 50.0]},
+      {"system": "动量基线 (7 日滚动)",        "kind": "non-llm", "avg": [13.6, 50.0]},
+      {"system": "人类小组 (n=5 名预测员)",     "kind": "human",   "avg": [41.8, 73.5]}
+    ]
+  }
+}
