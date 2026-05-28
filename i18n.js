@@ -594,13 +594,13 @@ Accepted events join the official catalog and ship in the next benchmark version
       // ---- Abstract -------------------------------------------------------
       'about.title': '摘要',
       'about.p1': '我们提出首个能评测大模型前瞻真实社会事件能力的 benchmark——所用真值数据来自 Web 新闻与社媒,并已经过匿名化处理。',
-      'about.p2.html': '我们并行从 Web 新闻与五个社媒平台采集帖子,通过一条六步 agent 链将每一源蒸馏为日期索引时间线,再合并为一份显式区分事实事件与公众舆论的统一年表。再经一道匿名化流程,把每段真实事件弧渲染为<strong>反事实社会世界</strong>——结构上与真实发生的完全一致,但剥去了模型能与预训练记忆比对的表面标签,使评测度量的是对社会世界演化的前向推理,而非记忆调取。在此之上,我们自动生成由 agent 审核的题库,支持两条正交的评测轴:概率校准与时间精度。',
+      'about.p2.html': '我们并行从 Web 新闻与五个社媒平台采集帖子,通过一条六步 agent 链将每一源蒸馏为日期索引时间线,再合并为一份显式区分事实事件与公众舆论的统一年表。再经一道匿名化流程,把每段真实事件弧渲染为<strong>模拟社会世界</strong>——结构上与真实发生的完全一致,但剥去了模型能与预训练记忆比对的表面标签,使评测度量的是对社会世界演化的前向推理,而非记忆调取。在此之上,我们自动生成由 agent 审核的题库,支持两条正交的评测轴:概率校准与时间精度。',
 
       // ---- Key Contributions ---------------------------------------------
       'contrib.title': '关键贡献',
       'contrib.c01.num': '01',
-      'contrib.c01.title': '反事实世界匿名化',
-      'contrib.c01.body.html': '三阶段实体与日期匿名化(规则替换 → LLM 对抗审计循环,最多 5 轮,在 <strong>high = 0</strong> 与 <strong>mid = 0</strong> 处收敛 → 一致性校验)。把每段真实弧渲染为去标识化的反事实世界——结构上与真实发生的完全一致,但剥去了能与预训练记忆比对的表面标签。',
+      'contrib.c01.title': '模拟世界匿名化',
+      'contrib.c01.body.html': '三阶段实体与日期匿名化(规则替换 → LLM 对抗审计循环,最多 5 轮,在 <strong>high = 0</strong> 与 <strong>mid = 0</strong> 处收敛 → 一致性校验)。把每段真实弧渲染为去标识化的模拟社会世界——结构上与真实发生的完全一致,但剥去了能与预训练记忆比对的表面标签。',
       'contrib.c02.num': '02',
       'contrib.c02.title': '双轴评测',
       'contrib.c02.body.html': '每个事件给出两个正交的 0–100 分:<strong>校准</strong>(以均匀 50% 预测器为 0 分基准,用加权 MAE 对照二元真值打分)与<strong>时间精度</strong>(以 30 天桶中点为 50 分基线,用按天 MAE 打分)。一个模型可能校准良好却对日期失灵,反之亦然;两者都需报告。',
@@ -613,7 +613,7 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // Four-phase pipeline
       'method.4phase.title': '四阶段流水线',
-      'method.4phase.intro': '本基准由四阶段流水线驱动:多源数据采集、时间线蒸馏、合并并匿名化为反事实世界,以及在概率校准与时间精度两个轴上评测模型。',
+      'method.4phase.intro': '本基准由四阶段流水线驱动:多源数据采集、时间线蒸馏、合并并匿名化为模拟社会世界,以及在概率校准与时间精度两个轴上评测模型。',
       'method.4phase.th1': '阶段',
       'method.4phase.th2': '工作内容',
       'method.4phase.p00.num': '00',
@@ -631,7 +631,7 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // Three-phase anonymization
       'method.3anon.title': '三阶段匿名化',
-      'method.3anon.intro.html': '在任何候选模型看到内容之前,匿名化流水线先把每条合并后的时间线渲染为反事实世界。审计循环在 <strong>high = 0 与 mid = 0</strong> 处收敛,最多 5 轮。',
+      'method.3anon.intro.html': '在任何候选模型看到内容之前,匿名化流水线先把每条合并后的时间线渲染为模拟社会世界。审计循环在 <strong>high = 0 与 mid = 0</strong> 处收敛,最多 5 轮。',
       'method.3anon.p01.num': '01',
       'method.3anon.p01.title': '基于规则的替换',
       'method.3anon.p01.body': '按事件级替换表用最长匹配规则替换实体;将每个日期统一平移一个偏移量 δ ~ U(±180 天),从而抹去绝对日历位置,但完整保留任意两事件间的间隔。',
