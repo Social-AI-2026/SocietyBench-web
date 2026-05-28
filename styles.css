@@ -552,6 +552,14 @@ section:last-of-type { border-bottom: none; }
 
 /* ---------- Hero ---------- */
 .hero {
+  /* Full-viewport-height hero so the WebP background fills the screen.
+     dvh on supporting browsers handles mobile address-bar resize cleanly;
+     vh is the universal fallback. */
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding-top: clamp(60px, 8vw, 100px);
   padding-bottom: clamp(60px, 8vw, 90px);
   position: relative;
