@@ -109,7 +109,15 @@
 
     <!-- ================================ HERO ============================== -->
     <section class="page-section reveal hero" data-page="overview" id="about">
-      <div class="wrap">
+      <!-- Video background layer. Drop your 8-10s looping mp4 at videos/hero.mp4 -->
+      <div class="hero-video-bg" aria-hidden="true">
+        <video class="hero-video" playsinline autoplay muted loop preload="metadata" poster="figures/hero-poster.jpg">
+          <source src="videos/hero.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-video-overlay"></div>
+      </div>
+
+      <div class="wrap hero-content">
         <h1 data-i18n="hero.title">Society-Bench</h1>
         <p class="pitch"><span data-i18n="hero.pitch">Can Language Models Forecast Real-World Social Events?</span><span class="cursor" aria-hidden="true">_</span></p>
 
