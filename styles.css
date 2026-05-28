@@ -559,14 +559,23 @@ section:last-of-type { border-bottom: none; }
   isolation: isolate;
 }
 
-/* Video background — sits behind .hero-content, in front of page bg */
+/* Video background — sits behind .hero-content, in front of page bg.
+   The poster image is also set as a background-image, so if the <video>
+   element fails to play (autoplay blocked, codec issue, network drop, etc.)
+   the user still sees the same still frame as a static hero background. */
 .hero-video-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  background-image: url('figures/hero-poster.jpg');
+  background-size: cover;
+  background-position: center;
 }
+/* When JS detects autoplay failure (video stays paused), it adds .video-failed
+   on the wrapper to hide the unrendered <video> and let the poster show. */
+.hero-video-bg.video-failed .hero-video { display: none; }
 .hero-video {
   position: absolute;
   top: 50%; left: 50%;

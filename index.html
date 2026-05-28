@@ -808,11 +808,14 @@ Accepted events join the official catalog and ship in the next benchmark version
 
   <!-- Hero video autoplay kick-start: some browsers/extensions still block
        autoplay even with muted+autoplay attributes, so we explicitly call
-       play() and retry on the first user interaction. -->
+       play() and retry on the first user interaction. If autoplay never
+       succeeds, mark the wrapper .video-failed so CSS falls back to the
+       poster image as a static hero background. -->
   <script>
     (function () {
       var v = document.querySelector('.hero-video');
       if (!v) return;
+      var wrap = document.querySelector('.hero-video-bg');
       v.muted = true;
       v.setAttribute('muted', '');
       v.setAttribute('playsinline', '');
@@ -823,9 +826,18 @@ Accepted events join the official catalog and ship in the next benchmark version
       tryPlay();
       v.addEventListener('loadedmetadata', tryPlay);
       v.addEventListener('canplay', tryPlay);
+      v.addEventListener('playing', function () {
+        if (wrap) wrap.classList.remove('video-failed');
+      });
       ['click', 'scroll', 'keydown', 'touchstart', 'pointerdown'].forEach(function (ev) {
         document.addEventListener(ev, tryPlay, { once: true, passive: true });
       });
+      // Last-resort fallback: if 2.5s after load the video is still paused
+      // (and has at least HAVE_CURRENT_DATA), assume autoplay is blocked and
+      // surface the poster as a static background instead.
+      setTimeout(function () {
+        if (v.paused && wrap) wrap.classList.add('video-failed');
+      }, 2500);
     })();
   </script>
 
@@ -842,6 +854,15 @@ Accepted events join the official catalog and ship in the next benchmark version
         gate.classList.add('auth-fadeout');
         setTimeout(function () { gate.remove(); }, 400);
         document.documentElement.classList.remove('auth-locked');
+        // Kick the hero video on this user-gesture boundary. Chrome's strict
+        // autoplay policy blocks muted-autoplay in some configurations; the
+        // password-submit click is the first real user gesture on the page,
+        // so calling play() here is the most reliable place to satisfy it.
+        var heroVid = document.querySelector('.hero-video');
+        if (heroVid) {
+          var hp = heroVid.play();
+          if (hp && typeof hp.catch === 'function') hp.catch(function () {});
+        }
       }
 
       async function sha256(text) {
