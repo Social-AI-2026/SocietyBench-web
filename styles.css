@@ -620,11 +620,13 @@ section:last-of-type { border-bottom: none; }
     0 1px 2px rgba(255, 255, 255, 0.95),
     0 0 18px rgba(255, 255, 255, 0.85);
 }
-/* Respect users who prefer reduced motion — hide the animated WebP and let the
-   static poster (background-image on .hero-video-bg) take over. */
-@media (prefers-reduced-motion: reduce) {
-  .hero-video { display: none; }
-}
+/* Animated WebP is treated as an image by browsers, so prefers-reduced-motion
+   does not auto-pause it the way it does CSS animations. We intentionally
+   leave the WebP visible even when reduced-motion is requested — Chrome and
+   Safari may still slow it internally; on systems that don't, the user gets
+   the intended hero motion (which is what an explicit hero video implies).
+   If absolute stillness is needed, the user can pause via browser settings.
+@media (prefers-reduced-motion: reduce) { .hero-video { display: none; } } */
 
 .hero h1 {
   font-family: var(--display);
