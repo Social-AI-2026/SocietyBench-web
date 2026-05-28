@@ -599,7 +599,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       // ---- Key Contributions ---------------------------------------------
       'contrib.title': '关键贡献',
       'contrib.c01.num': '01',
-      'contrib.c01.title': '反事实匿名化',
+      'contrib.c01.title': '反事实世界匿名化',
       'contrib.c01.body.html': '三阶段实体与日期匿名化(规则替换 → LLM 对抗审计循环,最多 5 轮,在 <strong>high = 0</strong> 与 <strong>mid = 0</strong> 处收敛 → 一致性校验)。把每段真实弧渲染为去标识化的反事实世界——结构上与真实发生的完全一致,但剥去了能与预训练记忆比对的表面标签。',
       'contrib.c02.num': '02',
       'contrib.c02.title': '双轴评测',
