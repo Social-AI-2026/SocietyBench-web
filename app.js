@@ -609,40 +609,41 @@ async function loadDeepDive() {
   renderStressBlock(data.stress_case);
   renderAblationTable("dd-questionbank",  data.ablations.question_bank_composition, {
     columns: [
-      { key: "label", title: t("js.dd.col.qb-comp") },
-      { key: "cal",  title: t("js.dd.col.cal"),  deltaKey: "cal_delta" },
-      { key: "time", title: t("js.dd.col.time"), deltaKey: "time_delta" }
+      { key: "label",  title: t("js.dd.col.qb-comp") },
+      { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
+      { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
+      { key: "mean",   title: t("js.dd.col.mean"), deltaKey: "mean_delta" }
     ],
-    extremes: ["cal_delta", "time_delta"]
+    extremes: ["mean_delta"]
   }, "02");
   renderAblationTable("dd-scoring",       data.ablations.scoring_formula, {
     columns: [
       { key: "label",  title: t("js.dd.col.scoring-formula") },
-      { key: "doubao", title: t("js.dd.col.doubao"), deltaKey: "doubao_delta" },
-      { key: "gemini", title: t("js.dd.col.gemini"), deltaKey: "gemini_delta" },
+      { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
+      { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
       { key: "gap",    title: t("js.dd.col.gap") }
     ]
   }, "03");
-  renderAblationTable("dd-reasoning",     data.ablations.reasoning_depth, {
+  renderAblationTable("dd-reasoning",     data.ablations.true_false_bias, {
     columns: [
-      { key: "label", title: t("js.dd.col.reasoning-effort") },
-      { key: "cal",  title: t("js.dd.col.cal"),  deltaKey: "cal_delta" },
-      { key: "time", title: t("js.dd.col.time"), deltaKey: "time_delta" }
-    ],
-    extremes: ["cal_delta", "time_delta"]
+      { key: "label",  title: t("js.dd.col.qb-comp") },
+      { key: "doubao", title: "Doubao" },
+      { key: "dseek",  title: "DSeek" },
+      { key: "opus",   title: "Opus" },
+      { key: "gemini", title: "Gemini" },
+      { key: "gpt",    title: "GPT-5.5" },
+      { key: "mean",   title: t("js.dd.col.mean") }
+    ]
   }, "04");
-  renderValidity(data.ablations.anonymization_protocol);
-  renderAblationTableSkipped("dd-anonymization", data.ablations.anonymization_protocol, {
+  renderAblationTable("dd-anonymization", data.ablations.cutoff_gradient, {
     columns: [
-      { key: "label",   title: t("js.dd.col.anon-variant") },
-      { key: "wuhan",   title: t("js.dd.col.pub")   },
-      { key: "us_iran", title: t("js.dd.col.geo")   },
-      { key: "tiktok",  title: t("js.dd.col.tech")  },
-      { key: "smci",    title: t("js.dd.col.mkt")   },
-      { key: "trump",   title: t("js.dd.col.trade") },
-      { key: "mean",    title: t("js.dd.col.mean")  }
-    ],
-    showLeak: true
+      { key: "label",  title: t("js.dd.col.qb-comp") },
+      { key: "doubao", title: "Doubao" },
+      { key: "opus",   title: "Opus" },
+      { key: "gemini", title: "Gemini" },
+      { key: "gpt",    title: "GPT-5.5" },
+      { key: "mean",   title: t("js.dd.col.mean") }
+    ]
   }, "05");
 }
 

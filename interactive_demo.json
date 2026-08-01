@@ -1,481 +1,3045 @@
 {
-  "schema_version": "0.3",
-  "notes": "Cached prediction data for the 'Try the Benchmark' widget. v0.3: 4 prediction points per event (16 total), each with 4 cached model responses. Live questions per event. Sources: paper App F (geopolitical Day 22) + anonymized illustrative responses for the remaining points. NO live API calls.",
-  "events": [
+ "schema_version": "2.0",
+ "notes": "Every number in cached mode comes from our real experiment outputs (runs_new/<event>/final/英文/results/run_main). Nothing here is invented.",
+ "events": [
+  {
+   "id": "event1_library",
+   "short": "Wuhan Lib.",
+   "domain_label": "PUBLIC CONTROVERSY",
+   "anonymized_arc": "Wuhan Lib.",
+   "live_questions": [],
+   "prediction_points": [
     {
-      "id": "geopolitical",
-      "domain_label": "GEOPOLITICAL CONFLICT",
-      "anonymized_arc": "Cross-border military confrontation between two states",
-      "live_questions": [
-        { "id": "Q1", "type": "calibration", "window": 14, "text": "Will a kinetic response by Faction-C occur within 14 days of the cutoff?" },
-        { "id": "Q2", "type": "calibration", "window": 30, "text": "Will an official de-escalation channel be opened within 30 days of the cutoff?" },
-        { "id": "Q3", "type": "calibration", "window": 7,  "text": "Will any third-party mediator publicly intervene within 7 days?" },
-        { "id": "Q4", "type": "temporal",                  "text": "Predict the calendar day of the next major kinetic event." },
-        { "id": "Q5", "type": "temporal",                  "text": "Predict the calendar day of the first formal cease-fire announcement." }
-      ],
-      "prediction_points": [
-        {
-          "point_id": "P_DAY08",
-          "cutoff_label": "Day 8 of the anonymized arc",
-          "cutoff_short": "Day 8",
-          "context_excerpt": "Days 1–8: Faction-A announces large-scale naval drills along the contested coastline (Day 2); Faction-C's foreign ministry issues a 'strongest possible' protest (Day 4). No diplomatic readouts have been published. Opinion-layer signals on both sides trend hawkish but engagement is still moderate. The model sees this prefix and must forecast whether the situation continues to escalate.",
-          "calibration_question": { "q": "Will rhetoric continue to escalate (sharper-than-current statement from Faction-C) within 14 days?", "window_days": 14, "gt": 1, "gt_note": "Faction-C foreign minister statement on Day 15 explicitly named kinetic-response threshold." },
-          "temporal_question":    { "q": "Predict the calendar day of the next major escalation event.", "gt_day": 15, "gt_label": "Day 15" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.74, "reasoning": "Foreign-ministry protest language on Day 4 already at the high end of the historical scale; no public off-ramp visible. Base-rate for continued escalation after dual-channel hawkish signals is ~75%." },
-              "temporal":    { "d_hat_day": 14, "d_hat_label": "Day 14", "abs_error_days": 1, "reasoning": "Next press-cycle boundary lands Day 13–15." },
-              "score_label": "Calibrated. Reads the protest language correctly; timing within one press cycle." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.88, "reasoning": "Hawkish rhetoric is monotonically rising; extrapolating the curve gives near-certain escalation." },
-              "temporal":    { "d_hat_day": 11, "d_hat_label": "Day 11", "abs_error_days": 4, "reasoning": "Recent slope predicts action within ~3 days." },
-              "score_label": "Over-confident continuation. Compresses the timeline." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Drills are routine; ministry language is at most a verbal protest. Insufficient basis to depart from the prior." },
-              "temporal":    { "d_hat_day": 45, "d_hat_label": "Day 45", "abs_error_days": 30, "reasoning": "Defaults to mid-bucket of the 30–60-day window." },
-              "score_label": "Uniform-0.5 collapse on calibration; long-horizon mid-bucket default." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.71, "reasoning": "Persona-1 (geopol-analyst): 0.82. Persona-2 (diplomatic-track): 0.55. Persona-3 (regional-observer): 0.76. Aggregated: 0.71." },
-              "temporal":    { "d_hat_day": 15, "d_hat_label": "Day 15", "abs_error_days": 0, "reasoning": "Diplomatic-track persona anchors on the press-cycle boundary; consensus lands Day 15." },
-              "score_label": "Persona aggregation lands exactly on GT day; tempered probability." }
-          ]
-        },
-        {
-          "point_id": "P_DAY22",
-          "cutoff_label": "Day 22 of the anonymized arc",
-          "cutoff_short": "Day 22",
-          "context_excerpt": "Days 1–22 of the anonymized arc: Faction-A military positioning and naval drills escalate across the regional theater. Faction-C officials issue progressively sharper rhetoric. Public de-escalation channels (back-channel diplomacy, third-party mediators) have not been observed for over a week. Opinion-layer signals show rising polarization on both sides. The model sees this prefix and must forecast what happens after the cutoff.",
-          "calibration_question": { "q": "Will a kinetic response by Faction-C occur within 14 days of the cutoff?", "window_days": 14, "gt": 1, "gt_note": "Strike occurred Day 31 (within the 14-day window)." },
-          "temporal_question":    { "q": "Predict the calendar day of the next major kinetic event.", "gt_day": 31, "gt_label": "Day 31" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.78, "reasoning": "Naval drill positioning combined with escalating rhetoric across Days 22–29 indicates intent; absence of public de-escalation channels makes a kinetic response within 14 days likely." },
-              "temporal":    { "d_hat_day": 33, "d_hat_label": "Day 33", "abs_error_days": 2, "reasoning": "Drill culminates Days 30–34; symbolic delay typical of Faction-A's response cycle places the strike one cycle out." },
-              "score_label": "Calibrated. Commits to direction with appropriate confidence. Window-anchored timing, slightly late." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.92, "reasoning": "Strike-frequency curve has been monotonically rising for 9 days; near-term retaliation is highly likely." },
-              "temporal":    { "d_hat_day": 28, "d_hat_label": "Day 28", "abs_error_days": 3, "reasoning": "Strike-frequency uptick suggests action within ~6 days." },
-              "score_label": "Over-confident continuation. Same heuristic that misses on reversal cases." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Signals point in opposing directions; insufficient basis to deviate from the prior." },
-              "temporal":    { "d_hat_day": 75, "d_hat_label": "Day 75", "abs_error_days": 44, "reasoning": "Long horizon; defaults to mid-bucket of the 61–90-day window." },
-              "score_label": "Defaults to uniform 0.5 under conflicting opinion signal; long-horizon temporal collapse." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.71, "reasoning": "Persona-1 (geopol-analyst): 0.85. Persona-2 (diplomatic-track): 0.55. Persona-3 (market-trader): 0.72. Swarm-aggregated: 0.71." },
-              "temporal":    { "d_hat_day": 32, "d_hat_label": "Day 32", "abs_error_days": 1, "reasoning": "Persona-2 (diplomatic-track) places the strike at Day 33 conditional on a Day 30–32 escalation event; mean of three personas." },
-              "score_label": "Persona aggregation tempers single-model bias. Tightest temporal agreement with GT." }
-          ]
-        },
-        {
-          "point_id": "P_DAY35",
-          "cutoff_label": "Day 35 of the anonymized arc",
-          "cutoff_short": "Day 35",
-          "context_excerpt": "Days 1–35: A kinetic event by Faction-C landed Day 31; Faction-A returned fire Day 33. Casualty figures are still contested. By Day 35 a third-party regional power has offered to host talks but neither side has committed. Opinion-layer signals are saturated; engagement is exhausting (clip-and-rehash, not new arguments). The model sees this prefix and must forecast whether a cease-fire forms in the next 14 days.",
-          "calibration_question": { "q": "Will a formal cease-fire announcement occur within 14 days of the cutoff?", "window_days": 14, "gt": 0, "gt_note": "First formal cease-fire announcement landed Day 58 — outside the 14-day window." },
-          "temporal_question":    { "q": "Predict the calendar day of the first formal cease-fire announcement.", "gt_day": 58, "gt_label": "Day 58" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.28, "reasoning": "Third-party host without committed parties is a stalled-mediation signature, not a near-cease-fire signal. Historical median for cease-fires after a reciprocal kinetic exchange is 18–28 days." },
-              "temporal":    { "d_hat_day": 55, "d_hat_label": "Day 55", "abs_error_days": 3, "reasoning": "Mediator commitments typically harden ~21 days post-strike, with a 3–5 day announcement lag." },
-              "score_label": "Calibrated. Correctly rejects the imminent-cease-fire hypothesis; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.62, "reasoning": "Mediator presence is a strong signal; engagement exhaustion lowers the cost of de-escalation." },
-              "temporal":    { "d_hat_day": 44, "d_hat_label": "Day 44", "abs_error_days": 14, "reasoning": "Mediator + exhaustion suggests resolution within ~9 days." },
-              "score_label": "Over-extends mediator signal. Wrong direction; off by two weeks." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Conflicting signals; cease-fire processes are slow but mediator offers can accelerate." },
-              "temporal":    { "d_hat_day": 80, "d_hat_label": "Day 80", "abs_error_days": 22, "reasoning": "Long-tail default of the 61–90-day window." },
-              "score_label": "Uniform-0.5 collapse on calibration; long-horizon over-estimate on timing." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.34, "reasoning": "Persona-1 (mediation-specialist): 0.22. Persona-2 (military-historian): 0.41. Persona-3 (regional-observer): 0.39. Aggregated: 0.34." },
-              "temporal":    { "d_hat_day": 60, "d_hat_label": "Day 60", "abs_error_days": 2, "reasoning": "Mediation persona's historical base-rate dominates; ~25 days post-strike, with a 2-day overshoot vs. GT." },
-              "score_label": "Correct rejection; tight temporal agreement via the mediation-specialist persona." }
-          ]
-        },
-        {
-          "point_id": "P_DAY60",
-          "cutoff_label": "Day 60 of the anonymized arc",
-          "cutoff_short": "Day 60",
-          "context_excerpt": "Days 1–60: Formal cease-fire announced Day 58 with ambiguous compliance language. Both sides are still reinforcing rear positions; the host nation has scheduled an initial talks session. Opinion-layer signals have shifted from war-coverage to economic-impact discussions. The model sees this prefix and must forecast whether substantive negotiations open in the next 30 days.",
-          "calibration_question": { "q": "Will substantive bilateral negotiations open within 30 days of the cutoff?", "window_days": 30, "gt": 1, "gt_note": "First bilateral substantive session held Day 72." },
-          "temporal_question":    { "q": "Predict the calendar day of the first substantive bilateral negotiation session.", "gt_day": 72, "gt_label": "Day 72" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.69, "reasoning": "Initial talks scheduled + opinion-layer shift to economics historically precedes substantive sessions within ~14 days. Reinforcement signals are noise (every cease-fire has them)." },
-              "temporal":    { "d_hat_day": 71, "d_hat_label": "Day 71", "abs_error_days": 1, "reasoning": "Scheduled initial session + standard 12–14 day delay to substance." },
-              "score_label": "Calibrated. Reads the economic-shift signal correctly; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.81, "reasoning": "Cease-fire is signed; talks are scheduled; engagement curve clearly trending toward resolution." },
-              "temporal":    { "d_hat_day": 68, "d_hat_label": "Day 68", "abs_error_days": 4, "reasoning": "Compresses based on the resolution trend." },
-              "score_label": "Direction correct; over-confident on probability and slightly early on timing." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Cease-fire compliance is ambiguous; negotiations may stall indefinitely." },
-              "temporal":    { "d_hat_day": 95, "d_hat_label": "Day 95", "abs_error_days": 23, "reasoning": "Long-tail default of the 90+ day window." },
-              "score_label": "Uniform-0.5 collapse; mid-bucket long-tail default on timing." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.67, "reasoning": "Persona-1 (diplomatic-track): 0.78. Persona-2 (regional-observer): 0.59. Persona-3 (economist): 0.64. Aggregated: 0.67." },
-              "temporal":    { "d_hat_day": 73, "d_hat_label": "Day 73", "abs_error_days": 1, "reasoning": "Economist persona anchors on the scheduled session + 14d substance lag." },
-              "score_label": "Tempered probability + economist-persona timing within 1 day of GT." }
-          ]
-        }
-      ]
+     "point_id": "P07",
+     "cutoff_label": "Cutoff 2025-04-15",
+     "cutoff_short": "2025-04-15",
+     "context_excerpt": "2025-04-14 **Event**: On April 13, Organization F issued a first-instance judgment in \"Organization K's Case C,\" holding that it could not be confirmed that the defendant Person A had committed sexual harassment against the plaintiff Person B, that this did not meet the elements of sexual harassment, and dismissing all of Person B's claims in accordance with the law. The case originated from an online post by Person …",
+     "calibration_question": {
+      "q": "Within 60 days after the cutoff, will the mainstream public opinion believe that Agency K's withdrawal and disciplinary notice of \"respecting justice and acting in accordance with regulations\" was handled appropriately and settled the controversy?",
+      "window_days": 60,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "opinion",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "Netizens have successively submitted reports to higher education institutions on the conduct and academic integrity of the accusers.",
+      "gt_date": "2025-04-17",
+      "gt_label": "2025-04-17",
+      "gt_day": 2
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.08,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 8%; ground truth no. Absolute error 0.08, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-15",
+        "d_hat_label": "2025-04-15",
+        "d_hat_day": 0,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2025-04-15, actual 2025-04-17, off by 2 days."
+       },
+       "score_label": "Direction right, absolute error 0.08; date off by 2 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-15",
+        "d_hat_label": "2025-04-15",
+        "d_hat_day": 0,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2025-04-15, actual 2025-04-17, off by 2 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 2 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.12,
+        "abs_error": 0.12,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 12%; ground truth no. Absolute error 0.12, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-16",
+        "d_hat_label": "2025-04-16",
+        "d_hat_day": 1,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-16, actual 2025-04-17, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.12; date off by 1 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 2%; ground truth no. Absolute error 0.02, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-16",
+        "d_hat_label": "2025-04-16",
+        "d_hat_day": 1,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-16, actual 2025-04-17, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.02; date off by 1 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.25,
+        "abs_error": 0.25,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 25%; ground truth no. Absolute error 0.25, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-16",
+        "d_hat_label": "2025-04-16",
+        "d_hat_day": 1,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-16, actual 2025-04-17, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.25; date off by 1 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-22",
+        "d_hat_label": "2025-04-22",
+        "d_hat_day": 7,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2025-04-22, actual 2025-04-17, off by 5 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 5 days."
+      }
+     ]
     },
-
     {
-      "id": "markets",
-      "domain_label": "FINANCIAL MARKETS",
-      "anonymized_arc": "Delisting crisis of an exchange-listed firm",
-      "live_questions": [
-        { "id": "Q1", "type": "calibration", "window": 30, "text": "Will Exchange-X grant Company-A a formal filing extension within 30 days of the cutoff?" },
-        { "id": "Q2", "type": "calibration", "window": 14, "text": "Will Company-A's special committee publicly clear management of fraud allegations within 14 days?" },
-        { "id": "Q3", "type": "calibration", "window": 21, "text": "Will a new external auditor be appointed within 21 days?" },
-        { "id": "Q4", "type": "temporal",                  "text": "Predict the calendar day of Exchange-X's next formal compliance ruling." },
-        { "id": "Q5", "type": "temporal",                  "text": "Predict the calendar day of Company-A's restated annual filing." }
-      ],
-      "prediction_points": [
-        {
-          "point_id": "P_DAY04",
-          "cutoff_label": "Day 4 of the anonymized arc",
-          "cutoff_short": "Day 4",
-          "context_excerpt": "Days 1–4: Short-seller Org-Y publishes a 200-page report alleging revenue-recognition issues at Company-A (Day 1). Share price drops 19% over Days 2–3. Company-A issues a one-line denial Day 4. No auditor or regulator action yet. Retail forums collapse to panic-selling; institutional desks are circulating the Org-Y report but holding fire.",
-          "calibration_question": { "q": "Will Company-A's Big-4 auditor resign within 14 days of the cutoff?", "window_days": 14, "gt": 1, "gt_note": "Auditor resigned Day 10 (within window)." },
-          "temporal_question":    { "q": "Predict the calendar day of the next major procedural event (auditor / regulator / committee action).", "gt_day": 10, "gt_label": "Day 10" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.67, "reasoning": "Org-Y reports of this density (200 pages, transaction-level detail) trigger auditor caution in 65–75% of historical cases; absence of immediate company rebuttal raises the probability further." },
-              "temporal":    { "d_hat_day": 11, "d_hat_label": "Day 11", "abs_error_days": 1, "reasoning": "Big-4 partners review such reports in a single internal cycle (~7 days); decision typically lands Days 10–12." },
-              "score_label": "Calibrated. Reads the auditor-cycle correctly; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.85, "reasoning": "19% drop + short-seller report + weak denial is the textbook signature for an imminent terminal event." },
-              "temporal":    { "d_hat_day": 7, "d_hat_label": "Day 7", "abs_error_days": 3, "reasoning": "Curve extrapolation places the next major event within ~3 days." },
-              "score_label": "Over-confident continuation. Direction correct, timing compressed." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Short-seller reports often fizzle; insufficient signal to commit." },
-              "temporal":    { "d_hat_day": 45, "d_hat_label": "Day 45", "abs_error_days": 35, "reasoning": "Long-tail mid-bucket of the 30–60-day window." },
-              "score_label": "Uniform-0.5 collapse; long-horizon mid-bucket default." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.64, "reasoning": "Persona-1 (forensic-accountant): 0.79. Persona-2 (sell-side): 0.51. Persona-3 (short-seller): 0.62. Aggregated: 0.64." },
-              "temporal":    { "d_hat_day": 10, "d_hat_label": "Day 10", "abs_error_days": 0, "reasoning": "Forensic-accountant persona anchors on the 7-day partner-review cycle + 3-day decision lag." },
-              "score_label": "Persona aggregation lands exactly on GT day." }
-          ]
-        },
-        {
-          "point_id": "P_DAY14",
-          "cutoff_label": "Day 14 of the anonymized arc",
-          "cutoff_short": "Day 14",
-          "context_excerpt": "Days 1–14: Short-seller Org-Y publishes a report alleging accounting irregularities at Company-A; share price falls 19%. Company-A's CEO issues a public response on Day 6; the annual 10-K-equivalent filing scheduled for Day 8 is delayed indefinitely. Big-4 auditor resigns Day 10. Regulator-Z opens a preliminary probe Day 12. Opinion-layer signals split: retail forums collapse to panic-selling, institutional analysts argue a compliance path remains open.",
-          "calibration_question": { "q": "Will Exchange-X grant Company-A a formal filing extension within 30 days of the cutoff?", "window_days": 30, "gt": 1, "gt_note": "Extension to Feb-25 equivalent granted on Day 27." },
-          "temporal_question":    { "q": "Predict the calendar day of Exchange-X's next formal compliance ruling.", "gt_day": 27, "gt_label": "Day 27" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.74, "reasoning": "Replacement-auditor search visible on Day 12; Regulator-Z probe is preliminary, not enforcement. Base-rate for filing extensions when a special committee is seated is high (~70%); compliance path is the modal outcome." },
-              "temporal":    { "d_hat_day": 30, "d_hat_label": "Day 30", "abs_error_days": 3, "reasoning": "Exchange-X procedural calendar runs in ~15-day blocks from probe disclosure; next ruling window falls Days 28–32." },
-              "score_label": "Calibrated. Reads the procedural path correctly; timing within one Exchange-X cycle of GT." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.18, "reasoning": "Big-4 auditor resignation + 19% drop is a terminal failure signature; extensions in this context are historically rare." },
-              "temporal":    { "d_hat_day": 18, "d_hat_label": "Day 18", "abs_error_days": 9, "reasoning": "Auditor resignation pulls the next ruling forward; expects an emergency action within a week." },
-              "score_label": "Wrong direction. Over-weighted the auditor exit signal; ignored the special-committee path." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Bearish and bullish signals balance; no basis to deviate from the prior." },
-              "temporal":    { "d_hat_day": 55, "d_hat_label": "Day 55", "abs_error_days": 28, "reasoning": "Defaults to mid-bucket of the 30–90-day window." },
-              "score_label": "Uniform collapse on calibration; long-horizon mid-bucket default on timing." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.68, "reasoning": "Persona-1 (compliance-counsel): 0.82. Persona-2 (short-seller): 0.31. Persona-3 (market-maker): 0.79. Swarm-aggregated: 0.68." },
-              "temporal":    { "d_hat_day": 29, "d_hat_label": "Day 29", "abs_error_days": 2, "reasoning": "Persona-1 weighs the 15-day procedural cycle most heavily; converges on Day 28–30." },
-              "score_label": "Compliance-counsel persona pulls the swarm toward the correct procedural reading." }
-          ]
-        },
-        {
-          "point_id": "P_DAY28",
-          "cutoff_label": "Day 28 of the anonymized arc",
-          "cutoff_short": "Day 28",
-          "context_excerpt": "Days 1–28: Filing extension granted Day 27. Special committee chair named Day 22; new auditor candidate shortlist circulating among institutional desks. Share price recovered ~40% from the floor but remains 35% below pre-report levels. Regulator-Z probe still labeled preliminary. Opinion-layer signals split: institutional flow turning constructive, retail still bearish.",
-          "calibration_question": { "q": "Will a restated annual filing be submitted within 60 days of the cutoff?", "window_days": 60, "gt": 1, "gt_note": "Restated filing submitted Day 86 (within window from Day 28 cutoff)." },
-          "temporal_question":    { "q": "Predict the calendar day of the restated annual filing.", "gt_day": 86, "gt_label": "Day 86" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.72, "reasoning": "Extension granted + committee chair seated is the modal compliance trajectory; historical restatement timeline once these are in place is 50–70 days." },
-              "temporal":    { "d_hat_day": 84, "d_hat_label": "Day 84", "abs_error_days": 2, "reasoning": "Committee + new-auditor process median is ~55 days from extension grant." },
-              "score_label": "Calibrated. Correct procedural reading; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.49, "reasoning": "Restatements often slip; regulator probe creates parallel uncertainty." },
-              "temporal":    { "d_hat_day": 72, "d_hat_label": "Day 72", "abs_error_days": 14, "reasoning": "Recovery curve suggests faster resolution." },
-              "score_label": "Direction roughly correct, low confidence; over-extends the recovery curve on timing." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Restatement timing is highly variable; no basis to deviate from the prior." },
-              "temporal":    { "d_hat_day": 110, "d_hat_label": "Day 110", "abs_error_days": 24, "reasoning": "Long-tail default of the 90+ day window." },
-              "score_label": "Uniform-0.5 collapse; long-tail mid-bucket on timing." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.71, "reasoning": "Persona-1 (audit-partner): 0.84. Persona-2 (sell-side): 0.63. Persona-3 (event-driven): 0.66. Aggregated: 0.71." },
-              "temporal":    { "d_hat_day": 87, "d_hat_label": "Day 87", "abs_error_days": 1, "reasoning": "Audit-partner persona anchors on the 55-day committee + restatement workflow." },
-              "score_label": "Tightest temporal agreement; audit-partner persona dominant." }
-          ]
-        },
-        {
-          "point_id": "P_DAY45",
-          "cutoff_label": "Day 45 of the anonymized arc",
-          "cutoff_short": "Day 45",
-          "context_excerpt": "Days 1–45: Restated filing process underway; new auditor signed Day 38. Regulator-Z preliminary probe escalated to a formal request for documents Day 42. Share price flat for 10 days. Opinion-layer signals quiet; story has rotated off the headlines.",
-          "calibration_question": { "q": "Will Regulator-Z file formal charges within 30 days of the cutoff?", "window_days": 30, "gt": 0, "gt_note": "Probe concluded with no charges Day 82 (outside window)." },
-          "temporal_question":    { "q": "Predict the calendar day of Regulator-Z's next public ruling.", "gt_day": 82, "gt_label": "Day 82" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.21, "reasoning": "Formal document requests at this stage of a preliminary-to-formal conversion historically resolve without charges in ~75% of cases when a restatement is underway. Cooperation signal lowers charge probability further." },
-              "temporal":    { "d_hat_day": 79, "d_hat_label": "Day 79", "abs_error_days": 3, "reasoning": "Document-request cycle to ruling averages ~40 days." },
-              "score_label": "Calibrated. Correct rejection; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.58, "reasoning": "Escalation to formal request reads as enforcement-direction signal." },
-              "temporal":    { "d_hat_day": 65, "d_hat_label": "Day 65", "abs_error_days": 17, "reasoning": "Escalation suggests faster action." },
-              "score_label": "Wrong direction. Misreads the document-request signal." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Regulatory outcomes are unpredictable; uniform prior." },
-              "temporal":    { "d_hat_day": 105, "d_hat_label": "Day 105", "abs_error_days": 23, "reasoning": "Long-tail default." },
-              "score_label": "Uniform-0.5 collapse; long-tail timing." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.27, "reasoning": "Persona-1 (ex-regulator): 0.18. Persona-2 (litigator): 0.41. Persona-3 (compliance): 0.21. Aggregated: 0.27." },
-              "temporal":    { "d_hat_day": 80, "d_hat_label": "Day 80", "abs_error_days": 2, "reasoning": "Ex-regulator persona anchors the procedural cycle." },
-              "score_label": "Correct rejection; ex-regulator persona dominant on timing." }
-          ]
-        }
-      ]
+     "point_id": "P08",
+     "cutoff_label": "Cutoff 2025-04-16",
+     "cutoff_short": "2025-04-16",
+     "context_excerpt": "2025-04-15 **Event**: As details of the first-instance judgment leaked, public opinion began to systematically review the whole course of the litigation. This case was in fact Person B, as plaintiff, suing Person A for liability for harm from sexual harassment: the case was filed on March 15, 2024, at the People's Court of the City A Economic and Technological Development Zone (case number Number A), with three priva…",
+     "calibration_question": {
+      "q": "Within 60 days after the cutoff, will public opinion unanimously believe that the school's punishment for the female tutor and the college's accountability is too severe, and will it be called for consideration for the teacher's difficulties?",
+      "window_days": 60,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "opinion",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The accuser posted a post saying that he had passed the qualification examination and would study for a Ph.D. abroad and mocked the other party, triggering a new round of strong backlash.",
+      "gt_date": "2025-04-17",
+      "gt_label": "2025-04-17",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.03,
+        "abs_error": 0.03,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 3%; ground truth no. Absolute error 0.03, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-16",
+        "d_hat_label": "2025-04-16",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-16, actual 2025-04-17, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.03; date off by 1 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-16",
+        "d_hat_label": "2025-04-16",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-16, actual 2025-04-17, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 15%; ground truth no. Absolute error 0.15, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-17",
+        "d_hat_label": "2025-04-17",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2025-04-17, actual 2025-04-17, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.15; date off by 0 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-17",
+        "d_hat_label": "2025-04-17",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2025-04-17, actual 2025-04-17, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 0 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 30%; ground truth no. Absolute error 0.30, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-23",
+        "d_hat_label": "2025-04-23",
+        "d_hat_day": 7,
+        "abs_error_days": 6.0,
+        "reasoning": "Predicted 2025-04-23, actual 2025-04-17, off by 6 days."
+       },
+       "score_label": "Direction right, absolute error 0.30; date off by 6 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-21",
+        "d_hat_label": "2025-04-21",
+        "d_hat_day": 5,
+        "abs_error_days": 4.0,
+        "reasoning": "Predicted 2025-04-21, actual 2025-04-17, off by 4 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 4 days."
+      }
+     ]
     },
-
     {
-      "id": "trade",
-      "domain_label": "TRADE POLICY",
-      "anonymized_arc": "Reciprocal-tariff escalation between two major economies",
-      "live_questions": [
-        { "id": "Q1", "type": "calibration", "window": 21, "text": "Will Country-A formally enact a counter-tariff package within 21 days of the cutoff?" },
-        { "id": "Q2", "type": "calibration", "window": 14, "text": "Will the two finance ministries hold a bilateral call within 14 days?" },
-        { "id": "Q3", "type": "calibration", "window": 30, "text": "Will any tariff line be paused or rolled back within 30 days?" },
-        { "id": "Q4", "type": "temporal",                  "text": "Predict the calendar day on which Action-T (the headline tariff) formally takes effect at customs." },
-        { "id": "Q5", "type": "temporal",                  "text": "Predict the calendar day of the first announced exemption list." }
-      ],
-      "prediction_points": [
-        {
-          "point_id": "P_DAY08",
-          "cutoff_label": "Day 8 of the anonymized arc",
-          "cutoff_short": "Day 8",
-          "context_excerpt": "Days 1–8: Country-A administration signals broad reciprocal-tariff intent Day 1; executive instrument signed Day 6 (originally scheduled for Day 12). Effective date publicly stated as 'within 90 days' but not formally set. Shipping forwarders report unusual booking volumes; opinion-layer concentrates on whether the headline rate is real or a negotiation opener.",
-          "calibration_question": { "q": "Will the effective date be brought forward from the announced 90-day window?", "window_days": 30, "gt": 1, "gt_note": "Effective date set to Day 22 — well inside the 30-day window." },
-          "temporal_question":    { "q": "Predict the calendar day on which Action-T formally takes effect at customs.", "gt_day": 22, "gt_label": "Day 22" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.66, "reasoning": "Pulling the signing forward by 6 days is the leading indicator of effective-date compression; historical hit-rate ~70%." },
-              "temporal":    { "d_hat_day": 28, "d_hat_label": "Day 28", "abs_error_days": 6, "reasoning": "Compressed timelines typically land at the 25–30 day mark when signing slips early." },
-              "score_label": "Calibrated. Correct direction; timing within one cycle of GT." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.81, "reasoning": "Signing compression + booking-volume signal strongly suggests imminent action." },
-              "temporal":    { "d_hat_day": 18, "d_hat_label": "Day 18", "abs_error_days": 4, "reasoning": "Booking-volume curve predicts ~10 days to effect." },
-              "score_label": "Over-confident on probability, close on timing." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.30, "reasoning": "Original 90-day buffer is the formal procedure; deviation requires extraordinary justification not yet observed." },
-              "temporal":    { "d_hat_day": 88, "d_hat_label": "Day 88", "abs_error_days": 66, "reasoning": "Anchored to the announced 90-day window." },
-              "score_label": "Anchored to the original schedule — misses the compression signal entirely." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.70, "reasoning": "Persona-1 (trade-economist): 0.78. Persona-2 (logistics): 0.81. Persona-3 (compliance): 0.51. Aggregated: 0.70." },
-              "temporal":    { "d_hat_day": 24, "d_hat_label": "Day 24", "abs_error_days": 2, "reasoning": "Logistics persona reads the booking-curve as a Day 21–24 deadline." },
-              "score_label": "Logistics persona supplies the missing signal; tight temporal agreement." }
-          ]
-        },
-        {
-          "point_id": "P_DAY18",
-          "cutoff_label": "Day 18 of the anonymized arc",
-          "cutoff_short": "Day 18",
-          "context_excerpt": "Days 1–18: Country-A administration signals broad reciprocal-tariff intent on Day 1; first executive instrument signed Day 6; effective date initially announced as Day 90. By Day 14, two milestones are visibly pulled forward — signing pulled to Day 4, effective date floated as 'within the month' in two separate briefings. Shipping forwarders observe Country-B exporters front-loading cargo. Opinion-layer signals (industry forums, social platforms) show concentrated focus on whether the effective date moves up to Day 22 vs sits at Day 90.",
-          "calibration_question": { "q": "Will Action-T take effect at Country-A customs within 21 days of the cutoff?", "window_days": 21, "gt": 1, "gt_note": "Effective Day 22 (within window)." },
-          "temporal_question":    { "q": "Predict the calendar day on which Action-T formally takes effect at customs.", "gt_day": 22, "gt_label": "Day 22" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.81, "reasoning": "Both milestones moved up this cycle; administration's pacing curve is monotonically accelerating. Standard 90-day buffer typically survives only the first such signal — second is decisive." },
-              "temporal":    { "d_hat_day": 25, "d_hat_label": "Day 25", "abs_error_days": 3, "reasoning": "Briefings cluster on Day 22 ± 3; symbolic anchoring around the next press cycle." },
-              "score_label": "Calibrated. Reads the acceleration correctly; timing within one press cycle of GT." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.62, "reasoning": "Front-loading is visible but procedural inertia at customs is significant; partial probability the timeline holds." },
-              "temporal":    { "d_hat_day": 19, "d_hat_label": "Day 19", "abs_error_days": 3, "reasoning": "Front-loading curve suggests imminent action; near-term over-extension." },
-              "score_label": "Direction correct, low confidence. Same near-term over-extension pattern; close on timing." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.30, "reasoning": "Original 90-day buffer is the published procedure; deviation requires extraordinary justification not observed." },
-              "temporal":    { "d_hat_day": 74, "d_hat_label": "Day 74", "abs_error_days": 52, "reasoning": "Anchored to the original 90-day grace period." },
-              "score_label": "Anchored to the originally-announced 90-day grace — misses the speed-up entirely." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.76, "reasoning": "Persona-1 (trade-economist): 0.83. Persona-2 (compliance): 0.61. Persona-3 (logistics): 0.84. Swarm-aggregated: 0.76." },
-              "temporal":    { "d_hat_day": 23, "d_hat_label": "Day 23", "abs_error_days": 1, "reasoning": "Logistics persona reads the cargo front-load as a Day 21–23 deadline; mean of three personas converges." },
-              "score_label": "Logistics persona supplies the missing signal; tightest temporal agreement with GT." }
-          ]
-        },
-        {
-          "point_id": "P_DAY25",
-          "cutoff_label": "Day 25 of the anonymized arc",
-          "cutoff_short": "Day 25",
-          "context_excerpt": "Days 1–25: Action-T took effect at customs Day 22 (3 days after cutoff). Country-B has issued a formal protest and announced 'commensurate measures' for review. Opinion-layer signals on Country-B side trend toward retaliation. Country-A administration has hinted at exemptions for strategic sectors but not specified.",
-          "calibration_question": { "q": "Will Country-B announce a counter-tariff package within 14 days of the cutoff?", "window_days": 14, "gt": 1, "gt_note": "Counter-tariff announced Day 32 (within window)." },
-          "temporal_question":    { "q": "Predict the calendar day of Country-B's counter-tariff announcement.", "gt_day": 32, "gt_label": "Day 32" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.79, "reasoning": "Formal protest + 'commensurate measures' language has been followed by a counter within 14 days in 8 of 10 historical reciprocal episodes." },
-              "temporal":    { "d_hat_day": 34, "d_hat_label": "Day 34", "abs_error_days": 2, "reasoning": "Counter-cycle median is 9–11 days from protest." },
-              "score_label": "Calibrated. Reads the reciprocal cycle correctly; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.88, "reasoning": "Retaliation rhetoric + opinion-layer pressure makes counter-tariffs near-certain." },
-              "temporal":    { "d_hat_day": 30, "d_hat_label": "Day 30", "abs_error_days": 2, "reasoning": "Retaliation curve compresses to ~5 days from cutoff." },
-              "score_label": "Over-confident probability; close timing." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Counter-tariffs sometimes stall in negotiation; insufficient signal." },
-              "temporal":    { "d_hat_day": 65, "d_hat_label": "Day 65", "abs_error_days": 33, "reasoning": "Mid-bucket long-tail default." },
-              "score_label": "Uniform-0.5 collapse; long-horizon temporal default." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.76, "reasoning": "Persona-1 (trade-historian): 0.84. Persona-2 (diplomat): 0.62. Persona-3 (logistics): 0.81. Aggregated: 0.76." },
-              "temporal":    { "d_hat_day": 33, "d_hat_label": "Day 33", "abs_error_days": 1, "reasoning": "Trade-historian persona anchors on the 9–11 day median; convergence sharp." },
-              "score_label": "Tempered probability + tight timing via the trade-historian persona." }
-          ]
-        },
-        {
-          "point_id": "P_DAY60",
-          "cutoff_label": "Day 60 of the anonymized arc",
-          "cutoff_short": "Day 60",
-          "context_excerpt": "Days 1–60: Both sides have tariff packages in effect. First round of bilateral talks held Day 50 with no announced concessions. Domestic industry lobbying on Country-A side has intensified (3 major sector letters in last 2 weeks). Opinion-layer signals shifting toward economic-impact framing.",
-          "calibration_question": { "q": "Will Country-A announce a first exemption list within 30 days of the cutoff?", "window_days": 30, "gt": 1, "gt_note": "First exemption list announced Day 78 (within window)." },
-          "temporal_question":    { "q": "Predict the calendar day of the first announced exemption list.", "gt_day": 78, "gt_label": "Day 78" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.71, "reasoning": "Three sector letters within 2 weeks is the threshold at which administrations historically respond with exemption carve-outs. Opinion-layer framing shift accelerates timing." },
-              "temporal":    { "d_hat_day": 76, "d_hat_label": "Day 76", "abs_error_days": 2, "reasoning": "Lobby-letter cycle to exemption typically runs 18–22 days." },
-              "score_label": "Calibrated. Correct procedural reading; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.59, "reasoning": "Lobbying pressure is rising but administration has not signaled openness." },
-              "temporal":    { "d_hat_day": 70, "d_hat_label": "Day 70", "abs_error_days": 8, "reasoning": "Lobbying curve suggests faster action." },
-              "score_label": "Direction correct, low confidence; over-extends lobbying curve on timing." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Exemptions are politically risky; no clear basis to deviate from the prior." },
-              "temporal":    { "d_hat_day": 110, "d_hat_label": "Day 110", "abs_error_days": 32, "reasoning": "Long-tail default of the 90+ day window." },
-              "score_label": "Uniform-0.5 collapse; long-tail mid-bucket timing." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.69, "reasoning": "Persona-1 (lobbyist): 0.82. Persona-2 (trade-economist): 0.66. Persona-3 (political-strategist): 0.59. Aggregated: 0.69." },
-              "temporal":    { "d_hat_day": 79, "d_hat_label": "Day 79", "abs_error_days": 1, "reasoning": "Lobbyist persona anchors the cycle precisely." },
-              "score_label": "Tightest timing via the lobbyist persona." }
-          ]
-        }
-      ]
+     "point_id": "P09",
+     "cutoff_label": "Cutoff 2025-04-18",
+     "cutoff_short": "2025-04-18",
+     "context_excerpt": "2025-04-17 **Event**: On April 15, Person B posted on social media announcing her personal latest news, two days after losing the first instance of her Case C. In the post she said she had passed Exam A, successfully obtained Exam B eligibility, and would \"happily pursue a doctorate,\" while mocking that \"Exam B will be very hard for Person A, won't it?\" This remark quickly sparked a strong online backlash; netizens e…",
+     "calibration_question": {
+      "q": "Within 60 days after the cutoff, will the mainstream public opinion believe that the woman's paper has \"more than 100 irregularities\" in it as non-academic misconduct, which is a fair and reasonable conclusion and should no longer be entangled?",
+      "window_days": 60,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "opinion",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The person in charge of the university involved responded that the matter of withdrawing the punishment was being processed and needed to wait for arrangements from superiors. Public opinion criticized him for pushing the envelope.",
+      "gt_date": "2025-04-19",
+      "gt_label": "2025-04-19",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-18",
+        "d_hat_label": "2025-04-18",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-18, actual 2025-04-19, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 1 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-21",
+        "d_hat_label": "2025-04-21",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2025-04-21, actual 2025-04-19, off by 2 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 2 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.08,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 8%; ground truth no. Absolute error 0.08, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-21",
+        "d_hat_label": "2025-04-21",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2025-04-21, actual 2025-04-19, off by 2 days."
+       },
+       "score_label": "Direction right, absolute error 0.08; date off by 2 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-21",
+        "d_hat_label": "2025-04-21",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2025-04-21, actual 2025-04-19, off by 2 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 2 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 15%; ground truth no. Absolute error 0.15, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-20",
+        "d_hat_label": "2025-04-20",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-20, actual 2025-04-19, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.15; date off by 1 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 2%; ground truth no. Absolute error 0.02, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-29",
+        "d_hat_label": "2025-04-29",
+        "d_hat_day": 11,
+        "abs_error_days": 10.0,
+        "reasoning": "Predicted 2025-04-29, actual 2025-04-19, off by 10 days."
+       },
+       "score_label": "Direction right, absolute error 0.02; date off by 10 days."
+      }
+     ]
     },
-
     {
-      "id": "public",
-      "domain_label": "PUBLIC CONTROVERSY",
-      "anonymized_arc": "Online dispute at a major university",
-      "live_questions": [
-        { "id": "Q1", "type": "calibration", "window": 14, "text": "Will Institution-Y issue an official statement within 14 days of the cutoff?" },
-        { "id": "Q2", "type": "calibration", "window": 30, "text": "Will a formal investigative panel be convened within 30 days?" },
-        { "id": "Q3", "type": "calibration", "window": 7,  "text": "Will any external regulator publicly comment within 7 days?" },
-        { "id": "Q4", "type": "temporal",                  "text": "Predict the calendar day of Institution-Y's first formal statement." },
-        { "id": "Q5", "type": "temporal",                  "text": "Predict the calendar day of the investigative panel's announcement." }
-      ],
-      "prediction_points": [
-        {
-          "point_id": "P_DAY03",
-          "cutoff_label": "Day 3 of the anonymized arc",
-          "cutoff_short": "Day 3",
-          "context_excerpt": "Days 1–3: An online post alleging research-conduct issues at Institution-Y goes viral on Platform-1 (Day 1); cross-posts hit Platform-2 (Day 2). Day 3 trending lists pick up the story. Institution-Y has issued no response. Engagement is rising sharply.",
-          "calibration_question": { "q": "Will Institution-Y issue any public response (formal or unofficial) within 14 days of the cutoff?", "window_days": 14, "gt": 1, "gt_note": "Unofficial spokesperson quoted Day 8; formal statement Day 16 (within the window from Day 3 cutoff)." },
-          "temporal_question":    { "q": "Predict the calendar day of Institution-Y's first public response.", "gt_day": 8, "gt_label": "Day 8" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.78, "reasoning": "Cross-platform virality within 48 hours hits Institution-Y's typical response threshold; institutions of this size respond unofficially within ~5–8 days in 80% of comparable cases." },
-              "temporal":    { "d_hat_day": 9, "d_hat_label": "Day 9", "abs_error_days": 1, "reasoning": "Institutional comms median to first response in viral-trending scenarios is 7–9 days." },
-              "score_label": "Calibrated. Correct on cross-platform virality; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.92, "reasoning": "Trending placement makes a response near-certain." },
-              "temporal":    { "d_hat_day": 5, "d_hat_label": "Day 5", "abs_error_days": 3, "reasoning": "Trending curve suggests immediate response." },
-              "score_label": "Over-confident direction; compresses timing." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Institutions sometimes wait out virality; uniform prior." },
-              "temporal":    { "d_hat_day": 40, "d_hat_label": "Day 40", "abs_error_days": 32, "reasoning": "Mid-bucket long-tail default." },
-              "score_label": "Uniform-0.5 collapse; long-horizon temporal default." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.74, "reasoning": "Persona-1 (PR-strategist): 0.87. Persona-2 (campus-source): 0.61. Persona-3 (media-analyst): 0.74. Aggregated: 0.74." },
-              "temporal":    { "d_hat_day": 8, "d_hat_label": "Day 8", "abs_error_days": 0, "reasoning": "PR-strategist persona pegs the next press cycle." },
-              "score_label": "Lands exactly on GT day via the PR-strategist persona." }
-          ]
-        },
-        {
-          "point_id": "P_DAY09",
-          "cutoff_label": "Day 9 of the anonymized arc",
-          "cutoff_short": "Day 9",
-          "context_excerpt": "Days 1–9: An online post alleging research-conduct issues at Institution-Y goes viral across two major social platforms by Day 2; trending lists pick it up Day 3. Institution-Y issues no formal response in the first week; an unofficial spokesperson is quoted Day 5. By Day 7 a parallel discussion thread accuses a peer institution of similar conduct. Opinion-layer signals show polarized framing (research-integrity vs. mob-justice) with sustained engagement on both sides.",
-          "calibration_question": { "q": "Will Institution-Y issue an official statement within 14 days of the cutoff?", "window_days": 14, "gt": 1, "gt_note": "Statement issued Day 16 (within the 14-day window from Day 9 cutoff)." },
-          "temporal_question":    { "q": "Predict the calendar day of Institution-Y's first formal statement.", "gt_day": 16, "gt_label": "Day 16" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.72, "reasoning": "Sustained virality past Day 7 plus the appearance of a parallel-institution thread historically forces an official response within ~2 weeks. The unofficial spokesperson on Day 5 hints the formal process is already underway." },
-              "temporal":    { "d_hat_day": 17, "d_hat_label": "Day 17", "abs_error_days": 1, "reasoning": "Institution-Y crisis-comms cadence runs in 7-day cycles; next cycle boundary lands Day 16–18." },
-              "score_label": "Calibrated. Reads the institutional response cadence; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.88, "reasoning": "Virality and trending placement guarantee a fast response; institutions almost always cave under sustained pressure." },
-              "temporal":    { "d_hat_day": 11, "d_hat_label": "Day 11", "abs_error_days": 5, "reasoning": "Predicts an imminent statement given the engagement curve." },
-              "score_label": "Over-confident continuation. Right direction, but compresses the institutional response timeline." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Insufficient signal to commit to a side; the institution's silence cuts in either direction." },
-              "temporal":    { "d_hat_day": 45, "d_hat_label": "Day 45", "abs_error_days": 29, "reasoning": "Long-horizon mid-bucket default." },
-              "score_label": "Uniform collapse on calibration; long-horizon temporal default." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.69, "reasoning": "Persona-1 (PR-strategist): 0.84. Persona-2 (sociologist): 0.62. Persona-3 (campus-source): 0.61. Swarm-aggregated: 0.69." },
-              "temporal":    { "d_hat_day": 18, "d_hat_label": "Day 18", "abs_error_days": 2, "reasoning": "PR-strategist persona pegs the next institutional press window at Day 16–19; mean of three personas." },
-              "score_label": "Persona aggregation tempers Doubao's over-extension. Close temporal agreement with GT." }
-          ]
-        },
-        {
-          "point_id": "P_DAY20",
-          "cutoff_label": "Day 20 of the anonymized arc",
-          "cutoff_short": "Day 20",
-          "context_excerpt": "Days 1–20: Institution-Y issued a formal statement Day 16 acknowledging the issue and 'committing to a review.' Engagement re-spiked on Day 17 then began tapering. Two faculty letters circulated demanding a formal investigative panel. No panel announced yet.",
-          "calibration_question": { "q": "Will a formal investigative panel be convened within 30 days of the cutoff?", "window_days": 30, "gt": 1, "gt_note": "Panel convened Day 33 (within window)." },
-          "temporal_question":    { "q": "Predict the calendar day of the panel announcement.", "gt_day": 33, "gt_label": "Day 33" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.74, "reasoning": "Statement-then-faculty-letter sequence is the modal predictor for a formal panel; historical median to panel announcement is 13–17 days post-letter." },
-              "temporal":    { "d_hat_day": 34, "d_hat_label": "Day 34", "abs_error_days": 1, "reasoning": "Faculty letters land mid-week; panel announcements cluster on the following Friday-equivalent." },
-              "score_label": "Calibrated. Correct procedural reading; near-perfect timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.61, "reasoning": "Institution-Y's statement was already cautious; panel formation is not guaranteed." },
-              "temporal":    { "d_hat_day": 28, "d_hat_label": "Day 28", "abs_error_days": 5, "reasoning": "Compresses based on faculty-letter urgency." },
-              "score_label": "Direction correct, low confidence; over-extends letter signal." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Institutional panels are politically delicate; uniform prior." },
-              "temporal":    { "d_hat_day": 60, "d_hat_label": "Day 60", "abs_error_days": 27, "reasoning": "Long-tail mid-bucket default." },
-              "score_label": "Uniform-0.5 collapse; long-horizon mid-bucket default." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.72, "reasoning": "Persona-1 (faculty-governance): 0.84. Persona-2 (admin): 0.62. Persona-3 (PR-strategist): 0.71. Aggregated: 0.72." },
-              "temporal":    { "d_hat_day": 32, "d_hat_label": "Day 32", "abs_error_days": 1, "reasoning": "Faculty-governance persona anchors the letter-to-panel cycle precisely." },
-              "score_label": "Tightest timing via the faculty-governance persona." }
-          ]
-        },
-        {
-          "point_id": "P_DAY40",
-          "cutoff_label": "Day 40 of the anonymized arc",
-          "cutoff_short": "Day 40",
-          "context_excerpt": "Days 1–40: Investigative panel convened Day 33 with a 60-day reporting window. Engagement has rotated off trending; only specialist outlets are still covering. No external regulator has commented. Two anonymous emails reportedly sent to a state-level oversight body.",
-          "calibration_question": { "q": "Will an external regulator publicly comment within 14 days of the cutoff?", "window_days": 14, "gt": 0, "gt_note": "External oversight body declined comment Day 70 — outside window and effectively a non-comment." },
-          "temporal_question":    { "q": "Predict the calendar day of the external regulator's first public comment.", "gt_day": 70, "gt_label": "Day 70" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.19, "reasoning": "External regulators typically defer to an active institutional panel; comment probability within 14 days is low (~15–20%)." },
-              "temporal":    { "d_hat_day": 66, "d_hat_label": "Day 66", "abs_error_days": 4, "reasoning": "Comment usually lands near the institutional report deadline (Day 60–72)." },
-              "score_label": "Calibrated. Correct rejection of imminent regulator action; tight timing." },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.54, "reasoning": "Anonymous tips can trigger early regulator outreach." },
-              "temporal":    { "d_hat_day": 50, "d_hat_label": "Day 50", "abs_error_days": 20, "reasoning": "Compresses to account for the tip signal." },
-              "score_label": "Wrong direction. Over-weighted the anonymous-tip signal." },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "Regulator behavior is highly variable; uniform prior." },
-              "temporal":    { "d_hat_day": 95, "d_hat_label": "Day 95", "abs_error_days": 25, "reasoning": "Long-tail mid-bucket default." },
-              "score_label": "Uniform-0.5 collapse; mid-bucket long-tail default." },
-            { "model": "MiroFish + Doubao (agent, projected)", "is_projected": true,
-              "calibration": { "p_hat": 0.22, "reasoning": "Persona-1 (ex-regulator): 0.12. Persona-2 (legal): 0.31. Persona-3 (PR-strategist): 0.24. Aggregated: 0.22." },
-              "temporal":    { "d_hat_day": 71, "d_hat_label": "Day 71", "abs_error_days": 1, "reasoning": "Ex-regulator persona anchors on the institutional-report deadline." },
-              "score_label": "Correct rejection; ex-regulator persona delivers near-perfect timing." }
-          ]
-        }
-      ]
+     "point_id": "P11",
+     "cutoff_label": "Cutoff 2025-04-20",
+     "cutoff_short": "2025-04-20",
+     "context_excerpt": "2025-04-19 **Event**: On April 13, 2025, the court issued a first-instance judgment in Organization K's Case C, holding that Person A had not committed sexual harassment, which contradicted the school's earlier demerit determination. After the judgment fermented for several days, April 19 became a key node in the interaction between public opinion and officials: that afternoon, reporters called Organization K, and st…",
+     "calibration_question": {
+      "q": "Within about a month after the cutoff, will voices calling for an end to playing tricks on both parties involved and a return to serious legal and academic discussions take over the mainstream of public opinion?",
+      "window_days": 30,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "opinion",
+      "question_type": "C_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The local court made a first-instance ruling on the \"sexual harassment accusation arising from secretly filmed videos in the library\", finding that the accused party's behavior did not constitute sexual harassment and rejecting all the prosecution's claims",
+      "gt_date": "2025-04-21",
+      "gt_label": "2025-04-21",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 10%; ground truth no. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-13",
+        "d_hat_label": "2025-04-13",
+        "d_hat_day": -7,
+        "abs_error_days": 8.0,
+        "reasoning": "Predicted 2025-04-13, actual 2025-04-21, off by 8 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 8 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 15%; ground truth no. Absolute error 0.15, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-13",
+        "d_hat_label": "2025-04-13",
+        "d_hat_day": -7,
+        "abs_error_days": 8.0,
+        "reasoning": "Predicted 2025-04-13, actual 2025-04-21, off by 8 days."
+       },
+       "score_label": "Direction right, absolute error 0.15; date off by 8 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.11,
+        "abs_error": 0.11,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 11%; ground truth no. Absolute error 0.11, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-21",
+        "d_hat_label": "2025-04-21",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2025-04-21, actual 2025-04-21, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.11; date off by 0 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 10%; ground truth no. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-22",
+        "d_hat_label": "2025-04-22",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-22, actual 2025-04-21, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 1 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 15%; ground truth no. Absolute error 0.15, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-22",
+        "d_hat_label": "2025-04-22",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-22, actual 2025-04-21, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.15; date off by 1 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 15%; ground truth no. Absolute error 0.15, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-05-12",
+        "d_hat_label": "2025-05-12",
+        "d_hat_day": 22,
+        "abs_error_days": 21.0,
+        "reasoning": "Predicted 2025-05-12, actual 2025-04-21, off by 21 days."
+       },
+       "score_label": "Direction right, absolute error 0.15; date off by 21 days."
+      }
+     ]
     }
-  ]
+   ]
+  },
+  {
+   "id": "event4_us_iran",
+   "short": "US-Iran",
+   "domain_label": "GEOPOLITICAL",
+   "anonymized_arc": "US-Iran",
+   "live_questions": [
+    {
+     "id": "P05-0",
+     "type": "calibration",
+     "window": 7,
+     "text": "As of 2025-09-22, have any of the navies taken any public action to issue new security guidelines for merchant ships in key straits and maintain port blockades?"
+    },
+    {
+     "id": "P05-1",
+     "type": "calibration",
+     "window": 14,
+     "text": "As of 2025-09-29, have any of the navies taken any public action to issue new security guidelines for merchant ships in key straits and maintain port blockades?"
+    },
+    {
+     "id": "P05-2",
+     "type": "calibration",
+     "window": 7,
+     "text": "As of 2025-09-21, have leaders of one party publicly accused the other party of violating existing ceasefire arrangements and issued warnings of the consequences?"
+    },
+    {
+     "id": "P05-3",
+     "type": "calibration",
+     "window": 7,
+     "text": "As of 2025-09-22, have leaders of one party publicly listed regime change as a policy goal and issued tough warnings on negotiations and nuclear issues?"
+    }
+   ],
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff_label": "Cutoff 2025-08-30",
+     "cutoff_short": "2025-08-30",
+     "context_excerpt": "2025-08-24 **Event**: Country X's President Leader C, between August 23 and 24, publicly warned for the first time Country Y's former President Leader A that if Country Y launched an attack on Country X's Supreme Leader Title A · Person B, it would trigger severe consequences. This statement directly responded to relevant remarks made a day earlier by Country Y's former ambassador to Country Z, Official B, and marked…",
+     "calibration_question": {
+      "q": "During this military exercise and high alert stage, were the official statements of Country V and Country U overwhelmingly interpreted by public opinion as supporting the launch of unilateral military action against Country X and calling for joining in the attack?",
+      "window_days": 14,
+      "days_from_cutoff": 6,
+      "difficulty": "hard",
+      "dimension": "opinion",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The supreme leader of one side went into hiding to prevent potential attacks, while the other side's warships sailed to regional waters for deployment",
+      "gt_date": "2025-08-31",
+      "gt_label": "2025-08-31",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 10%; ground truth no. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-08-31",
+        "d_hat_label": "2025-08-31",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2025-08-31, actual 2025-08-31, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 0 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.95,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 95%; ground truth no. Absolute error 0.95, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-01",
+        "d_hat_label": "2025-09-01",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-09-01, actual 2025-08-31, off by 1 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.95; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.28,
+        "abs_error": 0.28,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 28%; ground truth no. Absolute error 0.28, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-24",
+        "d_hat_label": "2025-09-24",
+        "d_hat_day": 25,
+        "abs_error_days": 24.0,
+        "reasoning": "Predicted 2025-09-24, actual 2025-08-31, off by 24 days."
+       },
+       "score_label": "Direction right, absolute error 0.28; date off by 24 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-24",
+        "d_hat_label": "2025-09-24",
+        "d_hat_day": 25,
+        "abs_error_days": 24.0,
+        "reasoning": "Predicted 2025-09-24, actual 2025-08-31, off by 24 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 24 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 20%; ground truth no. Absolute error 0.20, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-19",
+        "d_hat_label": "2025-09-19",
+        "d_hat_day": 20,
+        "abs_error_days": 19.0,
+        "reasoning": "Predicted 2025-09-19, actual 2025-08-31, off by 19 days."
+       },
+       "score_label": "Direction right, absolute error 0.20; date off by 19 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 20%; ground truth no. Absolute error 0.20, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-04",
+        "d_hat_label": "2025-09-04",
+        "d_hat_day": 5,
+        "abs_error_days": 4.0,
+        "reasoning": "Predicted 2025-09-04, actual 2025-08-31, off by 4 days."
+       },
+       "score_label": "Direction right, absolute error 0.20; date off by 4 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P03",
+     "cutoff_label": "Cutoff 2025-09-07",
+     "cutoff_short": "2025-09-07",
+     "context_excerpt": "2025-09-01 **Event**: Country X's Supreme Leader Person B entered a fortified bunker in City D on August 31 to shelter from a potential attack, and Country X's armed forces went into a high state of alert the same day and announced large-scale military exercises. This move was a response to the nuclear threat made by Country Y's former President Leader A on August 29 — Leader A had then posted on social media that if…",
+     "calibration_question": {
+      "q": "Within the target window, is there a complicated situation where maritime traffic restrictions and negotiation signals coexist?",
+      "window_days": 30,
+      "days_from_cutoff": 9,
+      "difficulty": "hard",
+      "dimension": "event",
+      "question_type": "C_true",
+      "gt": 1,
+      "gt_note": "the event did occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The two sides arranged diplomatic meetings between special envoys and foreign ministers, and one side announced the closure of all communication channels with the other side.",
+      "gt_date": "2025-09-08",
+      "gt_label": "2025-09-08",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.7,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 70%; ground truth yes. Absolute error 0.30, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-10-02",
+        "d_hat_label": "2025-10-02",
+        "d_hat_day": 25,
+        "abs_error_days": 24.0,
+        "reasoning": "Predicted 2025-10-02, actual 2025-09-08, off by 24 days."
+       },
+       "score_label": "Direction right, absolute error 0.30; date off by 24 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 100%; ground truth yes. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-24",
+        "d_hat_label": "2025-09-24",
+        "d_hat_day": 17,
+        "abs_error_days": 16.0,
+        "reasoning": "Predicted 2025-09-24, actual 2025-09-08, off by 16 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 16 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.22,
+        "abs_error": 0.78,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 22%; ground truth yes. Absolute error 0.78, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-26",
+        "d_hat_label": "2025-09-26",
+        "d_hat_day": 19,
+        "abs_error_days": 18.0,
+        "reasoning": "Predicted 2025-09-26, actual 2025-09-08, off by 18 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.78; date off by 18 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.7,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 70%; ground truth yes. Absolute error 0.30, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-26",
+        "d_hat_label": "2025-09-26",
+        "d_hat_day": 19,
+        "abs_error_days": 18.0,
+        "reasoning": "Predicted 2025-09-26, actual 2025-09-08, off by 18 days."
+       },
+       "score_label": "Direction right, absolute error 0.30; date off by 18 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.7,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 70%; ground truth yes. Absolute error 0.30, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-28",
+        "d_hat_label": "2025-09-28",
+        "d_hat_day": 21,
+        "abs_error_days": 20.0,
+        "reasoning": "Predicted 2025-09-28, actual 2025-09-08, off by 20 days."
+       },
+       "score_label": "Direction right, absolute error 0.30; date off by 20 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.45,
+        "abs_error": 0.55,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 45%; ground truth yes. Absolute error 0.55, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-21",
+        "d_hat_label": "2025-09-21",
+        "d_hat_day": 14,
+        "abs_error_days": 13.0,
+        "reasoning": "Predicted 2025-09-21, actual 2025-09-08, off by 13 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.55; date off by 13 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P05",
+     "cutoff_label": "Cutoff 2025-09-15",
+     "cutoff_short": "2025-09-15",
+     "context_excerpt": "2025-09-11 **Event**: In the early hours of September 11, 2025, Media Outlet B, citing Country X sources, reported that the talks originally scheduled between Country X and Country Y for September 12 in Country Q had been canceled. These talks were originally to be hosted by Country Q, with both sides intending to discuss a ceasefire and related issues, covering ten key questions including uranium enrichment and domi…",
+     "calibration_question": {
+      "q": "As of 2025-09-19, have leaders of one party publicly listed regime change as a policy goal and issued tough warnings on negotiations and nuclear issues?",
+      "window_days": 7,
+      "days_from_cutoff": 4,
+      "difficulty": "hard",
+      "dimension": "policy",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The navy of one side issues the latest safety guidelines for merchant ship passage in key straits and maintains port blockade measures",
+      "gt_date": "2025-09-16",
+      "gt_label": "2025-09-16",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 15%; ground truth no. Absolute error 0.15, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-10-07",
+        "d_hat_label": "2025-10-07",
+        "d_hat_day": 22,
+        "abs_error_days": 21.0,
+        "reasoning": "Predicted 2025-10-07, actual 2025-09-16, off by 21 days."
+       },
+       "score_label": "Direction right, absolute error 0.15; date off by 21 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.95,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 95%; ground truth no. Absolute error 0.95, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-10-05",
+        "d_hat_label": "2025-10-05",
+        "d_hat_day": 20,
+        "abs_error_days": 19.0,
+        "reasoning": "Predicted 2025-10-05, actual 2025-09-16, off by 19 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.95; date off by 19 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 20%; ground truth no. Absolute error 0.20, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-10-10",
+        "d_hat_label": "2025-10-10",
+        "d_hat_day": 25,
+        "abs_error_days": 24.0,
+        "reasoning": "Predicted 2025-10-10, actual 2025-09-16, off by 24 days."
+       },
+       "score_label": "Direction right, absolute error 0.20; date off by 24 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.08,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 8%; ground truth no. Absolute error 0.08, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-10-03",
+        "d_hat_label": "2025-10-03",
+        "d_hat_day": 18,
+        "abs_error_days": 17.0,
+        "reasoning": "Predicted 2025-10-03, actual 2025-09-16, off by 17 days."
+       },
+       "score_label": "Direction right, absolute error 0.08; date off by 17 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 20%; ground truth no. Absolute error 0.20, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-28",
+        "d_hat_label": "2025-09-28",
+        "d_hat_day": 13,
+        "abs_error_days": 12.0,
+        "reasoning": "Predicted 2025-09-28, actual 2025-09-16, off by 12 days."
+       },
+       "score_label": "Direction right, absolute error 0.20; date off by 12 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.08,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 8%; ground truth no. Absolute error 0.08, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-09-22",
+        "d_hat_label": "2025-09-22",
+        "d_hat_day": 7,
+        "abs_error_days": 6.0,
+        "reasoning": "Predicted 2025-09-22, actual 2025-09-16, off by 6 days."
+       },
+       "score_label": "Direction right, absolute error 0.08; date off by 6 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P19",
+     "cutoff_label": "Cutoff 2025-10-27",
+     "cutoff_short": "2025-10-27",
+     "context_excerpt": "2025-10-26 **Event**: Country X's Forces B issued a statement on October 26, warning that if Country Y's President Leader A carries out his threat to attack Country X's energy facilities, Country X will completely close Strait A. Leader A posted on social media on October 25 that if Country X did not reach an agreement with Country Y on the nuclear issue, Country Y would carry out \"unprecedented bombing\" of Country X…",
+     "calibration_question": {
+      "q": "In the two weeks ending on October 27, 2025, will public opinion strongly oppose Country X accepting any plan involving concessions on nuclear programs and missile capabilities, fearing that it will repeat the mistakes of war A and Country T abandoning nuclear weapons?",
+      "window_days": 14,
+      "days_from_cutoff": 3,
+      "difficulty": "hard",
+      "dimension": "opinion",
+      "question_type": "B_true",
+      "gt": 1,
+      "gt_note": "the event did occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "One side formally submitted a plan to end the conflict containing multiple clauses to its opponent, aiming to promote ceasefire negotiations to break the deadlock.",
+      "gt_date": "2025-10-29",
+      "gt_label": "2025-10-29",
+      "gt_day": 2
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.8,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 80%; ground truth yes. Absolute error 0.20, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-11-06",
+        "d_hat_label": "2025-11-06",
+        "d_hat_day": 10,
+        "abs_error_days": 8.0,
+        "reasoning": "Predicted 2025-11-06, actual 2025-10-29, off by 8 days."
+       },
+       "score_label": "Direction right, absolute error 0.20; date off by 8 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 0%; ground truth yes. Absolute error 1.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-11-15",
+        "d_hat_label": "2025-11-15",
+        "d_hat_day": 19,
+        "abs_error_days": 17.0,
+        "reasoning": "Predicted 2025-11-15, actual 2025-10-29, off by 17 days."
+       },
+       "score_label": "Direction wrong, absolute error 1.00; date off by 17 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.8,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 80%; ground truth yes. Absolute error 0.20, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-11-14",
+        "d_hat_label": "2025-11-14",
+        "d_hat_day": 18,
+        "abs_error_days": 16.0,
+        "reasoning": "Predicted 2025-11-14, actual 2025-10-29, off by 16 days."
+       },
+       "score_label": "Direction right, absolute error 0.20; date off by 16 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 100%; ground truth yes. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-11-07",
+        "d_hat_label": "2025-11-07",
+        "d_hat_day": 11,
+        "abs_error_days": 9.0,
+        "reasoning": "Predicted 2025-11-07, actual 2025-10-29, off by 9 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 9 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.9,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 90%; ground truth yes. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-11-04",
+        "d_hat_label": "2025-11-04",
+        "d_hat_day": 8,
+        "abs_error_days": 6.0,
+        "reasoning": "Predicted 2025-11-04, actual 2025-10-29, off by 6 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 6 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.98,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 98%; ground truth yes. Absolute error 0.02, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-11-12",
+        "d_hat_label": "2025-11-12",
+        "d_hat_day": 16,
+        "abs_error_days": 14.0,
+        "reasoning": "Predicted 2025-11-12, actual 2025-10-29, off by 14 days."
+       },
+       "score_label": "Direction right, absolute error 0.02; date off by 14 days."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "event3_tiktok",
+   "short": "TikTok",
+   "domain_label": "TECH POLICY",
+   "anonymized_arc": "TikTok",
+   "live_questions": [],
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff_label": "Cutoff 2022-10-09",
+     "cutoff_short": "2022-10-09",
+     "context_excerpt": "2022-10-03 **Event**: Country A Senator R and Representative A reintroduced bipartisan legislation on October 3, 2022, aimed at banning Platform X and other similar applications from operating in Country A. This legislation, named Regulation A, seeks to protect the people of Country A by blocking and prohibiting all transactions with social media companies that are connected to or influenced by Country B, a major pow…",
+     "calibration_question": {
+      "q": "Will this app reach zero-billing traffic cooperation with a large telecom operator in the next 14 days?",
+      "window_days": 14,
+      "days_from_cutoff": 14,
+      "difficulty": "hard",
+      "dimension": "event",
+      "question_type": "D_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "Platform X announces opening up access to its research data to the country’s nonprofit academic institutions for the first time in a show of transparency",
+      "gt_date": "2022-10-14",
+      "gt_label": "2022-10-14",
+      "gt_day": 5
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-10-24",
+        "d_hat_label": "2022-10-24",
+        "d_hat_day": 15,
+        "abs_error_days": 10.0,
+        "reasoning": "Predicted 2022-10-24, actual 2022-10-14, off by 10 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 10 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-10-15",
+        "d_hat_label": "2022-10-15",
+        "d_hat_day": 6,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2022-10-15, actual 2022-10-14, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.03,
+        "abs_error": 0.03,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 3%; ground truth no. Absolute error 0.03, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-10-19",
+        "d_hat_label": "2022-10-19",
+        "d_hat_day": 10,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2022-10-19, actual 2022-10-14, off by 5 days."
+       },
+       "score_label": "Direction right, absolute error 0.03; date off by 5 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 10%; ground truth no. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-10-24",
+        "d_hat_label": "2022-10-24",
+        "d_hat_day": 15,
+        "abs_error_days": 10.0,
+        "reasoning": "Predicted 2022-10-24, actual 2022-10-14, off by 10 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 10 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-10-14",
+        "d_hat_label": "2022-10-14",
+        "d_hat_day": 5,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2022-10-14, actual 2022-10-14, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 0 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-10-19",
+        "d_hat_label": "2022-10-19",
+        "d_hat_day": 10,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2022-10-19, actual 2022-10-14, off by 5 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 5 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P03",
+     "cutoff_label": "Cutoff 2022-11-09",
+     "cutoff_short": "2022-11-09",
+     "context_excerpt": "2022-11-07 **Event**: Organization N announced on November 7 that it would ban Platform X by the end of March on all devices able to access Organization O's network. Organization P chief executive officer Person G confirmed the decision was made following advice from cybersecurity experts, internal government discussions, and international exchanges. The same day, Organization Q and Organization R confirmed they had …",
+     "calibration_question": {
+      "q": "In the next 14 days, will public opinion ridicule Country A members’ poor performance in hearings, blaming the drug problem on the platform while avoiding the failure of its own system, and CEO_C’s “anti-drug ban in a Southeast Asian country” style irony?",
+      "window_days": 14,
+      "days_from_cutoff": 4,
+      "difficulty": "hard",
+      "dimension": "opinion",
+      "question_type": "C_true",
+      "gt": 1,
+      "gt_note": "the event did occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "In his testimony prepared for the hearing, the platform CEO denied that the parent company has agency relationships with foreign governments, emphasizing that it has more than 100 million domestic users.",
+      "gt_date": "2022-11-11",
+      "gt_label": "2022-11-11",
+      "gt_day": 2
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.75,
+        "abs_error": 0.25,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 75%; ground truth yes. Absolute error 0.25, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-11-11",
+        "d_hat_label": "2022-11-11",
+        "d_hat_day": 2,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2022-11-11, actual 2022-11-11, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.25; date off by 0 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 100%; ground truth yes. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-11-12",
+        "d_hat_label": "2022-11-12",
+        "d_hat_day": 3,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2022-11-12, actual 2022-11-11, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.5,
+        "abs_error": 0.5,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 50%; ground truth yes. Absolute error 0.50, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-11-15",
+        "d_hat_label": "2022-11-15",
+        "d_hat_day": 6,
+        "abs_error_days": 4.0,
+        "reasoning": "Predicted 2022-11-15, actual 2022-11-11, off by 4 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.50; date off by 4 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.95,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 95%; ground truth yes. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-11-13",
+        "d_hat_label": "2022-11-13",
+        "d_hat_day": 4,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2022-11-13, actual 2022-11-11, off by 2 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 2 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.88,
+        "abs_error": 0.12,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 88%; ground truth yes. Absolute error 0.12, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-11-15",
+        "d_hat_label": "2022-11-15",
+        "d_hat_day": 6,
+        "abs_error_days": 4.0,
+        "reasoning": "Predicted 2022-11-15, actual 2022-11-11, off by 4 days."
+       },
+       "score_label": "Direction right, absolute error 0.12; date off by 4 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.9,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 90%; ground truth yes. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2022-11-12",
+        "d_hat_label": "2022-11-12",
+        "d_hat_day": 3,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2022-11-12, actual 2022-11-11, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 1 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P07",
+     "cutoff_label": "Cutoff 2023-11-05",
+     "cutoff_short": "2023-11-05",
+     "context_excerpt": "2023-11-04 **Event**: Organization M on November 4, 2023, passed a bill by a bipartisan vote of 352 in favor and 65 against, requiring Company Y to sell Platform X's Country A business within six months, or else the application will face a ban in Country A. The vote result exceeded the two-thirds majority threshold needed to pass under the fast-track procedure. The bill sets a \"qualified divestiture\" path for Platfor…",
+     "calibration_question": {
+      "q": "In the next seven days, will the relevant Senate committee clearly announce that the divestiture bill has been permanently shelved and will no longer be discussed?",
+      "window_days": 7,
+      "days_from_cutoff": 5,
+      "difficulty": "hard",
+      "dimension": "policy",
+      "question_type": "A_true",
+      "gt": 1,
+      "gt_note": "the event did occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The executive branch publicly reiterated its support for legislation to promote a plan that \"requires overseas background short video platforms to be divested within a time limit, otherwise they will be banned\" and emphasized that the goal is data security rather than direct bans.",
+      "gt_date": "2023-11-07",
+      "gt_label": "2023-11-07",
+      "gt_day": 2
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.98,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 2%; ground truth yes. Absolute error 0.98, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-11-05",
+        "d_hat_label": "2023-11-05",
+        "d_hat_day": 0,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2023-11-05, actual 2023-11-07, off by 2 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.98; date off by 2 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 0%; ground truth yes. Absolute error 1.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-11-06",
+        "d_hat_label": "2023-11-06",
+        "d_hat_day": 1,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2023-11-06, actual 2023-11-07, off by 1 days."
+       },
+       "score_label": "Direction wrong, absolute error 1.00; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.03,
+        "abs_error": 0.97,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 3%; ground truth yes. Absolute error 0.97, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-11-07",
+        "d_hat_label": "2023-11-07",
+        "d_hat_day": 2,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2023-11-07, actual 2023-11-07, off by 0 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.97; date off by 0 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 5%; ground truth yes. Absolute error 0.95, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-11-06",
+        "d_hat_label": "2023-11-06",
+        "d_hat_day": 1,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2023-11-06, actual 2023-11-07, off by 1 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.95; date off by 1 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.85,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 15%; ground truth yes. Absolute error 0.85, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-11-17",
+        "d_hat_label": "2023-11-17",
+        "d_hat_day": 12,
+        "abs_error_days": 10.0,
+        "reasoning": "Predicted 2023-11-17, actual 2023-11-07, off by 10 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.85; date off by 10 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 5%; ground truth yes. Absolute error 0.95, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-11-06",
+        "d_hat_label": "2023-11-06",
+        "d_hat_day": 1,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2023-11-06, actual 2023-11-07, off by 1 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.95; date off by 1 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P09",
+     "cutoff_label": "Cutoff 2023-12-12",
+     "cutoff_short": "2023-12-12",
+     "context_excerpt": "2023-12-10 **Event**: Organization M Party B leaders on the evening of December 8 incorporated the legislation to force Platform X's divestiture into a foreign aid package aimed at providing aid to Country F and Country G. This move gave the bill significant momentum, and if Organization F acts swiftly, the bill could become law as soon as next week. Organization Four chair, lawmaker MC2, gave key support to this new…",
+     "calibration_question": {
+      "q": "In the next seven days, will any platform content creators sue separately, claiming that the forced divestiture law infringes on their expression or business rights?",
+      "window_days": 7,
+      "days_from_cutoff": 4,
+      "difficulty": "hard",
+      "dimension": "event",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "Institution M Passed with overwhelming bipartisan support, 360 to 58, a bill to divest Company Y of Platform X for one year and package it into a foreign aid package for Country F Country G and Region J",
+      "gt_date": "2023-12-13",
+      "gt_label": "2023-12-13",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.01,
+        "abs_error": 0.01,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 1%; ground truth no. Absolute error 0.01, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-12-12",
+        "d_hat_label": "2023-12-12",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2023-12-12, actual 2023-12-13, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.01; date off by 1 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-12-12",
+        "d_hat_label": "2023-12-12",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2023-12-12, actual 2023-12-13, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-12-13",
+        "d_hat_label": "2023-12-13",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2023-12-13, actual 2023-12-13, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 0 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 2%; ground truth no. Absolute error 0.02, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-12-12",
+        "d_hat_label": "2023-12-12",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2023-12-12, actual 2023-12-13, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.02; date off by 1 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-12-14",
+        "d_hat_label": "2023-12-14",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2023-12-14, actual 2023-12-13, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 1 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2023-12-18",
+        "d_hat_label": "2023-12-18",
+        "d_hat_day": 6,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2023-12-18, actual 2023-12-13, off by 5 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 5 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P21",
+     "cutoff_label": "Cutoff 2024-08-09",
+     "cutoff_short": "2024-08-09",
+     "context_excerpt": "2024-08-08 **Event**: Platform X and its parent Company Y on August 8 filed an emergency application with Court D, requesting to temporarily block the \"sell-or-be-banned\" bill that will take effect on September 11, 2024—this is the first time Platform X has filed a formal legal action with Court D over the law. The same day, Court B again rejected Platform X's motion to stay enforcement of the bill. President-elect L…",
+     "calibration_question": {
+      "q": "Have any securities regulatory authorities issued trading restrictions or prohibition orders on potential trading participants of the short video platform?",
+      "window_days": 60,
+      "days_from_cutoff": 3,
+      "difficulty": "hard",
+      "dimension": "policy",
+      "question_type": "D_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The highest judicial authority agreed to expedite the acceptance of a short video platform’s appeal against the “forced stripping or banning” law and arranged a date for oral arguments but did not immediately issue a temporary stop order.",
+      "gt_date": "2024-08-10",
+      "gt_label": "2024-08-10",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.01,
+        "abs_error": 0.01,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 1%; ground truth no. Absolute error 0.01, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-10",
+        "d_hat_label": "2024-08-10",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2024-08-10, actual 2024-08-10, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.01; date off by 0 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 2%; ground truth no. Absolute error 0.02, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-09",
+        "d_hat_label": "2024-08-09",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-08-09, actual 2024-08-10, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.02; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.03,
+        "abs_error": 0.03,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 3%; ground truth no. Absolute error 0.03, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-10",
+        "d_hat_label": "2024-08-10",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2024-08-10, actual 2024-08-10, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.03; date off by 0 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-12",
+        "d_hat_label": "2024-08-12",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2024-08-12, actual 2024-08-10, off by 2 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 2 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-16",
+        "d_hat_label": "2024-08-16",
+        "d_hat_day": 7,
+        "abs_error_days": 6.0,
+        "reasoning": "Predicted 2024-08-16, actual 2024-08-10, off by 6 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 6 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 10%; ground truth no. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-16",
+        "d_hat_label": "2024-08-16",
+        "d_hat_day": 7,
+        "abs_error_days": 6.0,
+        "reasoning": "Predicted 2024-08-16, actual 2024-08-10, off by 6 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 6 days."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "event5_smci",
+   "short": "SMCI",
+   "domain_label": "MARKETS",
+   "anonymized_arc": "SMCI",
+   "live_questions": [
+    {
+     "id": "P05-0",
+     "type": "calibration",
+     "window": 7,
+     "text": "Will Company A be removed from major indices before June 14, 2024?"
+    },
+    {
+     "id": "P05-1",
+     "type": "calibration",
+     "window": 4,
+     "text": "Will Company A be removed from major indices before June 11, 2024?"
+    },
+    {
+     "id": "P05-2",
+     "type": "calibration",
+     "window": 19,
+     "text": "Will Company A lower its quarterly revenue forecast before June 26, 2024 and announce that it will not be able to submit its quarterly report on time?"
+    },
+    {
+     "id": "P05-3",
+     "type": "calibration",
+     "window": 12,
+     "text": "Will Company A lower its quarterly revenue forecast before June 19, 2024 and announce that it will not be able to submit its quarterly report on time?"
+    }
+   ],
+   "prediction_points": [
+    {
+     "point_id": "P03",
+     "cutoff_label": "Cutoff 2024-06-05",
+     "cutoff_short": "2024-06-05",
+     "context_excerpt": "2024-05-06 **Event**: Company A officially executed a 10-for-1 stock split plan on May 6, 2024, with each share of common stock split into 10 shares; existing shareholders' ownership proportions remained unchanged, and the company's total market capitalization was also unaffected. This stock split was intended to lower the per-share price threshold, improve stock liquidity, and attract more retail investors to partic…",
+     "calibration_question": {
+      "q": "Will the company announce a stock buyback plan within 7 days from June 6, 2024 to stabilize the stock price?",
+      "window_days": 7,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "event",
+      "question_type": "A_true",
+      "gt": 1,
+      "gt_note": "the event did occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The company officially disclosed the resignation of the auditor and started the selection of a new auditor. The stock price plummeted by nearly 50% in two days.",
+      "gt_date": "2024-06-06",
+      "gt_label": "2024-06-06",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 5%; ground truth yes. Absolute error 0.95, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-05",
+        "d_hat_label": "2024-06-05",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-06-05, actual 2024-06-06, off by 1 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.95; date off by 1 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 0%; ground truth yes. Absolute error 1.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-05",
+        "d_hat_label": "2024-06-05",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-06-05, actual 2024-06-06, off by 1 days."
+       },
+       "score_label": "Direction wrong, absolute error 1.00; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.9,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 10%; ground truth yes. Absolute error 0.90, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-11",
+        "d_hat_label": "2024-06-11",
+        "d_hat_day": 6,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2024-06-11, actual 2024-06-06, off by 5 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.90; date off by 5 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 5%; ground truth yes. Absolute error 0.95, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-20",
+        "d_hat_label": "2024-06-20",
+        "d_hat_day": 15,
+        "abs_error_days": 14.0,
+        "reasoning": "Predicted 2024-06-20, actual 2024-06-06, off by 14 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.95; date off by 14 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 0%; ground truth yes. Absolute error 1.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-11",
+        "d_hat_label": "2024-06-11",
+        "d_hat_day": 6,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2024-06-11, actual 2024-06-06, off by 5 days."
+       },
+       "score_label": "Direction wrong, absolute error 1.00; date off by 5 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.8,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 20%; ground truth yes. Absolute error 0.80, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-11",
+        "d_hat_label": "2024-06-11",
+        "d_hat_day": 6,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2024-06-11, actual 2024-06-06, off by 5 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.80; date off by 5 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P05",
+     "cutoff_label": "Cutoff 2024-06-07",
+     "cutoff_short": "2024-06-07",
+     "context_excerpt": "2024-06-05 **Event**: Auditing Firm A officially resigned as Company A's auditor on June 5, 2024. In its resignation letter submitted to Organization A, Auditing Firm A stated that, due to recently learned information, the company's financial reporting was \"too questionable\" to be worth the audit risk, and that it could no longer rely on the representations of management and the audit committee. The letter also raise…",
+     "calibration_question": {
+      "q": "Will Company A's auditors raise reservations on financial data for the first time within 7 days before or after June 4, 2024?",
+      "window_days": 7,
+      "days_from_cutoff": -3,
+      "difficulty": "hard",
+      "dimension": "event",
+      "question_type": "D_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "Company removed from major indices",
+      "gt_date": "2024-06-11",
+      "gt_label": "2024-06-11",
+      "gt_day": 4
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.98,
+        "abs_error": 0.98,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 98%; ground truth no. Absolute error 0.98, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-07-01",
+        "d_hat_label": "2024-07-01",
+        "d_hat_day": 24,
+        "abs_error_days": 20.0,
+        "reasoning": "Predicted 2024-07-01, actual 2024-06-11, off by 20 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.98; date off by 20 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 100%; ground truth no. Absolute error 1.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-12",
+        "d_hat_label": "2024-06-12",
+        "d_hat_day": 5,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-06-12, actual 2024-06-11, off by 1 days."
+       },
+       "score_label": "Direction wrong, absolute error 1.00; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.9,
+        "abs_error": 0.9,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 90%; ground truth no. Absolute error 0.90, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-24",
+        "d_hat_label": "2024-06-24",
+        "d_hat_day": 17,
+        "abs_error_days": 13.0,
+        "reasoning": "Predicted 2024-06-24, actual 2024-06-11, off by 13 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.90; date off by 13 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 100%; ground truth no. Absolute error 1.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-28",
+        "d_hat_label": "2024-06-28",
+        "d_hat_day": 21,
+        "abs_error_days": 17.0,
+        "reasoning": "Predicted 2024-06-28, actual 2024-06-11, off by 17 days."
+       },
+       "score_label": "Direction wrong, absolute error 1.00; date off by 17 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 100%; ground truth no. Absolute error 1.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-07-01",
+        "d_hat_label": "2024-07-01",
+        "d_hat_day": 24,
+        "abs_error_days": 20.0,
+        "reasoning": "Predicted 2024-07-01, actual 2024-06-11, off by 20 days."
+       },
+       "score_label": "Direction wrong, absolute error 1.00; date off by 20 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 100%; ground truth no. Absolute error 1.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-16",
+        "d_hat_label": "2024-06-16",
+        "d_hat_day": 9,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2024-06-16, actual 2024-06-11, off by 5 days."
+       },
+       "score_label": "Direction wrong, absolute error 1.00; date off by 5 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P07",
+     "cutoff_label": "Cutoff 2024-06-12",
+     "cutoff_short": "2024-06-12",
+     "context_excerpt": "2024-06-07 **Event**: Auditing Firm A officially resigned as Company A's auditor on May 30, 2024, and raised questions about the company's commitment to integrity and ethics. Company A filed a Form C document on June 5 disclosing this matter, but explicitly stated that it disagreed with Auditing Firm A's decision and had begun searching for a new auditor. Hit by this news, the company's share price plunged 33% on Wed…",
+     "calibration_question": {
+      "q": "Has Company A been approved by the exchange to extend the listing period to late July within 30 days before June 19, 2024?",
+      "window_days": 30,
+      "days_from_cutoff": 7,
+      "difficulty": "hard",
+      "dimension": "event",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The company announced that it was unable to submit its quarterly report on time and lowered its performance expectations, facing severe pressure to delist.",
+      "gt_date": "2024-06-19",
+      "gt_label": "2024-06-19",
+      "gt_day": 7
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-19",
+        "d_hat_label": "2024-06-19",
+        "d_hat_day": 7,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2024-06-19, actual 2024-06-19, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 0 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-19",
+        "d_hat_label": "2024-06-19",
+        "d_hat_day": 7,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2024-06-19, actual 2024-06-19, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 0 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.08,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 8%; ground truth no. Absolute error 0.08, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-12",
+        "d_hat_label": "2024-06-12",
+        "d_hat_day": 0,
+        "abs_error_days": 7.0,
+        "reasoning": "Predicted 2024-06-12, actual 2024-06-19, off by 7 days."
+       },
+       "score_label": "Direction right, absolute error 0.08; date off by 7 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-14",
+        "d_hat_label": "2024-06-14",
+        "d_hat_day": 2,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2024-06-14, actual 2024-06-19, off by 5 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 5 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-14",
+        "d_hat_label": "2024-06-14",
+        "d_hat_day": 2,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2024-06-14, actual 2024-06-19, off by 5 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 5 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 20%; ground truth no. Absolute error 0.20, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-25",
+        "d_hat_label": "2024-06-25",
+        "d_hat_day": 13,
+        "abs_error_days": 6.0,
+        "reasoning": "Predicted 2024-06-25, actual 2024-06-19, off by 6 days."
+       },
+       "score_label": "Direction right, absolute error 0.20; date off by 6 days."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "event2_trump_tariff",
+   "short": "Trump Tariff",
+   "domain_label": "TRADE POLICY",
+   "anonymized_arc": "Trump Tariff",
+   "live_questions": [
+    {
+     "id": "P05-0",
+     "type": "calibration",
+     "window": 14,
+     "text": "Within 14 days of the cutoff, Country W leaders publicly denied claims that they had agreed with Country Y the president-elect on closing the border?"
+    },
+    {
+     "id": "P05-1",
+     "type": "calibration",
+     "window": 7,
+     "text": "Within 7 days of the cutoff, Country W leaders publicly denied claims that they had agreed with Country Y the president-elect on closing the border?"
+    },
+    {
+     "id": "P05-2",
+     "type": "calibration",
+     "window": 14,
+     "text": "Within 14 days after cutoff, Country Z Prime Minister took the initiative to go to Region M to meet with Country Y President-elect?"
+    },
+    {
+     "id": "P05-3",
+     "type": "calibration",
+     "window": 7,
+     "text": "Within 7 days after cutoff, Country Z Prime Minister will go to Region M to meet with Country Y President-elect?"
+    }
+   ],
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff_label": "Cutoff 2017-09-24",
+     "cutoff_short": "2017-09-24",
+     "context_excerpt": "2017-09-19 **Event**: On September 19, 2017, Country Y President Leader A escalated trade-war threats against Regional Bloc A on Platform A, warning that if Regional Bloc A took retaliatory measures against Country Y's Regulation P, Country Y would impose taxes on cars made in Region A. A week earlier, Leader A had abruptly announced plans to impose a 25% tariff on imported steel and a 10% tariff on aluminum to prote…",
+     "calibration_question": {
+      "q": "In the next 30 days, will there be a calm voice in public opinion reminding Person I3 that leaving does not necessarily mean that Official C takes over, the personnel has not yet been settled, so don’t rush to conclusions?",
+      "window_days": 30,
+      "days_from_cutoff": 3,
+      "difficulty": "hard",
+      "dimension": "opinion",
+      "question_type": "C_true",
+      "gt": 1,
+      "gt_note": "the event did occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "The ruling party has publicly confirmed that it will grant Law P temporary exemptions to some neighboring countries and allies, and uses permanent exemptions as a bargaining chip in trade agreement negotiations.",
+      "gt_date": "2017-09-26",
+      "gt_label": "2017-09-26",
+      "gt_day": 2
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.7,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 70%; ground truth yes. Absolute error 0.30, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2017-10-08",
+        "d_hat_label": "2017-10-08",
+        "d_hat_day": 14,
+        "abs_error_days": 12.0,
+        "reasoning": "Predicted 2017-10-08, actual 2017-09-26, off by 12 days."
+       },
+       "score_label": "Direction right, absolute error 0.30; date off by 12 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 100%; ground truth yes. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2017-10-08",
+        "d_hat_label": "2017-10-08",
+        "d_hat_day": 14,
+        "abs_error_days": 12.0,
+        "reasoning": "Predicted 2017-10-08, actual 2017-09-26, off by 12 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 12 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.52,
+        "abs_error": 0.48,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 52%; ground truth yes. Absolute error 0.48, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2017-09-25",
+        "d_hat_label": "2017-09-25",
+        "d_hat_day": 1,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2017-09-25, actual 2017-09-26, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.48; date off by 1 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 5%; ground truth yes. Absolute error 0.95, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2017-09-28",
+        "d_hat_label": "2017-09-28",
+        "d_hat_day": 4,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2017-09-28, actual 2017-09-26, off by 2 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.95; date off by 2 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.5,
+        "abs_error": 0.5,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 50%; ground truth yes. Absolute error 0.50, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2017-09-26",
+        "d_hat_label": "2017-09-26",
+        "d_hat_day": 2,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2017-09-26, actual 2017-09-26, off by 0 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.50; date off by 0 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.5,
+        "abs_error": 0.5,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 50%; ground truth yes. Absolute error 0.50, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2017-10-16",
+        "d_hat_label": "2017-10-16",
+        "d_hat_day": 22,
+        "abs_error_days": 20.0,
+        "reasoning": "Predicted 2017-10-16, actual 2017-09-26, off by 20 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.50; date off by 20 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P03",
+     "cutoff_label": "Cutoff 2018-02-09",
+     "cutoff_short": "2018-02-09",
+     "context_excerpt": "2018-02-05 **Event**: On February 5, 2018, Country Y's President, Leader A, said for the first time publicly, in a television interview with Media A, that he was prepared to impose tariffs on all goods imported from Country X. Leader A said in the interview about Country X, \"I'm ready to go to $500 billion,\" referring to the $505.5 billion total of Country Y's imports from Country X in 2017. Earlier, Country Y had al…",
+     "calibration_question": {
+      "q": "Country Y Will leaders grant tax exemptions on certain models within this window, subject to local production?",
+      "window_days": 7,
+      "days_from_cutoff": 7,
+      "difficulty": "hard",
+      "dimension": "event",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "Country Y Announces doubling of import tariffs on steel and aluminum from an allied country",
+      "gt_date": "2018-02-26",
+      "gt_label": "2018-02-26",
+      "gt_day": 17
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.03,
+        "abs_error": 0.03,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 3%; ground truth no. Absolute error 0.03, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2018-02-26",
+        "d_hat_label": "2018-02-26",
+        "d_hat_day": 17,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2018-02-26, actual 2018-02-26, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.03; date off by 0 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2018-02-26",
+        "d_hat_label": "2018-02-26",
+        "d_hat_day": 17,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2018-02-26, actual 2018-02-26, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 0 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.32,
+        "abs_error": 0.32,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 32%; ground truth no. Absolute error 0.32, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2018-02-26",
+        "d_hat_label": "2018-02-26",
+        "d_hat_day": 17,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2018-02-26, actual 2018-02-26, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.32; date off by 0 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2018-02-26",
+        "d_hat_label": "2018-02-26",
+        "d_hat_day": 17,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2018-02-26, actual 2018-02-26, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 0 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 30%; ground truth no. Absolute error 0.30, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2018-03-01",
+        "d_hat_label": "2018-03-01",
+        "d_hat_day": 20,
+        "abs_error_days": 3.0,
+        "reasoning": "Predicted 2018-03-01, actual 2018-02-26, off by 3 days."
+       },
+       "score_label": "Direction right, absolute error 0.30; date off by 3 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.75,
+        "abs_error": 0.75,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "Answered 75%; ground truth no. Absolute error 0.75, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2018-02-20",
+        "d_hat_label": "2018-02-20",
+        "d_hat_day": 11,
+        "abs_error_days": 6.0,
+        "reasoning": "Predicted 2018-02-20, actual 2018-02-26, off by 6 days."
+       },
+       "score_label": "Direction wrong, absolute error 0.75; date off by 6 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P05",
+     "cutoff_label": "Cutoff 2024-06-15",
+     "cutoff_short": "2024-06-15",
+     "context_excerpt": "2024-06-14 **Event**: Country Y's President-elect, Leader A, announced on his social media platform Product C on June 13, 2024, that after taking office in January 2025 he would sign an executive order imposing a 25% tariff on all goods imported from Country W and Country Z, while adding a 10% tariff on Country X goods. Leader A made clear these tariffs would remain in effect until drugs, especially the synthetic opi…",
+     "calibration_question": {
+      "q": "In the public opinion that Leader A threatens Institution X with 100% tariffs, will there be calls from netizens to advocate that Country Y should immediately and simultaneously implement financial sanctions on the local currency settlement systems of Country V and Country P?",
+      "window_days": 14,
+      "days_from_cutoff": 4,
+      "difficulty": "hard",
+      "dimension": "opinion",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "Country W President corrects Country Y President-elect misrepresents call between two men, denies agreement to close southern border",
+      "gt_date": "2024-06-16",
+      "gt_label": "2024-06-16",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-15",
+        "d_hat_label": "2024-06-15",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-06-15, actual 2024-06-16, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 1 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-15",
+        "d_hat_label": "2024-06-15",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-06-15, actual 2024-06-16, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.12,
+        "abs_error": 0.12,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 12%; ground truth no. Absolute error 0.12, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-15",
+        "d_hat_label": "2024-06-15",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-06-15, actual 2024-06-16, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.12; date off by 1 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-16",
+        "d_hat_label": "2024-06-16",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2024-06-16, actual 2024-06-16, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 0 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 30%; ground truth no. Absolute error 0.30, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-20",
+        "d_hat_label": "2024-06-20",
+        "d_hat_day": 5,
+        "abs_error_days": 4.0,
+        "reasoning": "Predicted 2024-06-20, actual 2024-06-16, off by 4 days."
+       },
+       "score_label": "Direction right, absolute error 0.30; date off by 4 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 0%; ground truth no. Absolute error 0.00, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-06-16",
+        "d_hat_label": "2024-06-16",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2024-06-16, actual 2024-06-16, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.00; date off by 0 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P07",
+     "cutoff_label": "Cutoff 2024-08-20",
+     "cutoff_short": "2024-08-20",
+     "context_excerpt": "2024-08-19 **Event**: Executive Body A confirmed on Friday afternoon local time that Country Y President Leader A would impose tariffs starting August 20 on imports from Country W, Country Z, and Country X. Executive Body A press secretary Person K1 announced that Country W and Country Z would face 25% tariffs and Country X 10%. Person T3 said the tariffs were a response to \"the illegal fentanyl the three countries p…",
+     "calibration_question": {
+      "q": "As of September 13, 2024, will new tariffs be announced immediately and generally on key industrial metals?",
+      "window_days": 30,
+      "days_from_cutoff": 24,
+      "difficulty": "hard",
+      "dimension": "policy",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "Leader A claimed on social media that the tariffs were imposed to protect Country Y people and pressured the three countries to curb fentanyl and reduce illegal immigration.",
+      "gt_date": "2024-08-21",
+      "gt_label": "2024-08-21",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 10%; ground truth no. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-08-20, actual 2024-08-21, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 1 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-08-20, actual 2024-08-21, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 1 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.12,
+        "abs_error": 0.12,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 12%; ground truth no. Absolute error 0.12, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-08-20, actual 2024-08-21, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.12; date off by 1 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 10%; ground truth no. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-08-20, actual 2024-08-21, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 1 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.4,
+        "abs_error": 0.4,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 40%; ground truth no. Absolute error 0.40, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-08-20, actual 2024-08-21, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.40; date off by 1 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 30%; ground truth no. Absolute error 0.30, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2024-08-20, actual 2024-08-21, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.30; date off by 1 days."
+      }
+     ]
+    },
+    {
+     "point_id": "P20",
+     "cutoff_label": "Cutoff 2025-04-16",
+     "cutoff_short": "2025-04-16",
+     "context_excerpt": "2025-04-04 **Event**: Trade Institution A on Tuesday formally issued the Notice Q, officially launching the review process for Agreement A (Agreement A) and opening a 45-day public consultation in preparation for next year's mandatory review of the trade agreement, with a public hearing planned for November. This is the first formal step ruling Team A has taken toward renegotiating this comprehensive trade agreement,…",
+     "calibration_question": {
+      "q": "Within 7 days from the base date, Country Y will the highest judicial body hold a hearing on the legality of the President’s tariffs?",
+      "window_days": 7,
+      "days_from_cutoff": 7,
+      "difficulty": "hard",
+      "dimension": "policy",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "the event did not occur inside the window"
+     },
+     "temporal_question": {
+      "q": "On what date does this event happen?",
+      "event_desc": "Country Y The Justice Department wants an app that reminds immigrants to evade law enforcement to be removed from the app store",
+      "gt_date": "2025-04-21",
+      "gt_label": "2025-04-21",
+      "gt_day": 5
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.01,
+        "abs_error": 0.01,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 1%; ground truth no. Absolute error 0.01, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-20",
+        "d_hat_label": "2025-04-20",
+        "d_hat_day": 4,
+        "abs_error_days": 1.0,
+        "reasoning": "Predicted 2025-04-20, actual 2025-04-21, off by 1 days."
+       },
+       "score_label": "Direction right, absolute error 0.01; date off by 1 days."
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 5%; ground truth no. Absolute error 0.05, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-16",
+        "d_hat_label": "2025-04-16",
+        "d_hat_day": 0,
+        "abs_error_days": 5.0,
+        "reasoning": "Predicted 2025-04-16, actual 2025-04-21, off by 5 days."
+       },
+       "score_label": "Direction right, absolute error 0.05; date off by 5 days."
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.04,
+        "abs_error": 0.04,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 4%; ground truth no. Absolute error 0.04, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-21",
+        "d_hat_label": "2025-04-21",
+        "d_hat_day": 5,
+        "abs_error_days": 0.0,
+        "reasoning": "Predicted 2025-04-21, actual 2025-04-21, off by 0 days."
+       },
+       "score_label": "Direction right, absolute error 0.04; date off by 0 days."
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.01,
+        "abs_error": 0.01,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 1%; ground truth no. Absolute error 0.01, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-23",
+        "d_hat_label": "2025-04-23",
+        "d_hat_day": 7,
+        "abs_error_days": 2.0,
+        "reasoning": "Predicted 2025-04-23, actual 2025-04-21, off by 2 days."
+       },
+       "score_label": "Direction right, absolute error 0.01; date off by 2 days."
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 10%; ground truth no. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-18",
+        "d_hat_label": "2025-04-18",
+        "d_hat_day": 2,
+        "abs_error_days": 3.0,
+        "reasoning": "Predicted 2025-04-18, actual 2025-04-21, off by 3 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 3 days."
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "Answered 10%; ground truth no. Absolute error 0.10, question weight 0.00."
+       },
+       "temporal": {
+        "pred_date": "2025-04-30",
+        "d_hat_label": "2025-04-30",
+        "d_hat_day": 14,
+        "abs_error_days": 9.0,
+        "reasoning": "Predicted 2025-04-30, actual 2025-04-21, off by 9 days."
+       },
+       "score_label": "Direction right, absolute error 0.10; date off by 9 days."
+      }
+     ]
+    }
+   ]
+  }
+ ]
 }

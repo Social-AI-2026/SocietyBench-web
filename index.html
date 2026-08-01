@@ -79,7 +79,7 @@
            unlocked on returning visitors (page-load is not a user gesture). -->
       <div class="hero-video-bg" aria-hidden="true">
         <video class="hero-video" autoplay muted loop playsinline preload="auto">
-          <source src="videos/hero.mp4?v=20260529" type="video/mp4" />
+          <source src="videos/hero.mp4?v=20260802-final" type="video/mp4" />
         </video>
         <div class="hero-video-overlay"></div>
       </div>
@@ -129,7 +129,7 @@
           </div>
           <figure class="abstract-video">
             <video class="abstract-video-el" controls playsinline preload="auto">
-              <source src="videos/abstract-demo.mp4?v=20260530b" type="video/mp4" />
+              <source src="videos/abstract-demo.mp4?v=20260802-final" type="video/mp4" />
             </video>
           </figure>
         </div>
@@ -230,7 +230,7 @@
             <h4 data-i18n="method.dual.a1.title">Probability Calibration.</h4>
             <p class="metric" data-i18n-html="method.dual.a1.metric.html">For an event E in a time window W, the model outputs P(E occurs in W) ∈ [0,1]. Scored by <strong>weighted MAE</strong> against binary ground truth.</p>
             <div class="scale">
-              <span data-i18n-html="method.dual.a1.scale.0.html"><b>0</b> uniform 50%</span>
+              <span data-i18n-html="method.dual.a1.scale.0.html"><b>50</b> uniform 50% predictor</span>
               <span data-i18n-html="method.dual.a1.scale.100.html"><b>100</b> perfect predictor</span>
             </div>
           </div>
@@ -270,7 +270,7 @@
         <!-- =============== MODELS TAB =============== -->
         <div class="lb-tab-pane active" data-lbpane="models">
           <div class="callout" data-i18n-html="lb.callout.html">
-            ★ Strongest validated LLM reaches only <span class="big">33.6 / 100</span> on the calibration axis — significant headroom remains.
+            ★ The strongest of six frontier LLMs reaches only <span class="big">75.0 / 100</span> overall, against a trivial anchor of 50 — about half the headroom remains.
           </div>
 
           <div class="lb-wrap" id="lb-unified">
@@ -278,9 +278,9 @@
           </div>
 
           <div class="lb-notes">
-            <p data-i18n-html="lb.note.dagger.html"><span class="sym">†</span> Kimi-K2.5 generated the question banks; self-evaluation bias bounded at ≈ +0.9 on cross-event Cal. (App. D.4).</p>
-            <p data-i18n-html="lb.note.star.html"><span class="sym">★</span> Gemini-3.1-pro was evaluated on a preview API; absolute numbers may shift on the GA build.</p>
-            <p style="margin-top: 10px;" data-i18n-html="lb.note.legend.html">Per-event cells: <code>Cal | Time</code>. Higher is better; 100 = perfect, 50 = uniform 50% / bucket-midpoint baseline. Per-event labels: PUB = Public Controversy · GEO = Geopolitical · TECH = Tech Policy · MKT = Markets · TRADE = Trade. Italic rows + <code>proj</code> badges are projected, pending experimental validation.</p>
+            <p data-i18n-html="lb.note.dagger.html"><span class="sym">†</span> Agents run on the <em>Doubao-Seed-2.0-Pro</em> base model; the delta against that base is what the row is measuring.</p>
+            <p data-i18n-html="lb.note.star.html"><span class="sym">★</span> The two model-free baselines emit no dates, so their temporal score is recorded at the bucket-midpoint anchor of 50.</p>
+            <p style="margin-top: 10px;" data-i18n-html="lb.note.legend.html">Per-event cells: <code>Cal | Time</code>. Higher is better; 100 = perfect, 50 = the trivial anchor (a uniform 50% predictor on calibration, a bucket-midpoint guesser on time). Per-event labels: PUB = Public Controversy · GEO = Geopolitical · TECH = Tech Policy · MKT = Markets · TRADE = Trade. Every score on this table is measured — this release contains no projected numbers.</p>
           </div>
         </div>
 
@@ -440,7 +440,7 @@ Accepted events join the official catalog and ship in the next benchmark version
           </article>
         </div>
 
-        <p class="expand-note" data-i18n-html="cb.expand-note.html">Contributors and event-growth statistics will appear here as the benchmark grows · current: <strong>5 events</strong> · <strong>6 systems</strong> on the leaderboard</p>
+        <p class="expand-note" data-i18n-html="cb.expand-note.html">Contributors and event-growth statistics will appear here as the benchmark grows · current: <strong>5 events</strong> · <strong>125 prediction points</strong> · <strong>11 systems</strong> on the leaderboard</p>
         <p class="discussions-line" data-i18n-html="cb.discussions.html">Questions about format, methodology, or scoring? &nbsp;→&nbsp; Join the discussion on <a href="#">GitHub Discussions ↗</a></p>
       </div>
     </section>
@@ -453,9 +453,9 @@ Accepted events join the official catalog and ship in the next benchmark version
           <button class="copy-btn" id="copy-bib" type="button" data-i18n="cite.copy">▸ COPY</button>
 <pre id="bibtex"><span class="kw">@misc</span>{societybench2026,
   title  = {SocietyBench: Forecasting Counterfactual Social-World Evolution},
-  author = {Anonymous Authors},
+  author = {Wang, Zhenran and Bian, Zhonghan and Li, Jinsong and Qi, Zhangyang},
   year   = {2026},
-  note   = {Anonymized release. Citation will be updated upon publication.}
+  note   = {\url{https://github.com/Social-AI-2026/SocietyBench-codebase}}
 }</pre>
         </div>
       </div>

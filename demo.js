@@ -160,18 +160,17 @@ async function loadWidget() {
 
 // ============================ Mode tabs (cached / live) ==================
 const MODEL_OPTIONS = [
-  // --- LLMs ---
-  { id: "gemini-3.1-pro",       label: "Gemini-3.1-pro",      group: "LLM" },
-  { id: "gpt-5.4",              label: "GPT-5.4",             group: "LLM" },
-  { id: "claude-sonnet-4.6",    label: "Claude Sonnet 4.6",   group: "LLM" },
-  { id: "doubao-seed-2.0-lite", label: "Doubao Seed 2.0 lite",group: "LLM" },
-  { id: "qwen3-235b-a22b",      label: "Qwen3-235B-A22B",     group: "LLM" },
-  { id: "kimi-k2.5",            label: "Kimi-K2.5",           group: "LLM" },
-  // --- Agents (projected) ---
-  { id: "mirofish-doubao",      label: "MiroFish + Doubao",   group: "AGENT" },
-  { id: "mirofish-qwen3",       label: "MiroFish + Qwen3",    group: "AGENT" },
-  { id: "langgraph-doubao",     label: "LangGraph + Doubao",  group: "AGENT" },
-  { id: "autogen-doubao",       label: "AutoGen + Doubao",    group: "AGENT" }
+  // --- the six frontier LLMs evaluated in the paper ---
+  { id: "gpt-5.5",             label: "GPT-5.5",             group: "LLM" },
+  { id: "gemini-3.5-flash",    label: "Gemini-3.5-Flash",    group: "LLM" },
+  { id: "claude-opus-4.8",     label: "Claude-Opus-4.8",     group: "LLM" },
+  { id: "deepseek-v4-pro",     label: "DeepSeek-V4-Pro",     group: "LLM" },
+  { id: "kimi-k2.5",           label: "Kimi-K2.5",           group: "LLM" },
+  { id: "doubao-seed-2.0-pro", label: "Doubao-Seed-2.0-Pro", group: "LLM" },
+  // --- the three agent frameworks, all on the Doubao base model ---
+  { id: "langgraph-doubao",    label: "LangGraph + Doubao",  group: "AGENT" },
+  { id: "autogen-doubao",      label: "AutoGen + Doubao",    group: "AGENT" },
+  { id: "mirofish-doubao",     label: "MiroFish + Doubao",   group: "AGENT" }
 ];
 
 // Live-mode preset questions are sourced per-event from interactive_demo.json

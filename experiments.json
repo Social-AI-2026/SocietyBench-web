@@ -1,82 +1,237 @@
 {
-  "schema_version": "0.1",
-  "notes": "All ablation + stress-case results from the SocietyBench paper. Numbers verified against /home/ubuntu/overleaf_69e60208/table/*.tex. Subscripts represent delta vs the in-paper baseline (the row with is_baseline: true).",
-  "stress_case": {
-    "title": "Two events, two failure axes",
-    "subtitle": "The largest single-event per-axis spreads in the validated leaderboard. SMCI's +28.2 Cal gap and Trump-Tariff's +44.9 Time gap are the two largest single-event gaps across all five validated LLMs.",
-    "events": [
-      {
-        "key": "smci",
-        "name": "SMCI",
-        "label": "Financial markets — delisting crisis (47-day arc)",
-        "stats": {"n_pts": 11, "arc_days": 47, "n_cal": 990, "n_time": 55},
-        "mean":   {"cal": 33.6, "time": 65.9},
-        "gemini": {"cal": 49.1, "time": 83.7, "is_best": true},
-        "qwen3":  {"cal": 20.9, "time": 53.7},
-        "gap":    {"cal": 28.2, "time": 30.0, "cal_pct_of_mean": 135, "time_pct_of_mean": 56},
-        "axis_winner": "cal",
-        "takeaway": "Calibration on short-arc events with company-specific numerical detail is the hardest single axis."
-      },
-      {
-        "key": "trump",
-        "name": "Trump-Tariff",
-        "label": "Trade policy — reciprocal-tariff escalation (90-day arc)",
-        "stats": {"n_pts": 25, "arc_days": 90, "n_cal": 9136, "n_time": 339},
-        "mean":   {"cal": 18.0, "time": 59.1},
-        "gemini": {"cal": 19.5, "time": 69.3, "is_best": true},
-        "qwen3":  {"cal": 14.5, "time": 24.4},
-        "gap":    {"cal": 5.0, "time": 44.9, "cal_pct_of_mean": 34, "time_pct_of_mean": 184},
-        "axis_winner": "time",
-        "takeaway": "Qwen3 collapses to ~half the bucket-midpoint baseline (24.4) on the longest-arc event — only sub-baseline temporal score across the five validated LLMs."
-      }
-    ]
-  },
-  "ablations": {
-    "question_bank_composition": {
-      "title": "Question-bank composition",
-      "subtitle": "Drop one question type and re-score on Doubao. Subscripts = inflation vs. the full bank (lower-on-the-table = more difficulty was supplied by that type).",
-      "axes": ["Cal", "Time"],
-      "rows": [
-        {"label": "− A-type (time-gradient, 44%)",    "cal": 30.5, "cal_delta": 5.8, "time": 62.8, "time_delta": 2.7},
-        {"label": "− B-type (specificity, 18%)",      "cal": 26.1, "cal_delta": 1.4, "time": 60.4, "time_delta": 0.3},
-        {"label": "− C-type (outcome variants, 18%)", "cal": 26.4, "cal_delta": 1.7, "time": 60.7, "time_delta": 0.6},
-        {"label": "− D-type (high-confusion, 19%)",   "cal": 28.9, "cal_delta": 4.2, "time": 61.3, "time_delta": 1.2},
-        {"label": "Full bank (ours, ~31k Q)",         "cal": 24.7, "cal_delta": 0.0, "time": 60.1, "time_delta": 0.0, "is_baseline": true}
-      ],
-      "takeaway": "Removing A-type (time-gradient) inflates calibration the most (+5.8) — it carries the bulk of the bank's difficulty. D-type adds another +4.2."
+ "schema_version": "2.0",
+ "notes": "Taken from the paper's own ablation and stress-case tables. No projected numbers.",
+ "stress_case": {
+  "title": "Stress-case events",
+  "subtitle": "The two events that stretch the models furthest apart: GPT-5.5 against Kimi-K2.5.",
+  "events": [
+   {
+    "event": "SMCI",
+    "points": 25,
+    "arc_days": 468,
+    "n_cal": 3196,
+    "n_time": 528,
+    "mean": {
+     "cal": 65.7,
+     "time": 70.5
     },
-    "scoring_formula": {
-      "title": "Calibration scoring formula",
-      "subtitle": "Re-score the same model answers under five aggregation rules. The Doubao–Gemini gap is stable across rules — ranking is robust to the formula choice.",
-      "rows": [
-        {"label": "Uniform MAE",            "doubao": 27.2, "doubao_delta": 2.5, "gemini": 36.8, "gemini_delta": 3.2, "gap": 9.6},
-        {"label": "Linear weighting",       "doubao": 25.8, "doubao_delta": 1.1, "gemini": 34.7, "gemini_delta": 1.1, "gap": 8.9},
-        {"label": "Brier score (rescaled)", "doubao": 26.0, "doubao_delta": 1.3, "gemini": 34.5, "gemini_delta": 0.9, "gap": 8.5},
-        {"label": "Log-loss (rescaled)",    "doubao": 23.4, "doubao_delta": 1.3, "gemini": 32.1, "gemini_delta": 1.5, "gap": 8.7},
-        {"label": "Weighted MAE (ours)",    "doubao": 24.7, "doubao_delta": 0.0, "gemini": 33.6, "gemini_delta": 0.0, "gap": 8.9, "is_baseline": true}
-      ],
-      "takeaway": "Doubao–Gemini gap clusters tightly between 8.5–9.6 across all rules — the model ordering survives the formula choice."
+    "gpt": {
+     "cal": 74.9,
+     "time": 84.2
     },
-    "reasoning_depth": {
-      "title": "Reasoning-depth budget",
-      "subtitle": "Gemini-3.1-pro at three thinking-effort levels. Subscripts = gap to our high-budget setting.",
-      "rows": [
-        {"label": "low (~1k tokens)",    "cal": 25.4, "cal_delta": 8.2, "time": 60.2, "time_delta": 9.1},
-        {"label": "medium (~4k tokens)", "cal": 30.8, "cal_delta": 2.8, "time": 65.5, "time_delta": 3.8},
-        {"label": "high (~16k, ours)",   "cal": 33.6, "cal_delta": 0.0, "time": 69.3, "time_delta": 0.0, "is_baseline": true}
-      ],
-      "takeaway": "Calibration scales steeply with depth (25.4 → 30.8 → 33.6). Reporting frontier models at lower budgets would understate calibration by 5–8 points."
+    "kimi": {
+     "cal": 64.8,
+     "time": 64.9
     },
-    "anonymization_protocol": {
-      "title": "Anonymization protocol",
-      "subtitle": "Per-event Cal on Doubao with each anonymization stage disabled. Both stages are load-bearing.",
-      "rows": [
-        {"label": "Anon. + date-shift (ours)",   "wuhan": 25.2, "us_iran": 21.8, "tiktok": 31.6, "smci": 24.9, "trump": 19.9, "mean": 24.7, "is_baseline": true},
-        {"label": "− date-shift",                "wuhan": 26.4, "us_iran": 23.0, "tiktok": 32.5, "smci": 25.7, "trump": 20.9, "mean": 25.7, "leak": 1.0},
-        {"label": "− entity anon.",              "wuhan": 28.9, "us_iran": 26.5, "tiktok": 33.8, "smci": 27.1, "trump": 22.5, "mean": 27.8, "leak": 3.1},
-        {"label": "− both (raw event names)",    "wuhan": 30.4, "us_iran": 28.2, "tiktok": 35.7, "smci": 28.5, "trump": 23.4, "mean": 29.2, "leak": 4.5}
-      ],
-      "takeaway": "Disabling both stages inflates cross-event mean by +4.5. US-Iran (+6.4) and Wuhan (+5.2) leak most — distinctive named entities."
+    "gap": {
+     "cal": 10.1,
+     "cal_pct": 16,
+     "time": 19.3,
+     "time_pct": 30
     }
+   },
+   {
+    "event": "Trump Tariff",
+    "points": 25,
+    "arc_days": 2930,
+    "n_cal": 8035,
+    "n_time": 976,
+    "mean": {
+     "cal": 72.9,
+     "time": 71.9
+    },
+    "gpt": {
+     "cal": 81.7,
+     "time": 85.4
+    },
+    "kimi": {
+     "cal": 66.4,
+     "time": 64.0
+    },
+    "gap": {
+     "cal": 15.3,
+     "cal_pct": 23,
+     "time": 21.4,
+     "time_pct": 33
+    }
+   }
+  ]
+ },
+ "ablations": {
+  "question_bank_composition": {
+   "title": "Question-bank composition",
+   "subtitle": "Drop one subset of the bank at a time and re-score. Subscripts are relative to the full bank.",
+   "rows": [
+    {
+     "label": "− A-type (time-gradient, 47%)",
+     "doubao": 70.7,
+     "doubao_delta": 6.4,
+     "gpt": 83.4,
+     "gpt_delta": 8.1,
+     "mean": 74.2,
+     "mean_delta": 7.2,
+     "is_baseline": false
+    },
+    {
+     "label": "− B-type (specificity, 23%)",
+     "doubao": 62.9,
+     "doubao_delta": -1.4,
+     "gpt": 74.1,
+     "gpt_delta": -1.2,
+     "mean": 66.2,
+     "mean_delta": -0.8,
+     "is_baseline": false
+    },
+    {
+     "label": "− C-type (variants, 12%)",
+     "doubao": 63.9,
+     "doubao_delta": -0.4,
+     "gpt": 74.8,
+     "gpt_delta": -0.5,
+     "mean": 66.6,
+     "mean_delta": -0.4,
+     "is_baseline": false
+    },
+    {
+     "label": "− D-type (designed-false, 18%)",
+     "doubao": 62.1,
+     "doubao_delta": -2.2,
+     "gpt": 72.2,
+     "gpt_delta": -3.1,
+     "mean": 63.6,
+     "mean_delta": -3.4,
+     "is_baseline": false
+    },
+    {
+     "label": "Full bank (ours, ~25k Q/edition)",
+     "doubao": 64.3,
+     "doubao_delta": 0.0,
+     "gpt": 75.3,
+     "gpt_delta": 0.0,
+     "mean": 67.0,
+     "mean_delta": 0.0,
+     "is_baseline": true
+    }
+   ],
+   "takeaway": "Dropping A inflates the mean the most (+7.2), so A carries most of the difficulty: models over-bet on a hot narrative continuing in the near term."
+  },
+  "scoring_formula": {
+   "title": "Calibration scoring formula",
+   "subtitle": "The same answers re-scored under alternative rules. Gap is GPT minus Doubao.",
+   "rows": [
+    {
+     "label": "Brier score (rescaled)",
+     "doubao": 57.4,
+     "doubao_delta": -6.9,
+     "gpt": 70.8,
+     "gpt_delta": -4.5,
+     "gap": 13.4,
+     "is_baseline": false
+    },
+    {
+     "label": "Log-loss (rescaled)",
+     "doubao": 45.4,
+     "doubao_delta": -18.9,
+     "gpt": 65.0,
+     "gpt_delta": -10.3,
+     "gap": 19.6,
+     "is_baseline": false
+    },
+    {
+     "label": "Hyperbolic score mapping",
+     "doubao": 73.4,
+     "doubao_delta": 9.1,
+     "gpt": 80.1,
+     "gpt_delta": 4.8,
+     "gap": 6.7,
+     "is_baseline": false
+    },
+    {
+     "label": "Weighted MAE (ours, α=0.04)",
+     "doubao": 64.3,
+     "doubao_delta": 0.0,
+     "gpt": 75.3,
+     "gpt_delta": 0.0,
+     "gap": 11.0,
+     "is_baseline": true
+    }
+   ],
+   "takeaway": "Under every rule the GPT-Doubao gap stays positive, so the ranking does not depend on the rule; the proper scoring rules in fact widen it, which makes our weighted MAE the gentler choice."
+  },
+  "true_false_bias": {
+   "title": "True/false-question bias",
+   "subtitle": "The calibration bank split by ground-truth polarity. Six-LLM means.",
+   "rows": [
+    {
+     "label": "True (the event did occur)",
+     "doubao": 59.8,
+     "dseek": 49.3,
+     "opus": 46.4,
+     "gemini": 72.0,
+     "gpt": 73.5,
+     "mean": 60.3
+    },
+    {
+     "label": "False (it did not)",
+     "doubao": 71.6,
+     "dseek": 79.9,
+     "opus": 84.3,
+     "gemini": 76.6,
+     "gpt": 78.3,
+     "mean": 76.1
+    },
+    {
+     "label": "Bias",
+     "doubao": 11.8,
+     "dseek": 30.6,
+     "opus": 38.0,
+     "gemini": 4.7,
+     "gpt": 4.8,
+     "mean": 15.9,
+     "is_delta": true
+    }
+   ],
+   "takeaway": "Models are much better at denying false events than at confirming true ones (76.1 against 60.3, mean bias +15.9). It is a disposition rather than raw strength: the two leaders are near balanced, Opus is the extreme at +38.0."
+  },
+  "cutoff_gradient": {
+   "title": "Cutoff gradient",
+   "subtitle": "Each event's 25 prediction points split into early, middle and late terciles.",
+   "rows": [
+    {
+     "label": "Early",
+     "doubao": 63.4,
+     "opus": 62.7,
+     "gemini": 75.1,
+     "gpt": 75.5,
+     "mean": 66.7
+    },
+    {
+     "label": "Middle",
+     "doubao": 66.1,
+     "opus": 63.5,
+     "gemini": 73.6,
+     "gpt": 75.4,
+     "mean": 67.6
+    },
+    {
+     "label": "Late",
+     "doubao": 66.6,
+     "opus": 68.4,
+     "gemini": 69.6,
+     "gpt": 77.4,
+     "mean": 68.7
+    },
+    {
+     "label": "Gradient",
+     "doubao": 3.2,
+     "opus": 5.7,
+     "gemini": -5.5,
+     "gpt": 1.9,
+     "mean": 2.0,
+     "is_delta": true
+    }
+   ],
+   "takeaway": "Later cutoffs see more of the arc and score higher (66.7 -> 67.6 -> 68.7). That is the closer-is-easier property a forecasting benchmark should show, and a basic sanity check on the construction."
   }
+ }
 }

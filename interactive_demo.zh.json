@@ -1,481 +1,3348 @@
 {
-  "schema_version": "0.3",
-  "notes": "缓存的预测数据,供「在线试用」组件使用。v0.3:每个事件 4 个预测点(共 16 个),每个点 4 个缓存的模型回复。Live 题按事件提供。来源:论文附录 F(地缘政治第 22 日)与匿名化的示例性回复。不调用任何实时 API。",
-  "events": [
+ "schema_version": "2.0",
+ "notes": "缓存模式的每一个数字都取自我们真实的实验输出 (runs_new/<event>/final/中文/results/run_main)，无任何虚构内容。",
+ "events": [
+  {
+   "id": "event1_library",
+   "short": "Wuhan Lib.",
+   "domain_label": "公共舆论",
+   "anonymized_arc": "Wuhan Lib.",
+   "live_questions": [
     {
-      "id": "geopolitical",
-      "domain_label": "地缘政治冲突",
-      "anonymized_arc": "两国之间的跨境军事对峙",
-      "live_questions": [
-        { "id": "Q1", "type": "calibration", "window": 14, "text": "截止日后 14 日内,Faction-C 是否会做出武力反应?" },
-        { "id": "Q2", "type": "calibration", "window": 30, "text": "截止日后 30 日内,是否会开启官方降级通道?" },
-        { "id": "Q3", "type": "calibration", "window": 7,  "text": "未来 7 日内,是否会有第三方调停者公开介入?" },
-        { "id": "Q4", "type": "temporal",                  "text": "预测下一次重大武力事件发生在哪一天。" },
-        { "id": "Q5", "type": "temporal",                  "text": "预测首次正式停火声明发布在哪一天。" }
-      ],
-      "prediction_points": [
-        {
-          "point_id": "P_DAY08",
-          "cutoff_label": "匿名化弧情第 8 日",
-          "cutoff_short": "第 8 日",
-          "context_excerpt": "第 1–8 日:Faction-A 沿争议海岸宣布大规模海军演习(第 2 日);Faction-C 外交部发出「最强烈」抗议(第 4 日)。尚未发布任何外交通报。舆论层信号在双方都偏鹰派,但参与度仍属中等。模型看到这段前缀,须预测形势是否继续升级。",
-          "calibration_question": { "q": "未来 14 日内,言辞是否会继续升级(Faction-C 发出比当前更激烈的声明)?", "window_days": 14, "gt": 1, "gt_note": "Faction-C 外长在第 15 日的声明中明确点名「动用武力门槛」。" },
-          "temporal_question":    { "q": "预测下一次重大升级事件发生在哪一天。", "gt_day": 15, "gt_label": "第 15 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.74, "reasoning": "第 4 日外交部抗议措辞已处历史尺度高端;未见任何公开的下台阶通道。双通道鹰派信号出现后,继续升级的基率约 75%。" },
-              "temporal":    { "d_hat_day": 14, "d_hat_label": "第 14 日", "abs_error_days": 1, "reasoning": "下一轮舆论周期边界落在第 13–15 日。" },
-              "score_label": "已校准。正确解读抗议措辞;时间偏差在一个舆论周期内。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.88, "reasoning": "鹰派言辞单调上升;外推这条曲线得到近乎必然的升级。" },
-              "temporal":    { "d_hat_day": 11, "d_hat_label": "第 11 日", "abs_error_days": 4, "reasoning": "近期斜率预测约 3 日内有动作。" },
-              "score_label": "过度自信的延续假设。时间线被压缩。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "演习属常规;外交部用语最多算口头抗议。无足够依据偏离先验。" },
-              "temporal":    { "d_hat_day": 45, "d_hat_label": "第 45 日", "abs_error_days": 30, "reasoning": "默认到 30–60 日窗口的中间桶。" },
-              "score_label": "校准坍缩到均匀 0.5;长周期默认到中位桶。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.71, "reasoning": "人格-1(地缘政治分析师):0.82。人格-2(外交轨道):0.55。人格-3(地区观察者):0.76。聚合:0.71。" },
-              "temporal":    { "d_hat_day": 15, "d_hat_label": "第 15 日", "abs_error_days": 0, "reasoning": "外交轨道人格锚定舆论周期边界;三人格均值落在第 15 日。" },
-              "score_label": "人格聚合精确命中 GT 日;概率被适度收敛。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY22",
-          "cutoff_label": "匿名化弧情第 22 日",
-          "cutoff_short": "第 22 日",
-          "context_excerpt": "匿名化弧情第 1–22 日:Faction-A 在该区域剧场内逐步加强军事部署与海军演习。Faction-C 官员发出渐次升级的言辞。过去一周以上未见公开的降级通道(后渠道外交、第三方调停)。舆论层信号在双方均呈极化上升。模型看到此前缀,须预测截止日之后会发生什么。",
-          "calibration_question": { "q": "截止日后 14 日内,Faction-C 是否会做出武力反应?", "window_days": 14, "gt": 1, "gt_note": "打击发生于第 31 日(在 14 日窗口内)。" },
-          "temporal_question":    { "q": "预测下一次重大武力事件发生在哪一天。", "gt_day": 31, "gt_label": "第 31 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.78, "reasoning": "海军演习部署叠加第 22–29 日逐步升级的言辞表明已有意图;同时未见任何公开降级通道,因此 14 日内出现武力反应的可能性较高。" },
-              "temporal":    { "d_hat_day": 33, "d_hat_label": "第 33 日", "abs_error_days": 2, "reasoning": "演习在第 30–34 日达到高潮;Faction-A 反应周期惯有的象征性延迟,使打击落在下一个周期。" },
-              "score_label": "已校准。在适度信心下选定方向;时间锚定窗口,略偏晚。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.92, "reasoning": "打击频率曲线连续 9 日单调上升;近期内的报复极有可能发生。" },
-              "temporal":    { "d_hat_day": 28, "d_hat_label": "第 28 日", "abs_error_days": 3, "reasoning": "打击频率抬升暗示约 6 日内会有动作。" },
-              "score_label": "过度自信的延续假设。与反转案例中失手的是同一启发式。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "信号方向相反;依据不足,无法偏离先验。" },
-              "temporal":    { "d_hat_day": 75, "d_hat_label": "第 75 日", "abs_error_days": 44, "reasoning": "长周期;默认到 61–90 日窗口的中位桶。" },
-              "score_label": "在冲突舆论信号下塌缩到均匀 0.5;长周期时间塌陷。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.71, "reasoning": "人格-1(地缘政治分析师):0.85。人格-2(外交轨道):0.55。人格-3(市场交易员):0.72。蜂群聚合:0.71。" },
-              "temporal":    { "d_hat_day": 32, "d_hat_label": "第 32 日", "abs_error_days": 1, "reasoning": "外交轨道人格在条件式「第 30–32 日有升级事件」下将打击定在第 33 日;三人格均值。" },
-              "score_label": "人格聚合收敛了单模型偏差。与 GT 的时间一致性最佳。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY35",
-          "cutoff_label": "匿名化弧情第 35 日",
-          "cutoff_short": "第 35 日",
-          "context_excerpt": "第 1–35 日:Faction-C 在第 31 日发起一次武力事件;Faction-A 于第 33 日回火。伤亡数字仍有争议。截至第 35 日,一个第三方区域大国提出主持会谈,但双方均未承诺。舆论层信号已饱和;参与度趋于疲态(复制粘贴式讨论,而非新论点)。模型看到此前缀,须预测未来 14 日内是否形成停火。",
-          "calibration_question": { "q": "截止日后 14 日内,是否会出现正式停火声明?", "window_days": 14, "gt": 0, "gt_note": "首次正式停火声明落在第 58 日——已超出 14 日窗口。" },
-          "temporal_question":    { "q": "预测首次正式停火声明发布在哪一天。", "gt_day": 58, "gt_label": "第 58 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.28, "reasoning": "第三方主持但双方未承诺,属于「调停停滞」特征,而非「停火在即」。互射后停火的历史中位数为 18–28 日。" },
-              "temporal":    { "d_hat_day": 55, "d_hat_label": "第 55 日", "abs_error_days": 3, "reasoning": "调停方承诺通常在打击后约 21 日成型,加 3–5 日的公告滞后。" },
-              "score_label": "已校准。正确否定即时停火假设;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.62, "reasoning": "调停方在场是强信号;参与度疲态降低了降级成本。" },
-              "temporal":    { "d_hat_day": 44, "d_hat_label": "第 44 日", "abs_error_days": 14, "reasoning": "调停 + 疲态暗示约 9 日内可解决。" },
-              "score_label": "过度延伸调停信号。方向错误;偏差近两周。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "信号相互冲突;停火流程通常缓慢,但调停方介入可加速。" },
-              "temporal":    { "d_hat_day": 80, "d_hat_label": "第 80 日", "abs_error_days": 22, "reasoning": "默认到 61–90 日窗口的长尾。" },
-              "score_label": "校准塌缩到均匀 0.5;时间长周期过估。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.34, "reasoning": "人格-1(调停专家):0.22。人格-2(军事史学家):0.41。人格-3(地区观察者):0.39。聚合:0.34。" },
-              "temporal":    { "d_hat_day": 60, "d_hat_label": "第 60 日", "abs_error_days": 2, "reasoning": "调停人格的历史基率占主导;约打击后 25 日,相对 GT 略多两日。" },
-              "score_label": "正确否定;通过调停专家人格获得紧凑的时间一致性。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY60",
-          "cutoff_label": "匿名化弧情第 60 日",
-          "cutoff_short": "第 60 日",
-          "context_excerpt": "第 1–60 日:第 58 日宣布正式停火,但合规措辞含糊。双方仍在后方阵地加固;东道国已安排首轮会谈。舆论层信号已从战况报道转向经济影响讨论。模型看到此前缀,须预测未来 30 日内是否开启实质性谈判。",
-          "calibration_question": { "q": "截止日后 30 日内,是否会开启实质性双边谈判?", "window_days": 30, "gt": 1, "gt_note": "首次实质性双边会谈于第 72 日召开。" },
-          "temporal_question":    { "q": "预测首次实质性双边谈判会议召开在哪一天。", "gt_day": 72, "gt_label": "第 72 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.69, "reasoning": "首轮会谈已排期 + 舆论层转向经济议题,历史上 14 日内就会迎来实质会议。后方加固属噪声(每次停火都有)。" },
-              "temporal":    { "d_hat_day": 71, "d_hat_label": "第 71 日", "abs_error_days": 1, "reasoning": "已排期的首轮会议 + 通常 12–14 日转入实质讨论。" },
-              "score_label": "已校准。正确解读经济转向信号;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.81, "reasoning": "停火已签;会谈已排;参与度曲线明显趋于平息。" },
-              "temporal":    { "d_hat_day": 68, "d_hat_label": "第 68 日", "abs_error_days": 4, "reasoning": "基于平息趋势进行压缩。" },
-              "score_label": "方向正确;概率过高,时间略偏早。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "停火合规含糊;谈判可能无限期搁置。" },
-              "temporal":    { "d_hat_day": 95, "d_hat_label": "第 95 日", "abs_error_days": 23, "reasoning": "默认到 90+ 日窗口的长尾。" },
-              "score_label": "校准塌缩到均匀 0.5;时间长尾默认。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.67, "reasoning": "人格-1(外交轨道):0.78。人格-2(地区观察者):0.59。人格-3(经济学家):0.64。聚合:0.67。" },
-              "temporal":    { "d_hat_day": 73, "d_hat_label": "第 73 日", "abs_error_days": 1, "reasoning": "经济学家人格锚定「已排会议 + 14 日实质化滞后」。" },
-              "score_label": "概率适度收敛 + 经济学家人格的时间与 GT 相差 1 日。" }
-          ]
-        }
-      ]
+     "id": "P05-0",
+     "type": "calibration",
+     "window": 30,
+     "text": "到目标日为止，相关民事争议是否已在两审程序中终结？"
     },
-
     {
-      "id": "markets",
-      "domain_label": "金融市场",
-      "anonymized_arc": "上市公司的退市危机",
-      "live_questions": [
-        { "id": "Q1", "type": "calibration", "window": 30, "text": "截止日后 30 日内,Exchange-X 是否会正式批准 Company-A 的延期申报?" },
-        { "id": "Q2", "type": "calibration", "window": 14, "text": "Company-A 的特别委员会是否会在 14 日内公开撇清管理层的欺诈指控?" },
-        { "id": "Q3", "type": "calibration", "window": 21, "text": "21 日内是否会任命新的外部审计机构?" },
-        { "id": "Q4", "type": "temporal",                  "text": "预测 Exchange-X 下一次正式合规裁定发生在哪一天。" },
-        { "id": "Q5", "type": "temporal",                  "text": "预测 Company-A 重新提交年度报告的日期。" }
-      ],
-      "prediction_points": [
-        {
-          "point_id": "P_DAY04",
-          "cutoff_label": "匿名化弧情第 4 日",
-          "cutoff_short": "第 4 日",
-          "context_excerpt": "第 1–4 日:卖空者 Org-Y 发表 200 页报告,指控 Company-A 存在收入确认问题(第 1 日)。股价在第 2–3 日累计下跌 19%。第 4 日 Company-A 发布一句话否认。尚无审计机构或监管行动。零售论坛陷入恐慌抛售;机构席位虽在传阅 Org-Y 报告但按兵不动。",
-          "calibration_question": { "q": "Company-A 的四大审计机构是否会在截止日后 14 日内辞任?", "window_days": 14, "gt": 1, "gt_note": "审计机构于第 10 日辞任(在窗口内)。" },
-          "temporal_question":    { "q": "预测下一次重大程序性事件(审计/监管/委员会动作)发生在哪一天。", "gt_day": 10, "gt_label": "第 10 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.67, "reasoning": "如此密度的 Org-Y 报告(200 页、含交易级细节)在 65–75% 的历史案例中会引发审计方警觉;公司未即时反驳进一步抬高概率。" },
-              "temporal":    { "d_hat_day": 11, "d_hat_label": "第 11 日", "abs_error_days": 1, "reasoning": "四大合伙人审阅此类报告需一个内部周期(~7 日);决定通常落在第 10–12 日。" },
-              "score_label": "已校准。正确解读审计周期;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.85, "reasoning": "19% 跌幅 + 卖空者报告 + 软弱否认,是即将出现终局事件的教科书特征。" },
-              "temporal":    { "d_hat_day": 7, "d_hat_label": "第 7 日", "abs_error_days": 3, "reasoning": "曲线外推将下一次重大事件锚定在约 3 日内。" },
-              "score_label": "过度自信的延续假设。方向正确,时间被压缩。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "卖空者报告常无果而终;信号不足以下注。" },
-              "temporal":    { "d_hat_day": 45, "d_hat_label": "第 45 日", "abs_error_days": 35, "reasoning": "默认到 30–60 日窗口的长尾中位桶。" },
-              "score_label": "校准塌缩到均匀 0.5;长周期默认到中位桶。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.64, "reasoning": "人格-1(法务会计):0.79。人格-2(卖方分析师):0.51。人格-3(卖空者):0.62。聚合:0.64。" },
-              "temporal":    { "d_hat_day": 10, "d_hat_label": "第 10 日", "abs_error_days": 0, "reasoning": "法务会计人格锚定「7 日合伙人审阅周期 + 3 日决定滞后」。" },
-              "score_label": "人格聚合精准命中 GT 日。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY14",
-          "cutoff_label": "匿名化弧情第 14 日",
-          "cutoff_short": "第 14 日",
-          "context_excerpt": "第 1–14 日:卖空者 Org-Y 发布报告,指控 Company-A 存在会计违规;股价下跌 19%。Company-A CEO 第 6 日发表公开回应;原定第 8 日提交的年报(10-K 等价物)无限期推迟。第 10 日四大审计辞任。Regulator-Z 第 12 日开启初步调查。舆论层信号分裂:零售论坛陷入恐慌抛售,机构分析师认为合规路径仍开放。",
-          "calibration_question": { "q": "截止日后 30 日内,Exchange-X 是否会正式批准 Company-A 的延期申报?", "window_days": 30, "gt": 1, "gt_note": "等效 2 月 25 日的延期申报于第 27 日获批。" },
-          "temporal_question":    { "q": "预测 Exchange-X 下一次正式合规裁定发生在哪一天。", "gt_day": 27, "gt_label": "第 27 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.74, "reasoning": "第 12 日已见替补审计搜索;Regulator-Z 调查仍属初步,而非执法行动。在已设立特别委员会的情况下,延期申报基率较高(~70%);合规路径是众数结局。" },
-              "temporal":    { "d_hat_day": 30, "d_hat_label": "第 30 日", "abs_error_days": 3, "reasoning": "自调查披露起,Exchange-X 程序日历以约 15 日为节奏;下一次裁定窗口落在第 28–32 日。" },
-              "score_label": "已校准。正确解读程序路径;时间与 GT 相差一个 Exchange-X 周期。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.18, "reasoning": "四大辞任 + 19% 跌幅,是终局失败特征;此情境下的延期申报历史上罕见。" },
-              "temporal":    { "d_hat_day": 18, "d_hat_label": "第 18 日", "abs_error_days": 9, "reasoning": "审计辞任拉前下一次裁定;预期一周内出现紧急动作。" },
-              "score_label": "方向错误。对审计离场信号过度加权,忽略了特别委员会路径。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "看空与看多信号相互平衡;没有理由偏离先验。" },
-              "temporal":    { "d_hat_day": 55, "d_hat_label": "第 55 日", "abs_error_days": 28, "reasoning": "默认到 30–90 日窗口的中位桶。" },
-              "score_label": "校准塌缩到均匀 0.5;时间长周期默认到中位桶。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.68, "reasoning": "人格-1(合规法务):0.82。人格-2(卖空者):0.31。人格-3(做市商):0.79。蜂群聚合:0.68。" },
-              "temporal":    { "d_hat_day": 29, "d_hat_label": "第 29 日", "abs_error_days": 2, "reasoning": "人格-1 最重视 15 日程序周期;收敛于第 28–30 日。" },
-              "score_label": "合规法务人格把蜂群拉向正确的程序解读。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY28",
-          "cutoff_label": "匿名化弧情第 28 日",
-          "cutoff_short": "第 28 日",
-          "context_excerpt": "第 1–28 日:延期申报已于第 27 日获批。第 22 日任命特别委员会主席;新审计机构候选名单在机构席位间流转。股价较谷底反弹约 40%,但仍低于报告前水平的 35%。Regulator-Z 调查仍标注为初步。舆论层信号分裂:机构资金转向建设性,零售仍偏空。",
-          "calibration_question": { "q": "截止日后 60 日内,是否会提交重述后的年度报告?", "window_days": 60, "gt": 1, "gt_note": "重述报告于第 86 日提交(自第 28 日截止起在窗口内)。" },
-          "temporal_question":    { "q": "预测重述后的年度报告提交在哪一天。", "gt_day": 86, "gt_label": "第 86 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.72, "reasoning": "延期获批 + 委员会主席就位,是众数合规轨迹;一旦这些到位,历史上的重述时间线为 50–70 日。" },
-              "temporal":    { "d_hat_day": 84, "d_hat_label": "第 84 日", "abs_error_days": 2, "reasoning": "委员会 + 新审计流程的中位数自延期获批起约 55 日。" },
-              "score_label": "已校准。程序解读正确;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.49, "reasoning": "重述常常拖延;监管调查制造平行不确定性。" },
-              "temporal":    { "d_hat_day": 72, "d_hat_label": "第 72 日", "abs_error_days": 14, "reasoning": "复苏曲线暗示更快的解决。" },
-              "score_label": "方向大致正确,信心不足;在时间上过度延伸复苏曲线。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "重述时点变异性很大;没有理由偏离先验。" },
-              "temporal":    { "d_hat_day": 110, "d_hat_label": "第 110 日", "abs_error_days": 24, "reasoning": "默认到 90+ 日窗口的长尾。" },
-              "score_label": "校准塌缩到均匀 0.5;时间长尾中位桶。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.71, "reasoning": "人格-1(审计合伙人):0.84。人格-2(卖方分析师):0.63。人格-3(事件驱动):0.66。聚合:0.71。" },
-              "temporal":    { "d_hat_day": 87, "d_hat_label": "第 87 日", "abs_error_days": 1, "reasoning": "审计合伙人人格锚定 55 日的委员会 + 重述工作流。" },
-              "score_label": "时间一致性最佳;审计合伙人人格占主导。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY45",
-          "cutoff_label": "匿名化弧情第 45 日",
-          "cutoff_short": "第 45 日",
-          "context_excerpt": "第 1–45 日:重述申报流程正在进行;新审计机构于第 38 日签约。Regulator-Z 初步调查于第 42 日升级为正式调取文件。股价持续横盘 10 日。舆论层信号沉寂;故事已淡出头条。",
-          "calibration_question": { "q": "截止日后 30 日内,Regulator-Z 是否会正式提出指控?", "window_days": 30, "gt": 0, "gt_note": "调查于第 82 日以无指控告终(在窗口外)。" },
-          "temporal_question":    { "q": "预测 Regulator-Z 下一次公开裁决发生在哪一天。", "gt_day": 82, "gt_label": "第 82 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.21, "reasoning": "在「初步转正式」阶段的正式文件调取,历史上当存在重述时,约 75% 的案例以「无指控」收场。配合信号进一步降低指控概率。" },
-              "temporal":    { "d_hat_day": 79, "d_hat_label": "第 79 日", "abs_error_days": 3, "reasoning": "从调取文件到出裁决的周期平均约 40 日。" },
-              "score_label": "已校准。正确否定;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.58, "reasoning": "升级到正式文件调取被读成「执法方向」信号。" },
-              "temporal":    { "d_hat_day": 65, "d_hat_label": "第 65 日", "abs_error_days": 17, "reasoning": "升级暗示更快动作。" },
-              "score_label": "方向错误。误读文件调取信号。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "监管结果不可预测;均匀先验。" },
-              "temporal":    { "d_hat_day": 105, "d_hat_label": "第 105 日", "abs_error_days": 23, "reasoning": "长尾默认。" },
-              "score_label": "校准塌缩到均匀 0.5;时间长尾。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.27, "reasoning": "人格-1(前监管者):0.18。人格-2(诉讼律师):0.41。人格-3(合规):0.21。聚合:0.27。" },
-              "temporal":    { "d_hat_day": 80, "d_hat_label": "第 80 日", "abs_error_days": 2, "reasoning": "前监管者人格锚定程序周期。" },
-              "score_label": "正确否定;前监管者人格主导时间预测。" }
-          ]
-        }
-      ]
+     "id": "P05-1",
+     "type": "calibration",
+     "window": 30,
+     "text": "在目标日之前30天内，是否出现针对一审裁判结果的上诉被二审法院受理的进展？"
     },
-
     {
-      "id": "trade",
-      "domain_label": "贸易政策",
-      "anonymized_arc": "两大经济体之间的对等关税升级",
-      "live_questions": [
-        { "id": "Q1", "type": "calibration", "window": 21, "text": "截止日后 21 日内,Country-A 是否会正式立法对等关税方案?" },
-        { "id": "Q2", "type": "calibration", "window": 14, "text": "两国财政部是否会在 14 日内进行双边通话?" },
-        { "id": "Q3", "type": "calibration", "window": 30, "text": "30 日内是否会有关税项被暂停或撤回?" },
-        { "id": "Q4", "type": "temporal",                  "text": "预测 Action-T(头条关税)在海关正式生效的日期。" },
-        { "id": "Q5", "type": "temporal",                  "text": "预测首份豁免清单公布的日期。" }
-      ],
-      "prediction_points": [
-        {
-          "point_id": "P_DAY08",
-          "cutoff_label": "匿名化弧情第 8 日",
-          "cutoff_short": "第 8 日",
-          "context_excerpt": "第 1–8 日:Country-A 政府于第 1 日释出广泛对等关税意图;行政文书于第 6 日签署(原计划第 12 日)。生效日期对外仅称「90 日内」,未正式定档。航运代理报告反常订舱量;舆论焦点集中在头条税率是「真做」还是「谈判前奏」。",
-          "calibration_question": { "q": "生效日期是否会从公开的 90 日窗口提前?", "window_days": 30, "gt": 1, "gt_note": "生效日期定在第 22 日 —— 在 30 日窗口内。" },
-          "temporal_question":    { "q": "预测 Action-T 在海关正式生效的日期。", "gt_day": 22, "gt_label": "第 22 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.66, "reasoning": "签署提前 6 日,是生效日期压缩的领先指标;历史命中率约 70%。" },
-              "temporal":    { "d_hat_day": 28, "d_hat_label": "第 28 日", "abs_error_days": 6, "reasoning": "压缩时间线在签署提前时通常落在 25–30 日。" },
-              "score_label": "已校准。方向正确;时间与 GT 相差一个周期。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.81, "reasoning": "签署压缩 + 订舱量信号强烈暗示即将动作。" },
-              "temporal":    { "d_hat_day": 18, "d_hat_label": "第 18 日", "abs_error_days": 4, "reasoning": "订舱量曲线预测约 10 日到生效。" },
-              "score_label": "概率过度自信,时间接近。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.30, "reasoning": "原本的 90 日缓冲是正式程序;偏离需要尚未观察到的非常理由。" },
-              "temporal":    { "d_hat_day": 88, "d_hat_label": "第 88 日", "abs_error_days": 66, "reasoning": "锚定到公开的 90 日窗口。" },
-              "score_label": "锚定到原计划 —— 完全错过压缩信号。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.70, "reasoning": "人格-1(贸易经济学家):0.78。人格-2(物流):0.81。人格-3(合规):0.51。聚合:0.70。" },
-              "temporal":    { "d_hat_day": 24, "d_hat_label": "第 24 日", "abs_error_days": 2, "reasoning": "物流人格将订舱曲线读为第 21–24 日的截止线。" },
-              "score_label": "物流人格补上缺失的信号;时间一致性紧密。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY18",
-          "cutoff_label": "匿名化弧情第 18 日",
-          "cutoff_short": "第 18 日",
-          "context_excerpt": "第 1–18 日:Country-A 政府第 1 日释出广泛对等关税意图;首份行政文书第 6 日签署;生效日期初次公告为第 90 日。至第 14 日,两个里程碑可见提前——签署提至第 4 日,生效日期在两次单独的吹风会上被描述为「本月之内」。航运代理观察到 Country-B 出口商在突击囤货。舆论层信号(行业论坛、社交平台)集中讨论生效日期会否从第 22 日提前还是仍落在第 90 日。",
-          "calibration_question": { "q": "截止日后 21 日内,Action-T 是否会在 Country-A 海关生效?", "window_days": 21, "gt": 1, "gt_note": "生效于第 22 日(在窗口内)。" },
-          "temporal_question":    { "q": "预测 Action-T 在海关正式生效的日期。", "gt_day": 22, "gt_label": "第 22 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.81, "reasoning": "本周期内两个里程碑都被提前;政府的节奏曲线单调加速。标准 90 日缓冲通常只能承受第一次此类信号 —— 第二次便决定性。" },
-              "temporal":    { "d_hat_day": 25, "d_hat_label": "第 25 日", "abs_error_days": 3, "reasoning": "吹风会集中在第 22 ± 3 日;围绕下一轮舆论周期进行象征性锚定。" },
-              "score_label": "已校准。正确解读加速信号;时间与 GT 相差一个舆论周期。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.62, "reasoning": "突击囤货可见,但海关层面的程序惯性显著;时间线维持原状仍有部分概率。" },
-              "temporal":    { "d_hat_day": 19, "d_hat_label": "第 19 日", "abs_error_days": 3, "reasoning": "囤货曲线暗示即将动作;近期过度延伸。" },
-              "score_label": "方向正确,信心不足。同样的近期过度延伸模式;时间接近。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.30, "reasoning": "原本的 90 日缓冲是公开程序;偏离需要未见的非常理由。" },
-              "temporal":    { "d_hat_day": 74, "d_hat_label": "第 74 日", "abs_error_days": 52, "reasoning": "锚定到原本的 90 日缓冲期。" },
-              "score_label": "锚定到原始公告的 90 日缓冲 —— 完全错过提速信号。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.76, "reasoning": "人格-1(贸易经济学家):0.83。人格-2(合规):0.61。人格-3(物流):0.84。蜂群聚合:0.76。" },
-              "temporal":    { "d_hat_day": 23, "d_hat_label": "第 23 日", "abs_error_days": 1, "reasoning": "物流人格将货物突击囤货读为第 21–23 日的截止线;三人格均值收敛。" },
-              "score_label": "物流人格补上缺失的信号;时间一致性与 GT 最为紧密。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY25",
-          "cutoff_label": "匿名化弧情第 25 日",
-          "cutoff_short": "第 25 日",
-          "context_excerpt": "第 1–25 日:Action-T 已在第 22 日(截止前 3 日)在海关生效。Country-B 已发出正式抗议并宣布将「相称反制」纳入审议。Country-B 一侧的舆论信号倾向报复。Country-A 政府暗示会为战略产业设立豁免,但未具体化。",
-          "calibration_question": { "q": "截止日后 14 日内,Country-B 是否会公布对等关税方案?", "window_days": 14, "gt": 1, "gt_note": "对等关税于第 32 日公布(在窗口内)。" },
-          "temporal_question":    { "q": "预测 Country-B 公布对等关税的日期。", "gt_day": 32, "gt_label": "第 32 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.79, "reasoning": "正式抗议 + 「相称反制」措辞在 10 次历史对等回合中有 8 次在 14 日内出现对等回应。" },
-              "temporal":    { "d_hat_day": 34, "d_hat_label": "第 34 日", "abs_error_days": 2, "reasoning": "反制周期的中位数自抗议起 9–11 日。" },
-              "score_label": "已校准。正确解读对等周期;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.88, "reasoning": "报复修辞 + 舆论压力使对等关税近乎必然。" },
-              "temporal":    { "d_hat_day": 30, "d_hat_label": "第 30 日", "abs_error_days": 2, "reasoning": "报复曲线压缩到截止后约 5 日。" },
-              "score_label": "概率过度自信;时间接近。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "对等关税有时在谈判中搁置;信号不足。" },
-              "temporal":    { "d_hat_day": 65, "d_hat_label": "第 65 日", "abs_error_days": 33, "reasoning": "中位桶长尾默认。" },
-              "score_label": "校准塌缩到均匀 0.5;时间长周期默认。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.76, "reasoning": "人格-1(贸易史学家):0.84。人格-2(外交官):0.62。人格-3(物流):0.81。聚合:0.76。" },
-              "temporal":    { "d_hat_day": 33, "d_hat_label": "第 33 日", "abs_error_days": 1, "reasoning": "贸易史学家人格锚定 9–11 日中位数;收敛锐利。" },
-              "score_label": "概率收敛 + 通过贸易史学家人格获得紧凑时间。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY60",
-          "cutoff_label": "匿名化弧情第 60 日",
-          "cutoff_short": "第 60 日",
-          "context_excerpt": "第 1–60 日:双方关税方案均已生效。第 50 日首轮双边会谈结束,无任何宣布的让步。Country-A 国内产业游说在最近两周显著升温(3 封主要产业信函)。舆论层信号正向「经济影响」框架转移。",
-          "calibration_question": { "q": "截止日后 30 日内,Country-A 是否会公布首份豁免清单?", "window_days": 30, "gt": 1, "gt_note": "首份豁免清单于第 78 日公布(在窗口内)。" },
-          "temporal_question":    { "q": "预测首份豁免清单公布的日期。", "gt_day": 78, "gt_label": "第 78 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.71, "reasoning": "两周内 3 封产业信函,是政府历史上以豁免切割回应的阈值。舆论层转向经济框架加速时间进度。" },
-              "temporal":    { "d_hat_day": 76, "d_hat_label": "第 76 日", "abs_error_days": 2, "reasoning": "游说信函到豁免的周期通常为 18–22 日。" },
-              "score_label": "已校准。程序解读正确;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.59, "reasoning": "游说压力在抬升,但政府尚未释出开放信号。" },
-              "temporal":    { "d_hat_day": 70, "d_hat_label": "第 70 日", "abs_error_days": 8, "reasoning": "游说曲线暗示更快动作。" },
-              "score_label": "方向正确,信心不足;时间上过度延伸游说曲线。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "豁免在政治上有风险;没有清晰理由偏离先验。" },
-              "temporal":    { "d_hat_day": 110, "d_hat_label": "第 110 日", "abs_error_days": 32, "reasoning": "默认到 90+ 日窗口的长尾。" },
-              "score_label": "校准塌缩到均匀 0.5;时间长尾中位桶。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.69, "reasoning": "人格-1(游说者):0.82。人格-2(贸易经济学家):0.66。人格-3(政治策略师):0.59。聚合:0.69。" },
-              "temporal":    { "d_hat_day": 79, "d_hat_label": "第 79 日", "abs_error_days": 1, "reasoning": "游说者人格精准锚定周期。" },
-              "score_label": "时间最紧凑,来自游说者人格。" }
-          ]
-        }
-      ]
+     "id": "P05-2",
+     "type": "calibration",
+     "window": 14,
+     "text": "在目标日之前14天内，是否出现涉事论文被学术资源平台下架或无法检索的情况？"
     },
-
     {
-      "id": "public",
-      "domain_label": "公共论争",
-      "anonymized_arc": "某重点大学的网络争议事件",
-      "live_questions": [
-        { "id": "Q1", "type": "calibration", "window": 14, "text": "截止日后 14 日内,Institution-Y 是否会发布官方声明?" },
-        { "id": "Q2", "type": "calibration", "window": 30, "text": "30 日内是否会召开正式调查小组?" },
-        { "id": "Q3", "type": "calibration", "window": 7,  "text": "未来 7 日内,是否会有任何外部监管方公开发声?" },
-        { "id": "Q4", "type": "temporal",                  "text": "预测 Institution-Y 首次正式声明发布的日期。" },
-        { "id": "Q5", "type": "temporal",                  "text": "预测调查小组宣布成立的日期。" }
-      ],
-      "prediction_points": [
-        {
-          "point_id": "P_DAY03",
-          "cutoff_label": "匿名化弧情第 3 日",
-          "cutoff_short": "第 3 日",
-          "context_excerpt": "第 1–3 日:一条指控 Institution-Y 科研操守问题的网络帖文在 Platform-1 上走红(第 1 日);第 2 日转发到 Platform-2。第 3 日话题进入热榜。Institution-Y 尚未回应。参与度急剧上升。",
-          "calibration_question": { "q": "截止日后 14 日内,Institution-Y 是否会发布任何公开回应(正式或非正式)?", "window_days": 14, "gt": 1, "gt_note": "第 8 日有非正式发言人被引述;正式声明第 16 日(自第 3 日截止起在窗口内)。" },
-          "temporal_question":    { "q": "预测 Institution-Y 首次公开回应的日期。", "gt_day": 8, "gt_label": "第 8 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.78, "reasoning": "48 小时内的跨平台走红已达 Institution-Y 此规模典型的回应阈值;同规模机构在 80% 的同类案例中会在约 5–8 日内以非正式方式回应。" },
-              "temporal":    { "d_hat_day": 9, "d_hat_label": "第 9 日", "abs_error_days": 1, "reasoning": "走红热榜情境下,机构传播中位数到首次回应是 7–9 日。" },
-              "score_label": "已校准。正确解读跨平台走红;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.92, "reasoning": "上热榜后回应近乎必然。" },
-              "temporal":    { "d_hat_day": 5, "d_hat_label": "第 5 日", "abs_error_days": 3, "reasoning": "热榜曲线暗示立即回应。" },
-              "score_label": "方向过度自信;时间被压缩。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "机构有时静观其变;均匀先验。" },
-              "temporal":    { "d_hat_day": 40, "d_hat_label": "第 40 日", "abs_error_days": 32, "reasoning": "中位桶长尾默认。" },
-              "score_label": "校准塌缩到均匀 0.5;时间长周期默认。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.74, "reasoning": "人格-1(公关策略师):0.87。人格-2(校内消息):0.61。人格-3(媒体分析师):0.74。聚合:0.74。" },
-              "temporal":    { "d_hat_day": 8, "d_hat_label": "第 8 日", "abs_error_days": 0, "reasoning": "公关策略师人格盯住下一轮舆论周期。" },
-              "score_label": "通过公关策略师人格精确命中 GT 日。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY09",
-          "cutoff_label": "匿名化弧情第 9 日",
-          "cutoff_short": "第 9 日",
-          "context_excerpt": "第 1–9 日:一条指控 Institution-Y 科研操守问题的网络帖文,至第 2 日已在两个主要社交平台走红;第 3 日进入热榜。Institution-Y 在第一周未发表正式回应;第 5 日有非正式发言人被引述。至第 7 日,一个平行讨论线指控某同业机构存在相似行为。舆论层信号呈现极化框架(科研诚信 vs. 网络审判),双方参与度持续。",
-          "calibration_question": { "q": "截止日后 14 日内,Institution-Y 是否会发布正式声明?", "window_days": 14, "gt": 1, "gt_note": "声明于第 16 日发布(自第 9 日截止起在 14 日窗口内)。" },
-          "temporal_question":    { "q": "预测 Institution-Y 首次正式声明发布的日期。", "gt_day": 16, "gt_label": "第 16 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.72, "reasoning": "走红延续过第 7 日再加上平行机构线出现,历史上迫使机构在约 2 周内发出正式回应。第 5 日的非正式发言人暗示正式流程已在推进。" },
-              "temporal":    { "d_hat_day": 17, "d_hat_label": "第 17 日", "abs_error_days": 1, "reasoning": "Institution-Y 危机传播节奏以 7 日为周期;下一个周期边界落在第 16–18 日。" },
-              "score_label": "已校准。正确解读机构回应节奏;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.88, "reasoning": "走红与热榜保证回应迅速;机构几乎总会在持续压力下让步。" },
-              "temporal":    { "d_hat_day": 11, "d_hat_label": "第 11 日", "abs_error_days": 5, "reasoning": "基于参与度曲线预测即将发声。" },
-              "score_label": "过度自信的延续假设。方向正确,但压缩了机构回应时间线。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "信号不足以下注一方;机构沉默两面皆可。" },
-              "temporal":    { "d_hat_day": 45, "d_hat_label": "第 45 日", "abs_error_days": 29, "reasoning": "长周期中位桶默认。" },
-              "score_label": "校准塌缩;时间长周期默认。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.69, "reasoning": "人格-1(公关策略师):0.84。人格-2(社会学家):0.62。人格-3(校内消息):0.61。蜂群聚合:0.69。" },
-              "temporal":    { "d_hat_day": 18, "d_hat_label": "第 18 日", "abs_error_days": 2, "reasoning": "公关策略师人格将下一个机构发声窗口定在第 16–19 日;三人格均值。" },
-              "score_label": "人格聚合收敛了 Doubao 的过度延伸。与 GT 时间相近。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY20",
-          "cutoff_label": "匿名化弧情第 20 日",
-          "cutoff_short": "第 20 日",
-          "context_excerpt": "第 1–20 日:Institution-Y 在第 16 日发出正式声明,承认问题并「承诺审议」。参与度在第 17 日再度反弹,随后开始下行。两封教师联名信流传,呼吁成立正式调查小组。尚未公布小组。",
-          "calibration_question": { "q": "截止日后 30 日内,是否会成立正式调查小组?", "window_days": 30, "gt": 1, "gt_note": "小组于第 33 日成立(在窗口内)。" },
-          "temporal_question":    { "q": "预测调查小组宣布的日期。", "gt_day": 33, "gt_label": "第 33 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.74, "reasoning": "声明加教师信序列是成立正式小组的众数预测因子;历史上从信函到小组公告的中位数为 13–17 日。" },
-              "temporal":    { "d_hat_day": 34, "d_hat_label": "第 34 日", "abs_error_days": 1, "reasoning": "教师信常在周中落地;小组公告集中在下一个周五等价日。" },
-              "score_label": "已校准。程序解读正确;时间近乎完美。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.61, "reasoning": "Institution-Y 的声明已偏谨慎;小组成立不保证。" },
-              "temporal":    { "d_hat_day": 28, "d_hat_label": "第 28 日", "abs_error_days": 5, "reasoning": "基于教师信紧迫感压缩。" },
-              "score_label": "方向正确,信心不足;过度延伸信函信号。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "机构小组在政治上敏感;均匀先验。" },
-              "temporal":    { "d_hat_day": 60, "d_hat_label": "第 60 日", "abs_error_days": 27, "reasoning": "长尾中位桶默认。" },
-              "score_label": "校准塌缩到均匀 0.5;长周期中位桶默认。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.72, "reasoning": "人格-1(教师治理):0.84。人格-2(行政):0.62。人格-3(公关策略师):0.71。聚合:0.72。" },
-              "temporal":    { "d_hat_day": 32, "d_hat_label": "第 32 日", "abs_error_days": 1, "reasoning": "教师治理人格精准锚定信函到小组周期。" },
-              "score_label": "通过教师治理人格获得最紧凑的时间。" }
-          ]
-        },
-        {
-          "point_id": "P_DAY40",
-          "cutoff_label": "匿名化弧情第 40 日",
-          "cutoff_short": "第 40 日",
-          "context_excerpt": "第 1–40 日:调查小组于第 33 日成立,报告窗口为 60 日。参与度已淡出热榜;只有专业媒体仍在跟踪。尚无外部监管方发声。据报道有两封匿名邮件发往州级监督机构。",
-          "calibration_question": { "q": "截止日后 14 日内,外部监管方是否会公开发声?", "window_days": 14, "gt": 0, "gt_note": "外部监督机构在第 70 日表示不予置评 —— 已超窗口且实质等同未发声。" },
-          "temporal_question":    { "q": "预测外部监管方首次公开发声的日期。", "gt_day": 70, "gt_label": "第 70 日" },
-          "model_responses": [
-            { "model": "Gemini-3.1-pro", "is_best_overall": true,
-              "calibration": { "p_hat": 0.19, "reasoning": "外部监管方通常会让位于正在进行的机构小组;14 日内发声的概率较低(~15–20%)。" },
-              "temporal":    { "d_hat_day": 66, "d_hat_label": "第 66 日", "abs_error_days": 4, "reasoning": "发声通常落在机构报告截止日附近(第 60–72 日)。" },
-              "score_label": "已校准。正确否定监管方即时动作;时间紧凑。" },
-            { "model": "Doubao Seed 2.0 lite",
-              "calibration": { "p_hat": 0.54, "reasoning": "匿名举报可能触发监管方的早期外联。" },
-              "temporal":    { "d_hat_day": 50, "d_hat_label": "第 50 日", "abs_error_days": 20, "reasoning": "因举报信号而压缩。" },
-              "score_label": "方向错误。对匿名举报信号过度加权。" },
-            { "model": "Qwen3-235B-A22B",
-              "calibration": { "p_hat": 0.50, "reasoning": "监管行为变异性大;均匀先验。" },
-              "temporal":    { "d_hat_day": 95, "d_hat_label": "第 95 日", "abs_error_days": 25, "reasoning": "长尾中位桶默认。" },
-              "score_label": "校准塌缩到均匀 0.5;中位桶长尾默认。" },
-            { "model": "MiroFish + Doubao (智能体,预估)", "is_projected": true,
-              "calibration": { "p_hat": 0.22, "reasoning": "人格-1(前监管者):0.12。人格-2(法律):0.31。人格-3(公关策略师):0.24。聚合:0.22。" },
-              "temporal":    { "d_hat_day": 71, "d_hat_label": "第 71 日", "abs_error_days": 1, "reasoning": "前监管者人格锚定机构报告截止日。" },
-              "score_label": "正确否定;前监管者人格给出近乎完美的时间。" }
-          ]
-        }
-      ]
+     "id": "P05-3",
+     "type": "calibration",
+     "window": 7,
+     "text": "在目标日之前7天内，是否出现当事人境外博士录取/拟录取状态变化被公开信息披露并引发集中关注？"
     }
-  ]
+   ],
+   "prediction_points": [
+    {
+     "point_id": "P02",
+     "cutoff_label": "截止日期 2023-10-25",
+     "cutoff_short": "2023-10-25",
+     "context_excerpt": "2023-07-02 **事件**：官员A于7月2日上午就网络传言作出公开回应，澄清其2013年结婚、2014年出生的儿子目前仍在小学就读，与机构K案件C涉事男生毫无关联。官员A同时否认其父亲为公司A前负责人的说法，表示父亲系地区B当地人士，已于十余年前去世，生前工作从未离开地区B范围。官员A称该谣言对其及家人造成重大伤害，已选择报警处理并通过媒体发布书面声明。机构K于7月2日晚发布通报，确认2022级本科生人物A在图书馆对女生实施性骚扰行为属实，依据校规给予记过处分。受害女生曾于3月在图书馆遭遇性骚扰，事后多次与辅导员沟通协商未果，三个月后发文网络引发舆论关注，校方于6月30日深夜成立工作组，仅用三天作出处分决定。 **舆论**：舆论场呈现明显的两极分化与后续反转态势。主流声音从最初部分支持女方\"勇敢发声\"，转向压倒性质疑指控真实性，大量网民为涉事男生辩护，认定其\"被诬告\"\"明明是挠痒\"，要求女方道歉并承担法律责任；同时存在对…",
+     "calibration_question": {
+      "q": "平台I出现公开女生人物B个人信息的'开盒'仓库后，舆论主流是否会谴责开盒者侵犯隐私、要求平台删除仓库并向其道歉？",
+      "window_days": 30,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "涉事男生家属在社交平台发布系统性回应，指称指控文章存在多处不实并披露当事人因网暴出现严重心理危机，引发舆论明显反转",
+      "gt_date": "2023-10-26",
+      "gt_label": "2023-10-26",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-10-30",
+        "d_hat_label": "2023-10-30",
+        "d_hat_day": 5,
+        "abs_error_days": 4.0,
+        "reasoning": "预测 2023-10-30，实际 2023-10-26，相差 4 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 4 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-10-31",
+        "d_hat_label": "2023-10-31",
+        "d_hat_day": 6,
+        "abs_error_days": 5.0,
+        "reasoning": "预测 2023-10-31，实际 2023-10-26，相差 5 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 5 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.4,
+        "abs_error": 0.4,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 40%；真值否。绝对误差 0.40，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-11-08",
+        "d_hat_label": "2023-11-08",
+        "d_hat_day": 14,
+        "abs_error_days": 13.0,
+        "reasoning": "预测 2023-11-08，实际 2023-10-26，相差 13 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.40；日期相差 13 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-10-25",
+        "d_hat_label": "2023-10-25",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2023-10-25，实际 2023-10-26，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 1 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 30%；真值否。绝对误差 0.30，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-10-30",
+        "d_hat_label": "2023-10-30",
+        "d_hat_day": 5,
+        "abs_error_days": 4.0,
+        "reasoning": "预测 2023-10-30，实际 2023-10-26，相差 4 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.30；日期相差 4 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 30%；真值否。绝对误差 0.30，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-11-08",
+        "d_hat_label": "2023-11-08",
+        "d_hat_day": 14,
+        "abs_error_days": 13.0,
+        "reasoning": "预测 2023-11-08，实际 2023-10-26，相差 13 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.30；日期相差 13 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P08",
+     "cutoff_label": "截止日期 2025-04-16",
+     "cutoff_short": "2025-04-16",
+     "context_excerpt": "2025-04-15 **事件**：随着一审判决细节流出，舆论开始系统复盘案件的诉讼始末。本案实为人物B作为原告起诉人物A性骚扰损害责任：2024年3月15日在城市A某区人民法院立案（案号编号A），先后于2024年4月11日、7月13日、7月27日三次不公开开庭，2025年4月13日一审宣判驳回人物B全部诉讼请求；法院认定现有证据无法认定人物A\"自慰\"、其行为有抓痒的高度可能，不构成针对特定对象的性骚扰，同时指出人物A在公共场合的行为确有不当之处、需向人物B书面道歉，并认为人物B在一小时内秘密拍摄五段视频的取证方式不当。与主诉并行，人物A一方自2024年初起已以\"诽谤\"\"侵犯名誉权\"为由对首发举报帖的网络平台另案起诉、要求删帖致歉并查明侵权人身份，相关维权仍在推进；人物A另就记过处分对机构X提起的行政诉讼则已败诉并上诉。判决落地后，人物B仍在社交平台坚称判决不公、将继续举报，人物A一方则表示判决还了清白、将起诉网暴者，校方对处分…",
+     "calibration_question": {
+      "q": "截止日后60天内，舆论会一致认为校方对女方导师及学院的问责处罚过重、呼吁体谅师长的不易吗？",
+      "window_days": 60,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "指控方发帖称已通过资格考试将赴外地读博并嘲讽对方，引发新一轮强烈反弹",
+      "gt_date": "2025-04-17",
+      "gt_label": "2025-04-17",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.03,
+        "abs_error": 0.03,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 3%；真值否。绝对误差 0.03，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-16",
+        "d_hat_label": "2025-04-16",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-04-16，实际 2025-04-17，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.03；日期相差 1 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 2%；真值否。绝对误差 0.02，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-18",
+        "d_hat_label": "2025-04-18",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-04-18，实际 2025-04-17，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.02；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 15%；真值否。绝对误差 0.15，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-17",
+        "d_hat_label": "2025-04-17",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2025-04-17，实际 2025-04-17，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.15；日期相差 0 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-25",
+        "d_hat_label": "2025-04-25",
+        "d_hat_day": 9,
+        "abs_error_days": 8.0,
+        "reasoning": "预测 2025-04-25，实际 2025-04-17，相差 8 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 8 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.25,
+        "abs_error": 0.25,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 25%；真值否。绝对误差 0.25，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-19",
+        "d_hat_label": "2025-04-19",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2025-04-19，实际 2025-04-17，相差 2 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.25；日期相差 2 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-17",
+        "d_hat_label": "2025-04-17",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2025-04-17，实际 2025-04-17，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 0 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P12",
+     "cutoff_label": "截止日期 2025-04-22",
+     "cutoff_short": "2025-04-22",
+     "context_excerpt": "2025-04-21 **事件**：机构K于2024年4月底就案件C后续作出最新回应，校方表示鉴于人物B本科期间的行为存在争议，将对其学位授予及研究生报考资格启动专项调查复核。该回应源于2023年6月发生的案件C，当时机构K女生人物B指控同校2022级本科生人物A在图书馆隔着裤子摩擦生殖器，并拍摄五段影片作为证据，机构K于同年7月2日发布通报对人物A作出记过处分。人物A母亲随后受访反驳，称儿子自幼患有疾病A，当日只是隔着衣物抓痒，并提供了2021年至2023年的多份就诊记录。2025年4月13日，法院作出一审判决，认定人物A行为不构成性骚扰，驳回人物B全部诉讼请求，针对人物A的记过处分是否撤销一事，机构K校长人物L回应称\"正在处理中\"。此前，人物B被曝现于机构B攻读博士学位。 **舆论**：舆论场呈现压倒性声讨涉事女生与校方的态势。公众愤怒集中于女方败诉后\"输了官司赢了人生\"的挑衅姿态、考试B考试A地区C读博的\"胜利者\"叙事，以…",
+     "calibration_question": {
+      "q": "内容平台是否会在未来14天内发布公告，宣布对相关讨论全面禁言清空并关闭话题入口？",
+      "window_days": 14,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "A_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "内容平台发布处置公告，确认有用户冒充事件相关身份并散布不实信息，遂对相关账号作永久封禁处理",
+      "gt_date": "2025-04-23",
+      "gt_label": "2025-04-23",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.03,
+        "abs_error": 0.97,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 3%；真值是。绝对误差 0.97，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-24",
+        "d_hat_label": "2025-04-24",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-04-24，实际 2025-04-23，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.97；日期相差 1 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.85,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 15%；真值是。绝对误差 0.85，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-24",
+        "d_hat_label": "2025-04-24",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-04-24，实际 2025-04-23，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.85；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.92,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 8%；真值是。绝对误差 0.92，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-25",
+        "d_hat_label": "2025-04-25",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2025-04-25，实际 2025-04-23，相差 2 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.92；日期相差 2 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 5%；真值是。绝对误差 0.95，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-24",
+        "d_hat_label": "2025-04-24",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-04-24，实际 2025-04-23，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.95；日期相差 1 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.8,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 20%；真值是。绝对误差 0.80，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-05-10",
+        "d_hat_label": "2025-05-10",
+        "d_hat_day": 18,
+        "abs_error_days": 17.0,
+        "reasoning": "预测 2025-05-10，实际 2025-04-23，相差 17 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.80；日期相差 17 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.25,
+        "abs_error": 0.75,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 25%；真值是。绝对误差 0.75，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-28",
+        "d_hat_label": "2025-04-28",
+        "d_hat_day": 6,
+        "abs_error_days": 5.0,
+        "reasoning": "预测 2025-04-28，实际 2025-04-23，相差 5 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.75；日期相差 5 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P15",
+     "cutoff_label": "截止日期 2025-04-27",
+     "cutoff_short": "2025-04-27",
+     "context_excerpt": "2025-04-26 **事件**：机构B于2025年4月25日正式撤销对人物B的博士录取资格，将其从拟录取博士生名单中移除。校方虽未发布详细公告，但相关录取名单中已删除其名字，显示学校已依据内部纪律程序作出决定。此前，人物B因在社交媒体炫耀其考试B经历、通过考试A及获得机构B博士录取资格，并扬言将向未来就读院校寄送材料继续针对人物A，引发网络舆论强烈反弹。网友进一步发现其论文论文A中存在多处错误，包括声称国家Y有专门的文件B以及篡改机构M数据等学术问题。大量网友向机构B发送举报信，要求对其道德品质和学术诚信进行调查。2025年4月26日，人物C正式向机构K提起诉讼，要求校方公开道歉，标志着这起持续引发社会关注的学术争议事件首次进入法律程序。 **舆论**：舆论场呈现高度极化态势，主流声音明显倾向同情被指控男生人物A，质疑女方人物B\"碰瓷\"诬告，对其主动拍摄视频、曝光隐私等行为普遍持负面评价，认为\"诬告零代价\"已成社会痛点。情绪…",
+     "calibration_question": {
+      "q": "在截止日之后的窗口内，舆论是否会出现“我等警察来”“退退退”等被戏谑传播的男性“自保策略”，折射对男性维权困境的集体焦虑？",
+      "window_days": 7,
+      "days_from_cutoff": 3,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "B_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "博主曝光指控方考试成绩单造假及既往获奖论文学术诚信问题",
+      "gt_date": "2025-04-30",
+      "gt_label": "2025-04-30",
+      "gt_day": 3
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.78,
+        "abs_error": 0.22,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 78%；真值是。绝对误差 0.22，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-28",
+        "d_hat_label": "2025-04-28",
+        "d_hat_day": 1,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2025-04-28，实际 2025-04-30，相差 2 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.22；日期相差 2 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.9,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 90%；真值是。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-29",
+        "d_hat_label": "2025-04-29",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-04-29，实际 2025-04-30，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.7,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 70%；真值是。绝对误差 0.30，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-30",
+        "d_hat_label": "2025-04-30",
+        "d_hat_day": 3,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2025-04-30，实际 2025-04-30，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.30；日期相差 0 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.95,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 95%；真值是。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-30",
+        "d_hat_label": "2025-04-30",
+        "d_hat_day": 3,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2025-04-30，实际 2025-04-30，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 0 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.75,
+        "abs_error": 0.25,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 75%；真值是。绝对误差 0.25，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-05-05",
+        "d_hat_label": "2025-05-05",
+        "d_hat_day": 8,
+        "abs_error_days": 5.0,
+        "reasoning": "预测 2025-05-05，实际 2025-04-30，相差 5 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.25；日期相差 5 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.85,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 85%；真值是。绝对误差 0.15，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-04-29",
+        "d_hat_label": "2025-04-29",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-04-29，实际 2025-04-30，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.15；日期相差 1 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P19",
+     "cutoff_label": "截止日期 2025-05-12",
+     "cutoff_short": "2025-05-12",
+     "context_excerpt": "2025-05-08 **事件**：媒体D2025年5月2日发表评论批评机构K在人物A事件中的处置方式。该校2023年3月在舆论压力下仅用48小时便对人物A作出记过处分并取消其考试B资格，如今面对2025年4月13日机构D驳回人物B全部诉讼请求的司法判决，却以\"等上级安排\"为由推诿拖延，拒绝及时纠正错误、恢复学生名誉。评论指出这种\"向上甩锅\"的做法使简单问题复杂化、一般问题政治化。目前，人物A仍处于\"没有处分的处分\"状态，无法取得毕业证明，不能正常入职工作。机构D2025年4月13日作出的判决认定，2023年3月在机构K图书馆内，机构U大一男生人物A存在用手触摸阴部的行为，该行为虽不构成性骚扰——因证据不足以证明人物A具有\"针对性\"的故意——但行为本身不当，人物A需向学院B女研究生人物B书面道歉；同时，法院指出人物B在一小时内用手机秘密录制五段视频取证的方式不当，侵犯了人物A的肖像权。 **舆论**：舆论场呈现一边倒的同情被指控…",
+     "calibration_question": {
+      "q": "舆论是否会形成共识、呼吁停止对涉事高校所在地的地域攻击并公开为该地区正名？",
+      "window_days": 60,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "C_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "民事纠纷案件上诉被法院正式受理，确认进入二审程序",
+      "gt_date": "2025-05-13",
+      "gt_label": "2025-05-13",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.04,
+        "abs_error": 0.04,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 4%；真值否。绝对误差 0.04，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-05-12",
+        "d_hat_label": "2025-05-12",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-05-12，实际 2025-05-13，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.04；日期相差 1 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-05-14",
+        "d_hat_label": "2025-05-14",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-05-14，实际 2025-05-13，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.25,
+        "abs_error": 0.25,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 25%；真值否。绝对误差 0.25，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-05-20",
+        "d_hat_label": "2025-05-20",
+        "d_hat_day": 8,
+        "abs_error_days": 7.0,
+        "reasoning": "预测 2025-05-20，实际 2025-05-13，相差 7 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.25；日期相差 7 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 2%；真值否。绝对误差 0.02，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-05-19",
+        "d_hat_label": "2025-05-19",
+        "d_hat_day": 7,
+        "abs_error_days": 6.0,
+        "reasoning": "预测 2025-05-19，实际 2025-05-13，相差 6 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.02；日期相差 6 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 20%；真值否。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-05-15",
+        "d_hat_label": "2025-05-15",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2025-05-15，实际 2025-05-13，相差 2 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 2 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-05-17",
+        "d_hat_label": "2025-05-17",
+        "d_hat_day": 5,
+        "abs_error_days": 4.0,
+        "reasoning": "预测 2025-05-17，实际 2025-05-13，相差 4 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 4 天。"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "event4_us_iran",
+   "short": "US-Iran",
+   "domain_label": "地缘政治",
+   "anonymized_arc": "US-Iran",
+   "live_questions": [
+    {
+     "id": "P05-0",
+     "type": "calibration",
+     "window": 7,
+     "text": "截至 2025-09-22，是否出现一方海军面向关键海峡商船通行发布新的安全指引并维持港口封锁的公开动作？"
+    },
+    {
+     "id": "P05-1",
+     "type": "calibration",
+     "window": 14,
+     "text": "截至 2025-09-29，是否出现一方海军面向关键海峡商船通行发布新的安全指引并维持港口封锁的公开动作？"
+    },
+    {
+     "id": "P05-2",
+     "type": "calibration",
+     "window": 7,
+     "text": "截至 2025-09-21，是否出现一方领导人公开指责对方违反既有停火安排并发出后果警告的表态？"
+    },
+    {
+     "id": "P05-3",
+     "type": "calibration",
+     "window": 7,
+     "text": "截至 2025-09-22，是否出现一方领导人公开把对方政权更迭列为政策目标并对谈判与核问题发出强硬警告？"
+    }
+   ],
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff_label": "截止日期 2025-08-30",
+     "cutoff_short": "2025-08-30",
+     "context_excerpt": "2025-08-24 **事件**：国家X总统领导人C于8月23日至24日首次公开警告国家Y前总统领导人A，若国家Y对国家X最高领袖头衔A·领导人B发动袭击，将引发严重后果。这一表态直接回应了国家Y前驻国家Z大使官员B一天前发表的相关言论，标志着国家X高层对国家Y强硬姿态的显著升级。国家X方面明确将针对领导人B的任何军事行动视为红线，表明国家X最高领导层的安全已成为城市D的核心关切。这一事态发展反映出国家Y国家X双方在核谈判僵局下的对抗态势持续升级，地区局势面临进一步恶化风险。 **舆论**：舆论对国家X总统划\"红线\"警告多持看戏心态，主流仍判断这是双方嘴炮、领导人A\"以打逼谈\"虚张声势，\"国家Y不敢真打\"渐成共识，认为国家Y方舍不得地区K石油利益。情绪以冷静研判夹杂讽刺为主，支持国家X强硬立场者居多，\"国家X不是国家R国家S\"\"软柿子捏不动\"等论调流行；亦有少数担忧擦枪走火。争议焦点在于高调表态究竟是真升级还是谈判筹码，整体对…",
+     "calibration_question": {
+      "q": "在该军演与高度戒备阶段，国家V与国家U的官方表态是否被舆论压倒性解读为支持对国家X发动单边军事行动、呼吁加入打击？",
+      "window_days": 14,
+      "days_from_cutoff": 6,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "一方最高领袖转入隐蔽状态以防潜在打击，另一方军舰驶向地区海域部署",
+      "gt_date": "2025-08-31",
+      "gt_label": "2025-08-31",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.12,
+        "abs_error": 0.12,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 12%；真值否。绝对误差 0.12，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-08-30",
+        "d_hat_label": "2025-08-30",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-08-30，实际 2025-08-31，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.12；日期相差 1 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-08-31",
+        "d_hat_label": "2025-08-31",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2025-08-31，实际 2025-08-31，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 0 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 15%；真值否。绝对误差 0.15，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-11",
+        "d_hat_label": "2025-09-11",
+        "d_hat_day": 12,
+        "abs_error_days": 11.0,
+        "reasoning": "预测 2025-09-11，实际 2025-08-31，相差 11 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.15；日期相差 11 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 20%；真值否。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-05",
+        "d_hat_label": "2025-09-05",
+        "d_hat_day": 6,
+        "abs_error_days": 5.0,
+        "reasoning": "预测 2025-09-05，实际 2025-08-31，相差 5 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 5 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.4,
+        "abs_error": 0.4,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 40%；真值否。绝对误差 0.40，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-28",
+        "d_hat_label": "2025-09-28",
+        "d_hat_day": 29,
+        "abs_error_days": 28.0,
+        "reasoning": "预测 2025-09-28，实际 2025-08-31，相差 28 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.40；日期相差 28 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 20%；真值否。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-07",
+        "d_hat_label": "2025-09-07",
+        "d_hat_day": 8,
+        "abs_error_days": 7.0,
+        "reasoning": "预测 2025-09-07，实际 2025-08-31，相差 7 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 7 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P03",
+     "cutoff_label": "截止日期 2025-09-07",
+     "cutoff_short": "2025-09-07",
+     "context_excerpt": "2025-09-01 **事件**：国家X最高领袖领导人B8月31日进入城市D一处加固地堡躲避潜在袭击，国家X武装部队同日进入高度戒备状态并宣布举行大规模军事演习。该动向是对国家Y国前总统领导人A8月29日核威胁的回应——领导人A当时在社交媒体发文称，若国家X不就核问题与国家Y达成协议，将面临\"前所未有的轰炸\"。国家X部队B总司令将领A此前已警告，若国家Y发动攻击，国家X将打击地区K地区所有国家Y军方基地；国家X总统领导人C亦表态不会在威胁下谈判。国家X军方强调其导弹能力可覆盖区域内所有国家Y军方目标，此次军演旨在展示防御能力。官员N呼吁双方保持克制，国家U和国家V则反对任何单边军事行动。分析人士指出当前局势与2019年将领C遇刺后的危机相似，但国家X此次反应更为谨慎，既展示威慑力又避免直接冲突，然而误判风险依然存在。 **舆论**：国家X军演加高度戒备、对冲领导人A\"前所未有的轰炸\"核威胁，舆论一边围观\"秀肌肉\"一边研判战和走…",
+     "calibration_question": {
+      "q": "是否有一方宣布对对手实施全国范围互联网限速或临时断网以应对战时信息安全？",
+      "window_days": 14,
+      "days_from_cutoff": 5,
+      "difficulty": "hard",
+      "dimension": "政策",
+      "question_type": "D_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "双方安排特使与外长级外交会晤，一方同时宣布关闭与对方的所有沟通渠道",
+      "gt_date": "2025-09-08",
+      "gt_label": "2025-09-08",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.08,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 8%；真值否。绝对误差 0.08，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-20",
+        "d_hat_label": "2025-09-20",
+        "d_hat_day": 13,
+        "abs_error_days": 12.0,
+        "reasoning": "预测 2025-09-20，实际 2025-09-08，相差 12 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.08；日期相差 12 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-26",
+        "d_hat_label": "2025-09-26",
+        "d_hat_day": 19,
+        "abs_error_days": 18.0,
+        "reasoning": "预测 2025-09-26，实际 2025-09-08，相差 18 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 18 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.06,
+        "abs_error": 0.06,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 6%；真值否。绝对误差 0.06，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-26",
+        "d_hat_label": "2025-09-26",
+        "d_hat_day": 19,
+        "abs_error_days": 18.0,
+        "reasoning": "预测 2025-09-26，实际 2025-09-08，相差 18 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.06；日期相差 18 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-24",
+        "d_hat_label": "2025-09-24",
+        "d_hat_day": 17,
+        "abs_error_days": 16.0,
+        "reasoning": "预测 2025-09-24，实际 2025-09-08，相差 16 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 16 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 20%；真值否。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-19",
+        "d_hat_label": "2025-09-19",
+        "d_hat_day": 12,
+        "abs_error_days": 11.0,
+        "reasoning": "预测 2025-09-19，实际 2025-09-08，相差 11 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 11 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 15%；真值否。绝对误差 0.15，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-21",
+        "d_hat_label": "2025-09-21",
+        "d_hat_day": 14,
+        "abs_error_days": 13.0,
+        "reasoning": "预测 2025-09-21，实际 2025-09-08，相差 13 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.15；日期相差 13 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P04",
+     "cutoff_label": "截止日期 2025-09-08",
+     "cutoff_short": "2025-09-08",
+     "context_excerpt": "2025-09-07 **事件**：国家X最高领袖领导人B于9月7日在城市D会见民众时首次就国家Y谈判策略作出明确表态，拒绝接受\"胡萝卜加大棒\"的谈判方式。领导人B指出，国家Y一方面威胁对国家X动武，另一方面又声称愿意谈判，这种策略是对国家X的侮辱；若国家Y真心想谈判，就应当停止威胁。他同时首次将潜在的国家Y国家X冲突明确定义为\"全地区性战争\"，直接向国家Y发出警告，称国家Y人应当清楚，若其挑起战争，冲突将升级为波及整个地区K地区的全面战争，而战争不符合国家Y的利益。此番表态系针对国家Y国总统领导人A此前\"不排除对国家X采取军事选项\"言论的最新高层回应。2024年11月以来，国家X与国家Y已通过国家Q斡旋举行了五轮间接谈判，双方以书面形式交换意见，未进行直接会面，谈判涉及核计划限制与制裁解除等核心议题，但进展有限。当前国家Y国家X双方在核问题及地区影响力等议题上分歧深刻，言语交锋持续升级。 **舆论**：舆论普遍认定领导人A\"以…",
+     "calibration_question": {
+      "q": "在未来7天内，参战方是否会对外确认出现战斗人员阵亡？",
+      "window_days": 7,
+      "days_from_cutoff": 7,
+      "difficulty": "hard",
+      "dimension": "事件",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "外媒称原定在第三方斡旋下举行的两国间接会谈被临时取消，停火与核相关议题磋商受挫。",
+      "gt_date": "2025-09-11",
+      "gt_label": "2025-09-11",
+      "gt_day": 3
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 2%；真值否。绝对误差 0.02，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-10-06",
+        "d_hat_label": "2025-10-06",
+        "d_hat_day": 28,
+        "abs_error_days": 25.0,
+        "reasoning": "预测 2025-10-06，实际 2025-09-11，相差 25 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.02；日期相差 25 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-19",
+        "d_hat_label": "2025-09-19",
+        "d_hat_day": 11,
+        "abs_error_days": 8.0,
+        "reasoning": "预测 2025-09-19，实际 2025-09-11，相差 8 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 8 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-15",
+        "d_hat_label": "2025-09-15",
+        "d_hat_day": 7,
+        "abs_error_days": 4.0,
+        "reasoning": "预测 2025-09-15，实际 2025-09-11，相差 4 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 4 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-11",
+        "d_hat_label": "2025-09-11",
+        "d_hat_day": 3,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2025-09-11，实际 2025-09-11，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 0 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.35,
+        "abs_error": 0.35,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 35%；真值否。绝对误差 0.35，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-10",
+        "d_hat_label": "2025-09-10",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-09-10，实际 2025-09-11，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.35；日期相差 1 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-20",
+        "d_hat_label": "2025-09-20",
+        "d_hat_day": 12,
+        "abs_error_days": 9.0,
+        "reasoning": "预测 2025-09-20，实际 2025-09-11，相差 9 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 9 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P07",
+     "cutoff_label": "截止日期 2025-09-17",
+     "cutoff_short": "2025-09-17",
+     "context_excerpt": "2025-09-16 **事件**：国家Y海军于9月16日正式发布针对穿越海峡A船只的最新航行指引，自国家Y对国家X实施港口封锁以来已强制拦截至少8艘船只。同日，国家Y总统领导人A公开表示与国家X的对话可能很快恢复，但国家Y继续对国家X港口实施封锁措施，导致该地区航运活动受到严重干扰。领导人A政府于近日宣布对国家X实施全面封锁新政策，计划扣押国家X油轮以向城市D施压，领导人A本人声明将完全封锁海峡A，但国家Y军方随后澄清实际行动仅限于封锁国家X港口而非整个海峡。国家Y交通部海事管理局于9月15日向途经海峡A的商船发布最新安全指南，建议悬挂国家Y国旗的商船尽可能远离国家X领海，并在被国家X军队拦截时立即向国家Y军方发出求救信号，要求国家Y商船提前72小时向国家Y部队A和机构D报告行程，保持自动识别系统开启并避免进入国家X领海，若遭国家X军方拦截须立即通过无线电16频道发出\"求救\"求救信号并联系国家Y部队A。海峡A作为全球最重要的石…",
+     "calibration_question": {
+      "q": "未来7天内，是否会出现一方领导人首次公开将推动对手政权更迭列为对外政策目标并伴随对核问题的强硬威胁？",
+      "window_days": 7,
+      "days_from_cutoff": 3,
+      "difficulty": "hard",
+      "dimension": "政策",
+      "question_type": "A_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "一方领导人在公开场合指责对手违反既有停火安排，并警告可能产生后果但未明确是否中止即将开始的接触",
+      "gt_date": "2025-09-19",
+      "gt_label": "2025-09-19",
+      "gt_day": 2
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.9,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 10%；真值是。绝对误差 0.90，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-18",
+        "d_hat_label": "2025-09-18",
+        "d_hat_day": 1,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-09-18，实际 2025-09-19，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.90；日期相差 1 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 5%；真值是。绝对误差 0.95，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-18",
+        "d_hat_label": "2025-09-18",
+        "d_hat_day": 1,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-09-18，实际 2025-09-19，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.95；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.85,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 15%；真值是。绝对误差 0.85，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-20",
+        "d_hat_label": "2025-09-20",
+        "d_hat_day": 3,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-09-20，实际 2025-09-19，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.85；日期相差 1 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.03,
+        "abs_error": 0.97,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 3%；真值是。绝对误差 0.97，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-21",
+        "d_hat_label": "2025-09-21",
+        "d_hat_day": 4,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2025-09-21，实际 2025-09-19，相差 2 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.97；日期相差 2 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.4,
+        "abs_error": 0.6,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 40%；真值是。绝对误差 0.60，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-30",
+        "d_hat_label": "2025-09-30",
+        "d_hat_day": 13,
+        "abs_error_days": 11.0,
+        "reasoning": "预测 2025-09-30，实际 2025-09-19，相差 11 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.60；日期相差 11 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 5%；真值是。绝对误差 0.95，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2025-09-20",
+        "d_hat_label": "2025-09-20",
+        "d_hat_day": 3,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2025-09-20，实际 2025-09-19，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.95；日期相差 1 天。"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "event3_tiktok",
+   "short": "TikTok",
+   "domain_label": "科技监管",
+   "anonymized_arc": "TikTok",
+   "live_questions": [],
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff_label": "截止日期 2022-10-09",
+     "cutoff_short": "2022-10-09",
+     "context_excerpt": "2022-10-03 **事件**：国家A参议员议员R和议员A于2022年10月3日重新提出跨党派立法，旨在禁止平台X及其他类似应用程序国家A国运营。这项名为法规A的立法拟通过阻止和禁止与国家B、某大国R及其他若干\"令人关切的外国\"有关联或受其影响的社交媒体公司的所有交易，以保护国家A民众，除非这些公司完全剥离危险的外国所有权。人物四十一在声明中表示，平台X允许政党A获取用户的私人数据，这对国家A国家安全利益和民众构成直接威胁。这一立法时机正值国家A媒体高度关注国家B侦察气球事件一周后，机构A信息学副教授人物A认为禁止平台X的努力表明机构F议员有意对国家B采取行动，这完全是对间谍气球的反应。 **舆论**：围绕人物四十一等议员重提封禁立法，舆论场以看戏与讽刺为主基调。主流声音将其解读为国家A借国家B侦察气球事件顺势国家B施压的政治操作，普遍质疑\"国家安全\"只是幌子。一派网民冷嘲国家A\"掌控不住就封杀\"，认为这恰恰暴露所谓\"自由\"…",
+     "calibration_question": {
+      "q": "该短视频应用是否在窗口内对外宣布暂停在国家A的新用户注册？",
+      "window_days": 14,
+      "days_from_cutoff": 11,
+      "difficulty": "hard",
+      "dimension": "事件",
+      "question_type": "D_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "平台X宣布首次向本国非营利学术机构开放其研究数据访问权限，以示透明",
+      "gt_date": "2022-10-14",
+      "gt_label": "2022-10-14",
+      "gt_day": 5
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.01,
+        "abs_error": 0.01,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 1%；真值否。绝对误差 0.01，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-10-14",
+        "d_hat_label": "2022-10-14",
+        "d_hat_day": 5,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2022-10-14，实际 2022-10-14，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.01；日期相差 0 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-10-14",
+        "d_hat_label": "2022-10-14",
+        "d_hat_day": 5,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2022-10-14，实际 2022-10-14，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 0 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 2%；真值否。绝对误差 0.02，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-10-25",
+        "d_hat_label": "2022-10-25",
+        "d_hat_day": 16,
+        "abs_error_days": 11.0,
+        "reasoning": "预测 2022-10-25，实际 2022-10-14，相差 11 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.02；日期相差 11 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-10-13",
+        "d_hat_label": "2022-10-13",
+        "d_hat_day": 4,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2022-10-13，实际 2022-10-14，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 1 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-10-12",
+        "d_hat_label": "2022-10-12",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2022-10-12，实际 2022-10-14，相差 2 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 2 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-10-20",
+        "d_hat_label": "2022-10-20",
+        "d_hat_day": 11,
+        "abs_error_days": 6.0,
+        "reasoning": "预测 2022-10-20，实际 2022-10-14，相差 6 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 6 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P03",
+     "cutoff_label": "截止日期 2022-11-09",
+     "cutoff_short": "2022-11-09",
+     "context_excerpt": "2022-11-07 **事件**：机构N于11月7日宣布将在10月底前禁止所有能够接入机构O网络的设备使用平台X，机构P首席执行官人物G确认该决定系在网络安全专家建议、政府内部讨论及国际交流后作出。同日，机构Q和机构R已确认在工作设备上实施了平台X禁令，总理人物H说明各部门遵循机构S的网络安全政策建议而非采取公共部门一刀切的做法。平台X于同日向某国际通讯社确认某外资审查机构已正式要求其国家B母公司公司Y的所有者出售所持股权，否则该平台可能国家A国面临全面封禁，这是领导人B政府首次对平台X发出潜在禁止威胁。平台X发言人人物I回应称强制所有权变更无法解决所谓的国家安全问题，公司Y方面同时确认平台X股权结构中60%由全球投资人持有、20%由员工持有、剩余20%由创始人持有。平台X首席执行官CEO_C定于下周赴机构F就平台安全问题接受机构D质询，他在接受《某大型财经日报》采访时明确表示出售股份无法解决国家A国家安全担忧，并强调平台X已…",
+     "calibration_question": {
+      "q": "国家A行政部门是否会在7天内公开重申支持强制剥离路线并强调目标不是直接封禁？",
+      "window_days": 7,
+      "days_from_cutoff": 7,
+      "difficulty": "hard",
+      "dimension": "政策",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "平台首席执行官在听证准备证词中否认母公司与外国政府存在代理关系，强调拥有逾一亿本国用户",
+      "gt_date": "2022-11-11",
+      "gt_label": "2022-11-11",
+      "gt_day": 2
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 20%；真值否。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-11-11",
+        "d_hat_label": "2022-11-11",
+        "d_hat_day": 2,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2022-11-11，实际 2022-11-11，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 0 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-11-12",
+        "d_hat_label": "2022-11-12",
+        "d_hat_day": 3,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2022-11-12，实际 2022-11-11，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.08,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 8%；真值否。绝对误差 0.08，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-11-14",
+        "d_hat_label": "2022-11-14",
+        "d_hat_day": 5,
+        "abs_error_days": 3.0,
+        "reasoning": "预测 2022-11-14，实际 2022-11-11，相差 3 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.08；日期相差 3 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-11-11",
+        "d_hat_label": "2022-11-11",
+        "d_hat_day": 2,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2022-11-11，实际 2022-11-11，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 0 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.85,
+        "abs_error": 0.85,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 85%；真值否。绝对误差 0.85，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-11-13",
+        "d_hat_label": "2022-11-13",
+        "d_hat_day": 4,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2022-11-13，实际 2022-11-11，相差 2 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.85；日期相差 2 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.85,
+        "abs_error": 0.85,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 85%；真值否。绝对误差 0.85，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2022-11-11",
+        "d_hat_label": "2022-11-11",
+        "d_hat_day": 2,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2022-11-11，实际 2022-11-11，相差 0 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.85；日期相差 0 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P08",
+     "cutoff_label": "截止日期 2023-11-11",
+     "cutoff_short": "2023-11-11",
+     "context_excerpt": "2023-11-10 **事件**：平台X于2023年11月9日正式推出创作者奖励计划，取代原有的创作者基金及创意计划测试版。新计划将收益与四大维度挂钩：观看时长、互动行为、搜索价值及广告价值。原创时长超过1分钟的视频若具备更长播放时长、更高完播率及更强互动性，创作者可获得更高奖励；点赞、评论、分享等互动行为亦纳入收益计算；内容与热门搜索词相关、能为搜索者提供价值的作品将获得额外激励；此外，当创作者账号的广告价值提升，即更多观众观看广告时，创作者也将获得相应奖励。与测试版仅要求视频超过1分钟不同，正式版明确了具体的收益计算维度，特别强调长观看时长与收益直接挂钩。平台尚未说明如何具体衡量\"搜索价值\"和\"广告价值\"，也未透露是否会向创作者开放相关数据后台。该计划上线之际，正值机构F针对平台X的禁令法案引发广泛关注的敏感时期。 **舆论**：国家A平台X用户以\"当你意识到平台X即将被禁你却无法阻止\"等自嘲视频表达无力与焦虑，形成\"疯狂…",
+     "calibration_question": {
+      "q": "截止日后7天内，舆论会反感把青少年保护议题工具化为地缘政治筹码，并用\"媒体L笑话\"作为解构\"国家B模式优越论\"式中外对比的通用梗吗？",
+      "window_days": 7,
+      "days_from_cutoff": 4,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "C_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "机构六启动对与平台X立法争议相关的威胁信息激增的调查、机构F议员收到大量威胁和令人担忧的信息报告",
+      "gt_date": "2023-11-12",
+      "gt_label": "2023-11-12",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.35,
+        "abs_error": 0.65,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 35%；真值是。绝对误差 0.65，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-11-11",
+        "d_hat_label": "2023-11-11",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2023-11-11，实际 2023-11-12，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.65；日期相差 1 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 100%；真值是。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-11-12",
+        "d_hat_label": "2023-11-12",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2023-11-12，实际 2023-11-12，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 0 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.35,
+        "abs_error": 0.65,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 35%；真值是。绝对误差 0.65，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-11-15",
+        "d_hat_label": "2023-11-15",
+        "d_hat_day": 4,
+        "abs_error_days": 3.0,
+        "reasoning": "预测 2023-11-15，实际 2023-11-12，相差 3 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.65；日期相差 3 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.9,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 90%；真值是。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-11-15",
+        "d_hat_label": "2023-11-15",
+        "d_hat_day": 4,
+        "abs_error_days": 3.0,
+        "reasoning": "预测 2023-11-15，实际 2023-11-12，相差 3 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 3 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.6,
+        "abs_error": 0.4,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 60%；真值是。绝对误差 0.40，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-11-14",
+        "d_hat_label": "2023-11-14",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2023-11-14，实际 2023-11-12，相差 2 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.40；日期相差 2 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.85,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 85%；真值是。绝对误差 0.15，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-11-13",
+        "d_hat_label": "2023-11-13",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2023-11-13，实际 2023-11-12，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.15；日期相差 1 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P11",
+     "cutoff_label": "截止日期 2023-12-23",
+     "cutoff_short": "2023-12-23",
+     "context_excerpt": "2023-12-20 **事件**：平台X国家I分公司确认将不再任命新的总经理，该地区领导层空缺状态持续。时任总经理人物七于今年2月告知同事即将离职后正式离开公司，其自2019年12月起领导平台X国家I业务，曾在对照大公司公司B和对照视频平台产品B任职，是该公司应对国家安全担忧指控时的公开代言人。人物五十三离职后，全球商业解决方案国家I总经理人物八成为当地最活跃的公众人物，其上周接受《媒体D》采访时将国家I可能禁止平台X称为\"假设性\"问题，并在周三声明中强调平台X在国家I拥有超过850万用户和35万家企业用户，为经济贡献11亿货币A并创造1.3万个就业岗位，同时表示\"没有任何证据表明平台X构成国家安全风险\"。然而，平台X发言人确认人物五十四仅为公司发言人，不负责人物五十三此前的工作职责，公司不会填补总经理职位空缺，并拒绝透露目前国家I最高层管理人员身份及当地商业或政策目标。与此同时，监管机构A向媒体E确认，针对平台X的调查已\"大…",
+     "calibration_question": {
+      "q": "2023-12-23之后约一周内，围绕前高管爆料，一派是否反驳称并非平台X制造信息茧房，而是\"国家A主流媒体不许其他声音发声\"，平台X只是为真相提供了渠道？",
+      "window_days": 7,
+      "days_from_cutoff": 5,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "C_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "前平台营销高管提交修正诉讼，指控母公司对平台的实际控制远超公开承认、首席执行官仅为传声筒",
+      "gt_date": "2023-12-28",
+      "gt_label": "2023-12-28",
+      "gt_day": 5
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.72,
+        "abs_error": 0.28,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 72%；真值是。绝对误差 0.28，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-01-15",
+        "d_hat_label": "2024-01-15",
+        "d_hat_day": 23,
+        "abs_error_days": 18.0,
+        "reasoning": "预测 2024-01-15，实际 2023-12-28，相差 18 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.28；日期相差 18 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 100%；真值是。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-01-01",
+        "d_hat_label": "2024-01-01",
+        "d_hat_day": 9,
+        "abs_error_days": 4.0,
+        "reasoning": "预测 2024-01-01，实际 2023-12-28，相差 4 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 4 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.6,
+        "abs_error": 0.4,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 60%；真值是。绝对误差 0.40，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-01-10",
+        "d_hat_label": "2024-01-10",
+        "d_hat_day": 18,
+        "abs_error_days": 13.0,
+        "reasoning": "预测 2024-01-10，实际 2023-12-28，相差 13 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.40；日期相差 13 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.8,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 80%；真值是。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-01-16",
+        "d_hat_label": "2024-01-16",
+        "d_hat_day": 24,
+        "abs_error_days": 19.0,
+        "reasoning": "预测 2024-01-16，实际 2023-12-28，相差 19 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 19 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.8,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 80%；真值是。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2023-12-28",
+        "d_hat_label": "2023-12-28",
+        "d_hat_day": 5,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2023-12-28，实际 2023-12-28，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 0 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.95,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 95%；真值是。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-01-17",
+        "d_hat_label": "2024-01-17",
+        "d_hat_day": 25,
+        "abs_error_days": 20.0,
+        "reasoning": "预测 2024-01-17，实际 2023-12-28，相差 20 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 20 天。"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "event5_smci",
+   "short": "SMCI",
+   "domain_label": "金融市场",
+   "anonymized_arc": "SMCI",
+   "live_questions": [
+    {
+     "id": "P05-0",
+     "type": "calibration",
+     "window": 7,
+     "text": "公司A是否会在2024年6月14日前被从主要指数中移除？"
+    },
+    {
+     "id": "P05-1",
+     "type": "calibration",
+     "window": 4,
+     "text": "公司A是否会在2024年6月11日前被从主要指数中移除？"
+    },
+    {
+     "id": "P05-2",
+     "type": "calibration",
+     "window": 19,
+     "text": "公司A是否会在2024年6月26日前下调季度营收预期并宣布无法按时提交季报？"
+    },
+    {
+     "id": "P05-3",
+     "type": "calibration",
+     "window": 12,
+     "text": "公司A是否会在2024年6月19日前下调季度营收预期并宣布无法按时提交季报？"
+    }
+   ],
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff_label": "截止日期 2024-05-02",
+     "cutoff_short": "2024-05-02",
+     "context_excerpt": "2024-04-03 **事件**：公司A于周三宣布推迟提交截至2024年2月4日财年的表格A，导致其股价当日暴跌19%。公司表示将于4月5日向机构A提交延迟申报通知，原因是需要更多时间评估其财务报告内部控制的设计和有效性。这一宣布紧随做空机构机构B研究发布批评报告一天之后，该报告指控公司A存在重大会计问题、未披露的关联方交易、违反制裁和出口管制规定，以及客户问题。同日，投行A分析师发布报告反驳机构B指控，认为该报告缺乏实质性新细节，不会改变公司A的中期前景。公司A过去一年收入增长109.77%，第四季度收入增长142.95%，市值达250.9亿货币A。 **舆论**：舆论普遍看跌公司A，投资者亏损焦虑弥漫，多人晒出高位套牢、越补越跌的惨痛经历，将其贬为\"组装电脑\"泡沫股，预言估值将打回原形；情绪以悲观、疲惫为主，\"人物J\"成自嘲热梗，反映AI硬件持仓集体承压的无力感。争议焦点在于财务造假质疑与AI泡沫风险——机构B指控其\"会计…",
+     "calibration_question": {
+      "q": "公司A是否会在2024年5月6日前后7天内因股票分割计划导致股价暴跌？",
+      "window_days": 7,
+      "days_from_cutoff": 4,
+      "difficulty": "hard",
+      "dimension": "事件",
+      "question_type": "A_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "公司正式执行股票分割计划，每股拆分为多股以提升流动性",
+      "gt_date": "2024-05-06",
+      "gt_label": "2024-05-06",
+      "gt_day": 4
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.92,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 8%；真值是。绝对误差 0.92，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-05-07",
+        "d_hat_label": "2024-05-07",
+        "d_hat_day": 5,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-05-07，实际 2024-05-06，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.92；日期相差 1 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 0%；真值是。绝对误差 1.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-05-07",
+        "d_hat_label": "2024-05-07",
+        "d_hat_day": 5,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-05-07，实际 2024-05-06，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 1.00；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.12,
+        "abs_error": 0.88,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 12%；真值是。绝对误差 0.88，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-05-21",
+        "d_hat_label": "2024-05-21",
+        "d_hat_day": 19,
+        "abs_error_days": 15.0,
+        "reasoning": "预测 2024-05-21，实际 2024-05-06，相差 15 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.88；日期相差 15 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 5%；真值是。绝对误差 0.95，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-05-20",
+        "d_hat_label": "2024-05-20",
+        "d_hat_day": 18,
+        "abs_error_days": 14.0,
+        "reasoning": "预测 2024-05-20，实际 2024-05-06，相差 14 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.95；日期相差 14 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.8,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 20%；真值是。绝对误差 0.80，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-05-15",
+        "d_hat_label": "2024-05-15",
+        "d_hat_day": 13,
+        "abs_error_days": 9.0,
+        "reasoning": "预测 2024-05-15，实际 2024-05-06，相差 9 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.80；日期相差 9 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.95,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 5%；真值是。绝对误差 0.95，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-05-28",
+        "d_hat_label": "2024-05-28",
+        "d_hat_day": 26,
+        "abs_error_days": 22.0,
+        "reasoning": "预测 2024-05-28，实际 2024-05-06，相差 22 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.95；日期相差 22 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P04",
+     "cutoff_label": "截止日期 2024-06-06",
+     "cutoff_short": "2024-06-06",
+     "context_excerpt": "2024-05-10 **事件**：律所A律师事务所于2024年5月10日代表机构C向法院A提起针对公司A公司及其部分高管的证券集体诉讼，案号为编号A。该案依据法规B法规F、法规G及法规C提起，适用于2020年9月8日至2024年5月1日期间购买或获得公司A证券的所有投资者。此次诉讼与2024年4月5日提起的案件A、案件B及案件C三起案件相关，新诉讼将集体诉讼期延长至2024年5月1日，并新增指控被告虚假声称遵守了对国家W出口限制的贸易管制规定。诉状同时指控被告严重虚报公司收入、盈利及其他财务数据，违反准则A，未披露内部财务报告控制缺陷，以及隐瞒关联方及关联交易的重要信息。被告的欺诈行为于2024年4月2日开始曝光。根据法规D要求，有意担任首席原告的投资者须在2024年6月4日前提交任命动议。 **舆论**：舆论场聚焦针对公司A的证券集体诉讼及机构K介入调查，情绪以幸灾乐祸与恐慌交织为主。看空者对\"国家Y机构K介入、股价狂跌12…",
+     "calibration_question": {
+      "q": "舆论是否在2024年6月11日前后14天内流传'芯片商A订单转移传闻令公司C成潜在赢家'的AI供应链重构说法？",
+      "window_days": 14,
+      "days_from_cutoff": 5,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "B_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "公司披露贷款协议第三次修订，延长提供经审计财务文件期限并新增最低无限制现金条款",
+      "gt_date": "2024-06-07",
+      "gt_label": "2024-06-07",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.8,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 80%；真值是。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-24",
+        "d_hat_label": "2024-06-24",
+        "d_hat_day": 18,
+        "abs_error_days": 17.0,
+        "reasoning": "预测 2024-06-24，实际 2024-06-07，相差 17 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 17 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 1.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 100%；真值是。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-28",
+        "d_hat_label": "2024-06-28",
+        "d_hat_day": 22,
+        "abs_error_days": 21.0,
+        "reasoning": "预测 2024-06-28，实际 2024-06-07，相差 21 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 21 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.28,
+        "abs_error": 0.72,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 28%；真值是。绝对误差 0.72，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-18",
+        "d_hat_label": "2024-06-18",
+        "d_hat_day": 12,
+        "abs_error_days": 11.0,
+        "reasoning": "预测 2024-06-18，实际 2024-06-07，相差 11 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.72；日期相差 11 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.7,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 30%；真值是。绝对误差 0.70，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-18",
+        "d_hat_label": "2024-06-18",
+        "d_hat_day": 12,
+        "abs_error_days": 11.0,
+        "reasoning": "预测 2024-06-18，实际 2024-06-07，相差 11 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.70；日期相差 11 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.55,
+        "abs_error": 0.45,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 55%；真值是。绝对误差 0.45，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-17",
+        "d_hat_label": "2024-06-17",
+        "d_hat_day": 11,
+        "abs_error_days": 10.0,
+        "reasoning": "预测 2024-06-17，实际 2024-06-07，相差 10 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.45；日期相差 10 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.75,
+        "abs_error": 0.25,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 75%；真值是。绝对误差 0.25，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-17",
+        "d_hat_label": "2024-06-17",
+        "d_hat_day": 11,
+        "abs_error_days": 10.0,
+        "reasoning": "预测 2024-06-17，实际 2024-06-07，相差 10 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.25；日期相差 10 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P06",
+     "cutoff_label": "截止日期 2024-06-11",
+     "cutoff_short": "2024-06-11",
+     "context_excerpt": "2024-06-06 **事件**：公司A于6月5日向机构A提交表格C文件，正式披露审计机构A已于5月30日辞任审计工作，并对该公司在诚信和道德方面的承诺提出质疑。受此消息冲击，公司A股价当日暴跌33%，周四盘中再度跌逾15%，两日累计跌幅接近50%，股价跌至约29货币A，市值缩水至160亿货币A，已低于指数A180亿货币A的市值门槛。审计机构A去年3月才接替审计机构C出任审计师，尚未完成首份年报审计便离场，距其上任仅约19个月，并明确声明\"无意与管理层编制的报表产生关联\"。该公司因3月遭做空机构机构B狙击，至今未能提交截至2月4日的表格A年报，自12月起未向机构A提交正式财务报告。按照交易所A规定，公司A须在6月22日前重新提交年报或恢复合规计划，否则将面临停牌或退市。机构E分析师B指出，审计辞任是严重事件，公司A面临\"最坏结果\"的可能性越来越高，这将导致其竞争力下滑并面临生存挑战，同时不排除公司高层和董事会\"大换血\"或被其他…",
+     "calibration_question": {
+      "q": "公司A是否在14天内明确公布延期提交年报的具体时间表？",
+      "window_days": 14,
+      "days_from_cutoff": 1,
+      "difficulty": "hard",
+      "dimension": "事件",
+      "question_type": "A_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "公司股价暴跌，首席财务官表态将申请延期提交年报但未明确时间表，交易所此前已发出退市警告",
+      "gt_date": "2024-06-12",
+      "gt_label": "2024-06-12",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.25,
+        "abs_error": 0.75,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 25%；真值是。绝对误差 0.75，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-12",
+        "d_hat_label": "2024-06-12",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-06-12，实际 2024-06-12，相差 0 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.75；日期相差 0 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 0%；真值是。绝对误差 1.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-11",
+        "d_hat_label": "2024-06-11",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-06-11，实际 2024-06-12，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 1.00；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.7,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 30%；真值是。绝对误差 0.70，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-12",
+        "d_hat_label": "2024-06-12",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-06-12，实际 2024-06-12，相差 0 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.70；日期相差 0 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.4,
+        "abs_error": 0.6,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 40%；真值是。绝对误差 0.60，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-11",
+        "d_hat_label": "2024-06-11",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-06-11，实际 2024-06-12，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.60；日期相差 1 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.6,
+        "abs_error": 0.4,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 60%；真值是。绝对误差 0.40，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-11",
+        "d_hat_label": "2024-06-11",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-06-11，实际 2024-06-12，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.40；日期相差 1 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.7,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 30%；真值是。绝对误差 0.70，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-12",
+        "d_hat_label": "2024-06-12",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-06-12，实际 2024-06-12，相差 0 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.70；日期相差 0 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P07",
+     "cutoff_label": "截止日期 2024-06-12",
+     "cutoff_short": "2024-06-12",
+     "context_excerpt": "2024-06-07 **事件**：审计机构A会计师事务所于2024年5月30日正式辞去公司A审计师职务，并对该公司诚信与道德承诺提出质疑。公司A于6月5日提交表格C文件披露此事，但明确表示不同意审计机构A的决定，并已开始寻找新审计机构。受此消息冲击，公司股价周三暴跌33%，周四盘中再跌逾15%，两日累计跌幅接近50%，股价跌至29货币A附近，市值缩水至160亿货币A，跌破指数A门槛。此前，做空机构机构B研究于3月底发布报告指控该公司存在\"明显的会计危险信号\"，公司A回应称报告内容\"虚假或不准确\"，随后公司延迟提交表格A，国家Y机构K已对其展开调查。公司A计划于6月11日盘后发布2025财年第一财季业绩。 **舆论**：舆论普遍对公司A持强烈质疑态度，支持审计机构A\"壮士断腕\"式辞任，认为其罕见严厉措辞已实质宣判公司财务可信度死刑；反对声音集中于公司管理层诚信崩塌及审计委员会失职。情绪以震惊、愤怒与黑色幽默交织为主，投资者焦虑于…",
+     "calibration_question": {
+      "q": "公司A是否在2024年6月19日前30天内被交易所批准延长上市期限至7月下旬？",
+      "window_days": 30,
+      "days_from_cutoff": 7,
+      "difficulty": "hard",
+      "dimension": "事件",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "公司宣布无法按时提交季报并下调业绩预期，面临严峻退市压力",
+      "gt_date": "2024-06-19",
+      "gt_label": "2024-06-19",
+      "gt_day": 7
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-12",
+        "d_hat_label": "2024-06-12",
+        "d_hat_day": 0,
+        "abs_error_days": 7.0,
+        "reasoning": "预测 2024-06-12，实际 2024-06-19，相差 7 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 7 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-12",
+        "d_hat_label": "2024-06-12",
+        "d_hat_day": 0,
+        "abs_error_days": 7.0,
+        "reasoning": "预测 2024-06-12，实际 2024-06-19，相差 7 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 7 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-12",
+        "d_hat_label": "2024-06-12",
+        "d_hat_day": 0,
+        "abs_error_days": 7.0,
+        "reasoning": "预测 2024-06-12，实际 2024-06-19，相差 7 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 7 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-12",
+        "d_hat_label": "2024-06-12",
+        "d_hat_day": 0,
+        "abs_error_days": 7.0,
+        "reasoning": "预测 2024-06-12，实际 2024-06-19，相差 7 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 7 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.4,
+        "abs_error": 0.4,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 40%；真值否。绝对误差 0.40，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-13",
+        "d_hat_label": "2024-06-13",
+        "d_hat_day": 1,
+        "abs_error_days": 6.0,
+        "reasoning": "预测 2024-06-13，实际 2024-06-19，相差 6 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.40；日期相差 6 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-13",
+        "d_hat_label": "2024-06-13",
+        "d_hat_day": 1,
+        "abs_error_days": 6.0,
+        "reasoning": "预测 2024-06-13，实际 2024-06-19，相差 6 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 6 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P09",
+     "cutoff_label": "截止日期 2024-06-24",
+     "cutoff_short": "2024-06-24",
+     "context_excerpt": "2024-06-19 **事件**：公司A于2024年6月19日宣布，因所需工作量和成本过高，无法按时提交截至2024年5月6日的2025财年第一季度表格D。该公司同时下调了业绩预期，预计第一季度营收59亿至60亿货币A，低于此前60亿至70亿货币A的预测。公司此前因原独立会计师事务所审计机构A提出担忧而成立特别委员会调查内部控制问题，该委员会虽已完成初步审查，但仍需更多时间完成全部工作。公司A正在遴选新的独立审计师，并需额外时间完成新审计师聘用、评估截至2024年2月4日的内部控制有效性，以及完成2024财年表格A和2025财年第一季度表格D的审计工作。该公司面临严峻退市压力，若被交易所A摘牌，可能需提前偿还高达17.25亿货币A的可转换票据。为避免退市，公司A须于6月中旬前向机构A提交年度报告。该公司已于4月23日收到交易所A的不合规通知，因其迟迟未提交年度财报表格A，根据通知仅有60天时间提交合规计划，截止日期为本周末。受…",
+     "calibration_question": {
+      "q": "公司A是否在2024年6月23日至7月23日期间被剔除出主要市场指数？",
+      "window_days": 30,
+      "days_from_cutoff": -1,
+      "difficulty": "hard",
+      "dimension": "事件",
+      "question_type": "A_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "公司A股价连续第二个交易日录得两位数涨幅",
+      "gt_date": "2024-06-25",
+      "gt_label": "2024-06-25",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.78,
+        "abs_error": 0.22,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 78%；真值是。绝对误差 0.22，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-25",
+        "d_hat_label": "2024-06-25",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-06-25，实际 2024-06-25，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.22；日期相差 0 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 1.0,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 0%；真值是。绝对误差 1.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-25",
+        "d_hat_label": "2024-06-25",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-06-25，实际 2024-06-25，相差 0 天。"
+       },
+       "score_label": "方向错误，绝对误差 1.00；日期相差 0 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.7,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 30%；真值是。绝对误差 0.70，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-07-16",
+        "d_hat_label": "2024-07-16",
+        "d_hat_day": 22,
+        "abs_error_days": 21.0,
+        "reasoning": "预测 2024-07-16，实际 2024-06-25，相差 21 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.70；日期相差 21 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.75,
+        "abs_error": 0.25,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 75%；真值是。绝对误差 0.25，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-07-02",
+        "d_hat_label": "2024-07-02",
+        "d_hat_day": 8,
+        "abs_error_days": 7.0,
+        "reasoning": "预测 2024-07-02，实际 2024-06-25，相差 7 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.25；日期相差 7 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.75,
+        "abs_error": 0.25,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 75%；真值是。绝对误差 0.25，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-26",
+        "d_hat_label": "2024-06-26",
+        "d_hat_day": 2,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-06-26，实际 2024-06-25，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.25；日期相差 1 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.95,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 95%；真值是。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-27",
+        "d_hat_label": "2024-06-27",
+        "d_hat_day": 3,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2024-06-27，实际 2024-06-25，相差 2 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 2 天。"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "event2_trump_tariff",
+   "short": "Trump Tariff",
+   "domain_label": "贸易政策",
+   "anonymized_arc": "Trump Tariff",
+   "live_questions": [
+    {
+     "id": "P05-0",
+     "type": "calibration",
+     "window": 14,
+     "text": "cutoff后14天内,国家W领导人公开否认与国家Y当选总统就关闭边境达成一致的说法?"
+    },
+    {
+     "id": "P05-1",
+     "type": "calibration",
+     "window": 7,
+     "text": "cutoff后7天内,国家W领导人公开否认与国家Y当选总统就关闭边境达成一致的说法?"
+    },
+    {
+     "id": "P05-2",
+     "type": "calibration",
+     "window": 14,
+     "text": "cutoff后14天内,国家Z总理主动赴地区M与国家Y当选总统举行会面?"
+    },
+    {
+     "id": "P05-3",
+     "type": "calibration",
+     "window": 7,
+     "text": "cutoff后7天内,国家Z总理赴地区M与国家Y当选总统举行会面?"
+    }
+   ],
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff_label": "截止日期 2017-09-24",
+     "cutoff_short": "2017-09-24",
+     "context_excerpt": "2017-09-19 **事件**：2017年9月19日，国家Y总统领导人A在公司A上升级对区域组织A贸易战威胁，警告若区域组织A针国家Y国法规P采取报复措施，国家Y将对地区A制造的汽车征税。此前一周，领导人A突然宣布计划对进口钢铁征收25%关税、对铝材征收10%关税以保护国家Y产业，区域组织A委员会主席人物X3随即表示拟对公司D摩托车、公司C牛仔裤和产品I等国家Y进口商品征收关税作为回应。领导人A在推文中称，若区域组织A进一步提高关税和壁垒阻碍国家Y公司经营，国家Y将对其汽车征税，并抨击往届政府\"非常愚蠢\"的贸易协议。领导人A此前多次攻击地区A汽车制造商，2017年曾威胁对进口车辆征收35%边境税，并在城市A闭门会议上称\"国家A很坏，非常坏\"。 **舆论**：平台B上对领导人A隔空威胁区域组织A汽车关税的消息一片看戏氛围。有网友调侃\"上来就把盟友往死里得罪，钢铝刚抡完又要砍豪华进口车，领导人A果然六亲不认\"。不少人翻出他骂\"国…",
+     "calibration_question": {
+      "q": "未来30天内,舆论是否出现冷静声音提醒人物I3走人未必等于官员C接任、人事尚未落定、别急着下结论?",
+      "window_days": 30,
+      "days_from_cutoff": 3,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "C_true",
+      "gt": 1,
+      "gt_note": "该事件在窗口内确实发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "执政方公开确认对部分邻国与盟友给予法规P临时豁免，并把永久豁免作为贸易协定谈判筹码",
+      "gt_date": "2017-09-26",
+      "gt_label": "2017-09-26",
+      "gt_day": 2
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.7,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 70%；真值是。绝对误差 0.30，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2017-10-08",
+        "d_hat_label": "2017-10-08",
+        "d_hat_day": 14,
+        "abs_error_days": 12.0,
+        "reasoning": "预测 2017-10-08，实际 2017-09-26，相差 12 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.30；日期相差 12 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.01,
+        "abs_error": 0.99,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 1%；真值是。绝对误差 0.99，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2017-10-08",
+        "d_hat_label": "2017-10-08",
+        "d_hat_day": 14,
+        "abs_error_days": 12.0,
+        "reasoning": "预测 2017-10-08，实际 2017-09-26，相差 12 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.99；日期相差 12 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.08,
+        "abs_error": 0.92,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 8%；真值是。绝对误差 0.92，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2017-10-06",
+        "d_hat_label": "2017-10-06",
+        "d_hat_day": 12,
+        "abs_error_days": 10.0,
+        "reasoning": "预测 2017-10-06，实际 2017-09-26，相差 10 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.92；日期相差 10 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.5,
+        "abs_error": 0.5,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 50%；真值是。绝对误差 0.50，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2017-09-28",
+        "d_hat_label": "2017-09-28",
+        "d_hat_day": 4,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2017-09-28，实际 2017-09-26，相差 2 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.50；日期相差 2 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.5,
+        "abs_error": 0.5,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 50%；真值是。绝对误差 0.50，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2017-09-29",
+        "d_hat_label": "2017-09-29",
+        "d_hat_day": 5,
+        "abs_error_days": 3.0,
+        "reasoning": "预测 2017-09-29，实际 2017-09-26，相差 3 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.50；日期相差 3 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.9,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 10%；真值是。绝对误差 0.90，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2017-10-05",
+        "d_hat_label": "2017-10-05",
+        "d_hat_day": 11,
+        "abs_error_days": 9.0,
+        "reasoning": "预测 2017-10-05，实际 2017-09-26，相差 9 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.90；日期相差 9 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P04",
+     "cutoff_label": "截止日期 2018-12-06",
+     "cutoff_short": "2018-12-06",
+     "context_excerpt": "2018-11-21 **事件**：2018年11月21日，国家Y总统领导人A在社交媒体发文威胁，将于11月26日起对价值2000亿美元的国家X商品提高关税税率，并\"很快\"对额外数千亿美元的国家X进口商品加征关税。这一威胁正值数十名国家X高级官员本周抵达城市C、准备进行预期中的最后一轮贸易谈判之际。领导人A此举令国家X官员措手不及，城市E方面11月22日上午正在权衡是否仍派机构Y副总理人物R按原计划本周访国家Y。领导人A发出威胁前，国家X谈判代表在上周于城市E举行的高层贸易谈判中态度强硬，不愿接受任何需要国家X立法机关修改现行法律的协议条款。 **舆论**：好家伙，咱代表团人都快到城市C了，领导人A一条公司A说10号就把2000亿的税从10%提到25%，还要再加几千亿，这是要谈判桌都不让咱坐稳就掀桌子！典型的极限施压，想用突袭逼咱让步。据说上周城市E那轮咱态度强硬，不肯接受要修改国内法律的条款——这点必须顶住啊，法律是咱主权范围…",
+     "calibration_question": {
+      "q": "cutoff后7天内，国家Y央行负责人是否会公开批评对国家W的加税决定？",
+      "window_days": 7,
+      "days_from_cutoff": 7,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "国家Y宣布对来自邻国国家W的所有进口商品加征关税，以施压其阻止非法移民",
+      "gt_date": "2018-12-16",
+      "gt_label": "2018-12-16",
+      "gt_day": 10
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.01,
+        "abs_error": 0.01,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 1%；真值否。绝对误差 0.01，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2018-12-16",
+        "d_hat_label": "2018-12-16",
+        "d_hat_day": 10,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2018-12-16，实际 2018-12-16，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.01；日期相差 0 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2018-12-16",
+        "d_hat_label": "2018-12-16",
+        "d_hat_day": 10,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2018-12-16，实际 2018-12-16，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 0 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.02,
+        "abs_error": 0.02,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 2%；真值否。绝对误差 0.02，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2018-12-20",
+        "d_hat_label": "2018-12-20",
+        "d_hat_day": 14,
+        "abs_error_days": 4.0,
+        "reasoning": "预测 2018-12-20，实际 2018-12-16，相差 4 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.02；日期相差 4 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2018-12-16",
+        "d_hat_label": "2018-12-16",
+        "d_hat_day": 10,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2018-12-16，实际 2018-12-16，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 0 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2018-12-20",
+        "d_hat_label": "2018-12-20",
+        "d_hat_day": 14,
+        "abs_error_days": 4.0,
+        "reasoning": "预测 2018-12-20，实际 2018-12-16，相差 4 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 4 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 20%；真值否。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2018-12-17",
+        "d_hat_label": "2018-12-17",
+        "d_hat_day": 11,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2018-12-17，实际 2018-12-16，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 1 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P05",
+     "cutoff_label": "截止日期 2024-06-15",
+     "cutoff_short": "2024-06-15",
+     "context_excerpt": "2024-06-14 **事件**：国家Y当选总统领导人A于2024年6月13日在其社交媒体平台产品C上宣布，将在2024年7月就职后签署行政命令，对从国家W和国家Z进口的所有商品征收25%的关税，同时对国家X商品加征10%的关税。领导人A明确表示，这些关税将持续生效，直到毒品特别是芬太尼以及非法移民停止\"入侵\"国家Y为止。国家W总统领导人J于6月14日警告称，\"一项关税将招致另一项关税作为回应，如此往复，直到我们共同的企业面临风险\"。国家Z总理领导人C1领导人D同日表示，已在领导人A宣布后数小时内与其通话，并计划于周三召集各省领导人召开紧急会议商讨对策。国家X驻城市C大使馆发言人同日向媒体D表示：\"贸易战或关税战没有赢家。\"三国官员均警告，领导人A的关税计划可能颠覆四国经济，国家Z、国家W和国家X均为国家Y最大贸易伙伴，若关税政策实施，将对地区L及全球供应链造成重大冲击。 **舆论**：靴子接着落，领导人A这回把国家X也点名了…",
+     "calibration_question": {
+      "q": "在领导人A以100%关税威胁机构X的舆论中,是否会出现网友主张国家Y应当立即同步对国家V、国家P的本币结算系统实施金融制裁的呼声?",
+      "window_days": 14,
+      "days_from_cutoff": 4,
+      "difficulty": "hard",
+      "dimension": "舆论",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "国家W总统纠正国家Y当选总统对两人通话内容的误述,否认同意关闭南部边境",
+      "gt_date": "2024-06-16",
+      "gt_label": "2024-06-16",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 20%；真值否。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-16",
+        "d_hat_label": "2024-06-16",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-06-16，实际 2024-06-16，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 0 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-15",
+        "d_hat_label": "2024-06-15",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-06-15，实际 2024-06-16，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-15",
+        "d_hat_label": "2024-06-15",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-06-15，实际 2024-06-16，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 1 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.65,
+        "abs_error": 0.65,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 65%；真值否。绝对误差 0.65，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-15",
+        "d_hat_label": "2024-06-15",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-06-15，实际 2024-06-16，相差 1 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.65；日期相差 1 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 30%；真值否。绝对误差 0.30，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-16",
+        "d_hat_label": "2024-06-16",
+        "d_hat_day": 1,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-06-16，实际 2024-06-16，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.30；日期相差 0 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-06-15",
+        "d_hat_label": "2024-06-15",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-06-15，实际 2024-06-16，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 1 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P07",
+     "cutoff_label": "截止日期 2024-08-20",
+     "cutoff_short": "2024-08-20",
+     "context_excerpt": "2024-08-19 **事件**：行政机构A于当地时间周五下午确认，国家Y总统领导人A将从8月20日起对来自国家W、国家Z和国家X的进口商品征收关税。行政机构A新闻秘书人物K1宣布，国家W和国家Z将面临25%的关税，国家X则为10%。人物T3表示，这些关税是对\"三国采购并允许流入国家Y的非法芬太尼\"的回应，并纠正了此前关于关税将于9月17日生效的报道，强调生效日期为8月20日。国家Z总理领导人C1领导人D周五回应称，若国家Y实施关税，国家Z将立即采取强有力的反制措施。经济学家和食品行业高管警告，国家Y消费者可能还要承受肉类、蔬菜和水果的更高成本，领导人A的惩罚性关税及国家Z、国家W的报复性措施，可能扰乱近1.6万亿美元的地区L贸易，并终结已深度整合三国经济长达30年的自由贸易体系。 **舆论**：行政机构A这是真要动手了？刚上台没几天就把国家Z国家W怼25%、国家X10%，还甩锅芬太尼当借口，理由找得真齐全。平台B上不少人吐槽…",
+     "calibration_question": {
+      "q": "截至2024-09-13前，是否会宣布对关键工业金属立即普遍加征新关税？",
+      "window_days": 30,
+      "days_from_cutoff": 24,
+      "difficulty": "hard",
+      "dimension": "政策",
+      "question_type": "B_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "领导人A在社交媒体称征收关税是为保护国家Y人并施压三国遏制芬太尼、要求减少非法移民",
+      "gt_date": "2024-08-21",
+      "gt_label": "2024-08-21",
+      "gt_day": 1
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-08-20，实际 2024-08-21，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 1 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.0,
+        "abs_error": 0.0,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 0%；真值否。绝对误差 0.00，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-08-20，实际 2024-08-21，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.00；日期相差 1 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-08-20，实际 2024-08-21，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 1 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-08-20，实际 2024-08-21，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 1 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.5,
+        "abs_error": 0.5,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 50%；真值否。绝对误差 0.50，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-08-20，实际 2024-08-21，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.50；日期相差 1 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.15,
+        "abs_error": 0.15,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 15%；真值否。绝对误差 0.15，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-08-20",
+        "d_hat_label": "2024-08-20",
+        "d_hat_day": 0,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-08-20，实际 2024-08-21，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.15；日期相差 1 天。"
+      }
+     ]
+    },
+    {
+     "point_id": "P10",
+     "cutoff_label": "截止日期 2024-09-29",
+     "cutoff_short": "2024-09-29",
+     "context_excerpt": "2024-09-28 **事件**：国家Y总统领导人A于2024年9月28日承诺对区域组织A和国家Z采取的报复性关税措施进行对等回应。执政团队A于9月26日推进扩大钢铁和铝进口关税的计划，对所有进入国家Y的钢铁和铝产品征收25%的统一关税，并取消了此前给予部分国家的豁免待遇。国家Z宣布从9月29日起对价值近300亿货币B（约200亿美元）的国家Y产品征收25%的报复性关税，涵盖钢铁、电脑和体育器材等商品。区域组织A则宣布将从10月18日起对价值高达260亿货币C（约280亿美元）的国家Y商品提高关税，包括游艇、产品I和摩托车等。领导人A回应称\"当然\"会采取反制措施，并重申将于下月公布针对全球各国的\"对等\"关税计划，称\"他们向我们收多少，我们就向他们收多少\"。这一威胁标志着贸易战的进一步升级，已引发金融市场动荡。 **舆论**：看戏的心态又上来了。领导人A一句\"他们收多少我们就收多少\"听着霸气，可国家Z、区域组织A反手就是几百亿的…",
+     "calibration_question": {
+      "q": "未来7天内，领导人A是否会把某社交媒体应用的出售进展当作关税让步的筹码公开提及？",
+      "window_days": 7,
+      "days_from_cutoff": 7,
+      "difficulty": "hard",
+      "dimension": "政策",
+      "question_type": "A_false",
+      "gt": 0,
+      "gt_note": "该事件在窗口内并未发生"
+     },
+     "temporal_question": {
+      "q": "这个事件会在哪一天发生？",
+      "event_desc": "国际经济机构下调全球及国家Y经济增长预期并警告贸易战升级风险",
+      "gt_date": "2024-10-03",
+      "gt_label": "2024-10-03",
+      "gt_day": 4
+     },
+     "model_responses": [
+      {
+       "model": "GPT-5.5",
+       "is_best_overall": true,
+       "calibration": {
+        "p_hat": 0.55,
+        "abs_error": 0.55,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 55%；真值否。绝对误差 0.55，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-10-03",
+        "d_hat_label": "2024-10-03",
+        "d_hat_day": 4,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-10-03，实际 2024-10-03，相差 0 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.55；日期相差 0 天。"
+      },
+      {
+       "model": "Gemini-3.5-Flash",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.8,
+        "abs_error": 0.8,
+        "weight": 0.0,
+        "correct_side": false,
+        "reasoning": "答 80%；真值否。绝对误差 0.80，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-10-01",
+        "d_hat_label": "2024-10-01",
+        "d_hat_day": 2,
+        "abs_error_days": 2.0,
+        "reasoning": "预测 2024-10-01，实际 2024-10-03，相差 2 天。"
+       },
+       "score_label": "方向错误，绝对误差 0.80；日期相差 2 天。"
+      },
+      {
+       "model": "Claude-Opus-4.8",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.1,
+        "abs_error": 0.1,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 10%；真值否。绝对误差 0.10，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-10-03",
+        "d_hat_label": "2024-10-03",
+        "d_hat_day": 4,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-10-03，实际 2024-10-03，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.10；日期相差 0 天。"
+      },
+      {
+       "model": "DeepSeek-V4-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.05,
+        "abs_error": 0.05,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 5%；真值否。绝对误差 0.05，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-10-15",
+        "d_hat_label": "2024-10-15",
+        "d_hat_day": 16,
+        "abs_error_days": 12.0,
+        "reasoning": "预测 2024-10-15，实际 2024-10-03，相差 12 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.05；日期相差 12 天。"
+      },
+      {
+       "model": "Kimi-K2.5",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.3,
+        "abs_error": 0.3,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 30%；真值否。绝对误差 0.30，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-10-02",
+        "d_hat_label": "2024-10-02",
+        "d_hat_day": 3,
+        "abs_error_days": 1.0,
+        "reasoning": "预测 2024-10-02，实际 2024-10-03，相差 1 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.30；日期相差 1 天。"
+      },
+      {
+       "model": "Doubao-Seed-2.0-Pro",
+       "is_best_overall": false,
+       "calibration": {
+        "p_hat": 0.2,
+        "abs_error": 0.2,
+        "weight": 0.0,
+        "correct_side": true,
+        "reasoning": "答 20%；真值否。绝对误差 0.20，该题权重 0.00。"
+       },
+       "temporal": {
+        "pred_date": "2024-10-03",
+        "d_hat_label": "2024-10-03",
+        "d_hat_day": 4,
+        "abs_error_days": 0.0,
+        "reasoning": "预测 2024-10-03，实际 2024-10-03，相差 0 天。"
+       },
+       "score_label": "方向正确，绝对误差 0.20；日期相差 0 天。"
+      }
+     ]
+    }
+   ]
+  }
+ ]
 }
