@@ -86,8 +86,15 @@
 
       // ---- Hero -----------------------------------------------------------
       'hero.title': 'Society-Bench',
+      'hero.title.main': 'SocietyBench',
+      'hero.title.sub.lead': 'Forecasting',
+      'hero.title.sub.accent': 'Counterfactual Social-World',
+      'hero.title.sub.tail': 'Evolution',
+      'hero.badge': 'Private preview · v0.1 · Anonymous review',
       'hero.pitch': 'Can Language Models Forecast Real-World Social Events?',
-      'hero.btn.paper': 'Paper (PDF)',
+      'hero.pitch.long': 'The first benchmark capable of measuring whether language models can forecast real-world social events — using anonymized ground truth distilled from Web news and five social-media platforms.',
+      'hero.btn.paper': 'Paper',
+      'hero.btn.leaderboard': 'See Leaderboard',
       'hero.btn.arxiv': 'arXiv',
       'hero.btn.code': 'Code',
       'hero.btn.dataset': 'Dataset',
@@ -99,6 +106,7 @@
       'about.title': 'Abstract',
       'about.p1': 'We present the first benchmark capable of measuring the ability to forecast real-world social events using anonymized ground truth from Web news and social-media.',
       'about.p2.html': 'Our approach collects Web news and social-media posts across five platforms, distills each source into date-indexed timelines via a six-step agent-driven processing chain, and merges them into a unified chronology that separates factual events from public opinion. We apply an anonymization procedure that renders each real event arc into a <strong>counterfactual social world</strong>, ensuring the evaluation measures forecasting ability rather than the ability to search for the real event. We then automatically generate an agent-audited question bank supporting two orthogonal evaluation axes: probability calibration and temporal accuracy.',
+      'about.p3': 'SocietyBench turns any one-line event topic into an anonymized simulated social world, and uses an agent-audited question bank to evaluate LLMs along two axes — probability calibration and temporal accuracy.',
 
       // ---- Key Contributions ---------------------------------------------
       'contrib.title': 'Key Contributions',
@@ -116,6 +124,7 @@
       'method.title': 'Method',
 
       // Four-phase pipeline
+      'method.4phase.eyebrow': 'SUB-BLOCK 01 / PIPELINE',
       'method.4phase.title': 'Four-Phase Pipeline',
       'method.4phase.intro': 'Our benchmark operates through a four-phase pipeline: collecting multi-source data, distilling timelines, merging and anonymizing them into counterfactual worlds, and evaluating models on probability calibration and temporal accuracy.',
       'method.4phase.th1': 'Phase',
@@ -134,6 +143,7 @@
       'method.4phase.p03.desc': 'Anonymizes, generates questions, and scores on two axes',
 
       // Three-phase anonymization
+      'method.3anon.eyebrow': 'SUB-BLOCK 02 / ANONYMIZATION',
       'method.3anon.title': 'Three-Phase Anonymization',
       'method.3anon.intro.html': 'The anonymization pipeline renders each merged timeline into a counterfactual world before any candidate model sees it. The auditor loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.',
       'method.3anon.p01.num': '01',
@@ -147,6 +157,7 @@
       'method.3anon.p03.body': 'Paragraph-, event-, and narrative-level comparison against the original, repairing any substitution damage while preserving anonymized entities and shifted dates.',
 
       // Dual-axis evaluation
+      'method.dual.eyebrow': 'SUB-BLOCK 03 / EVALUATION',
       'method.dual.title': 'Dual-Axis Evaluation',
       'method.dual.intro': 'At each accepted prediction point, the candidate sees the context up to a cutoff date and answers two orthogonal question types.',
       'method.dual.a1.tag': 'AXIS 01 — CALIBRATION',
@@ -188,7 +199,7 @@
       'lb.stamp.refreshed': 'DATA REFRESHED',
       'lb.stamp.nextreview': 'NEXT REVIEW',
       'lb.stamp.schema': 'SCHEMA',
-      'lb.caption.html': 'Want your model on this table? &nbsp;→&nbsp; see <a href="#/contribute">EXPAND THE BENCHMARK</a> below.',
+      'lb.caption.html': 'Want your model on this table? &nbsp;→&nbsp; see <a href="#expand">EXPAND THE BENCHMARK</a> below.',
 
       'lb.tab.models': '[ MODELS ]',
       'lb.tab.bars': '[ BARS ]',
@@ -225,12 +236,12 @@
       'lb.bars.legend.best': 'Best in selection',
       'lb.bars.legend.llm': 'Validated LLM',
       'lb.bars.legend.proj': 'Projected',
-      'lb.bars.legend.ref': 'Baseline / Human',
+      'lb.bars.legend.ref': 'Baseline',
       'lb.bars.legend.baseline-mark': 'Baseline tick',
 
       // Events tab inside leaderboard
       'lb.events.intro': 'Five anonymized arcs. Each card shows the arc description, prediction-point count, and the question volume that point supplies to the bank.',
-      'lb.events.footer.html': '▸ More events expected via community contributions — see <a href="#/contribute" style="color: var(--orange-ink); border-bottom: 2px solid var(--orange); text-decoration: none; font-weight: 700;">EXPAND THE BENCHMARK</a>.',
+      'lb.events.footer.html': '▸ More events expected via community contributions — see <a href="#expand" style="color: var(--orange-ink); border-bottom: 2px solid var(--orange); text-decoration: none; font-weight: 700;">EXPAND THE BENCHMARK</a>.',
 
       // ---- Try the Benchmark ---------------------------------------------
       'try.title.html': 'Try the Benchmark <span style="color: var(--orange);">★</span>',
@@ -355,7 +366,11 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // ---- Deep dive (intro only; tables rendered by app.js) -------------
       'dd.title': 'Deep Dive',
-      'dd.intro': 'Five tables behind the headline number. Stress cases isolate where models break; four ablations isolate where the benchmark\'s difficulty comes from.',
+      'dd.validity.title': 'Does anonymization actually work?',
+      'dd.validity.lede': 'Cross-event calibration score with each anonymization stage switched off. If the benchmark were measuring recall rather than forecasting, removing the disguise would make models look better — and it does.',
+      'dd.validity.conclusion': 'Running on raw, un-anonymized event names inflates the mean by {gap} points. That gap is memory, not foresight: a measurable share of questions become answerable by recognising the real event instead of reasoning forward from it.',
+      'dd.validity.more': 'Full per-event breakdown and the audit protocol are in §4.2 of the paper.',
+      'dd.intro': 'The evidence behind the headline number. First, whether anonymization actually works — the one result the benchmark stands or falls on. Then stress cases isolating where models break, and three ablations isolating where the difficulty comes from.',
 
       // ---- Qualitative ---------------------------------------------------
       'qual.title': 'Qualitative',
@@ -582,8 +597,15 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // ---- Hero -----------------------------------------------------------
       'hero.title': 'Society-Bench',
+      'hero.title.main': 'SocietyBench',
+      'hero.title.sub.lead': '预测',
+      'hero.title.sub.accent': '反事实社会世界',
+      'hero.title.sub.tail': '的演化',
+      'hero.badge': '内部预览 · v0.1 · 匿名评审',
       'hero.pitch': '语言模型能否预测真实世界的社会事件？',
-      'hero.btn.paper': '论文 (PDF)',
+      'hero.pitch.long': '首个能评测大模型前瞻真实社会事件能力的 benchmark —— 真值数据来源于 Web 新闻与五个社媒平台,并经匿名化处理。',
+      'hero.btn.paper': '论文',
+      'hero.btn.leaderboard': '查看排行榜',
       'hero.btn.arxiv': 'arXiv',
       'hero.btn.code': '代码',
       'hero.btn.dataset': '数据集',
@@ -595,6 +617,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'about.title': '摘要',
       'about.p1': '我们提出首个能评测大模型前瞻真实社会事件能力的 benchmark——所用真值数据来自 Web 新闻与社媒,并已经过匿名化处理。',
       'about.p2.html': '我们并行从 Web 新闻与五个社媒平台采集帖子,通过一条六步 agent 链将每一源蒸馏为日期索引时间线,再合并为一份显式区分事实事件与公众舆论的统一年表。再经一道匿名化流程,把每段真实事件弧渲染为<strong>模拟社会世界</strong>——结构上与真实发生的完全一致,但剥去了模型能与预训练记忆比对的表面标签,使评测度量的是对社会世界演化的前向推理,而非记忆调取。在此之上,我们自动生成由 agent 审核的题库,支持两条正交的评测轴:概率校准与时间精度。',
+      'about.p3': 'SocietyBench 把任意一行事件主题转化为匿名化的模拟社会世界,并以 agent 审核的题库从概率校准与时间精度两轴评测 LLM。',
 
       // ---- Key Contributions ---------------------------------------------
       'contrib.title': '关键贡献',
@@ -612,6 +635,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'method.title': '方法',
 
       // Four-phase pipeline
+      'method.4phase.eyebrow': '子块 01 / 流水线',
       'method.4phase.title': '四阶段流水线',
       'method.4phase.intro': '本基准由四阶段流水线驱动:多源数据采集、时间线蒸馏、合并并匿名化为模拟社会世界,以及在概率校准与时间精度两个轴上评测模型。',
       'method.4phase.th1': '阶段',
@@ -630,6 +654,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'method.4phase.p03.desc': '匿名化、出题,并按双轴评分',
 
       // Three-phase anonymization
+      'method.3anon.eyebrow': '子块 02 / 匿名化',
       'method.3anon.title': '三阶段匿名化',
       'method.3anon.intro.html': '在任何候选模型看到内容之前,匿名化流水线先把每条合并后的时间线渲染为模拟社会世界。审计循环在 <strong>high = 0 与 mid = 0</strong> 处收敛,最多 5 轮。',
       'method.3anon.p01.num': '01',
@@ -643,6 +668,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'method.3anon.p03.body': '在段落级、事件级、叙事级与原文对比,修复任何替换造成的损伤,同时保留匿名化后的实体与平移后的日期。',
 
       // Dual-axis evaluation
+      'method.dual.eyebrow': '子块 03 / 评测',
       'method.dual.title': '双轴评测',
       'method.dual.intro': '在每个被纳入的预测点上,候选模型只看到截至某截止日期为止的上下文,并回答两类正交问题。',
       'method.dual.a1.tag': '轴 01 — 校准',
@@ -684,7 +710,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'lb.stamp.refreshed': '数据更新',
       'lb.stamp.nextreview': '下次复核',
       'lb.stamp.schema': '字段版本',
-      'lb.caption.html': '想把你的模型放上这张表? &nbsp;→&nbsp; 见下方 <a href="#/contribute">参与贡献</a>。',
+      'lb.caption.html': '想把你的模型放上这张表? &nbsp;→&nbsp; 见下方 <a href="#expand">参与贡献</a>。',
 
       'lb.tab.models': '[ 模型 ]',
       'lb.tab.bars': '[ 条形图 ]',
@@ -721,12 +747,12 @@ Accepted events join the official catalog and ship in the next benchmark version
       'lb.bars.legend.best': '当前选择最高',
       'lb.bars.legend.llm': '已验证 LLM',
       'lb.bars.legend.proj': '预估',
-      'lb.bars.legend.ref': '基线 / 人类',
+      'lb.bars.legend.ref': '基线',
       'lb.bars.legend.baseline-mark': '基线刻度',
 
       // Events tab inside leaderboard
       'lb.events.intro': '五条匿名化的事件弧。每张卡片显示弧情简述、预测点数量,以及该事件向题库贡献的题量。',
-      'lb.events.footer.html': '▸ 更多事件将通过社区贡献加入——见 <a href="#/contribute" style="color: var(--orange-ink); border-bottom: 2px solid var(--orange); text-decoration: none; font-weight: 700;">参与贡献</a>。',
+      'lb.events.footer.html': '▸ 更多事件将通过社区贡献加入——见 <a href="#expand" style="color: var(--orange-ink); border-bottom: 2px solid var(--orange); text-decoration: none; font-weight: 700;">参与贡献</a>。',
 
       // ---- Try the Benchmark ---------------------------------------------
       'try.title.html': '在线试用基准 <span style="color: var(--orange);">★</span>',
@@ -851,7 +877,11 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // ---- Deep dive (intro only; tables rendered by app.js) -------------
       'dd.title': '深度分析',
-      'dd.intro': '头部数字背后的五张表。压力用例隔离出模型失败之处;四个消融隔离出基准难度的来源。',
+      'dd.validity.title': '匿名化真的有效吗?',
+      'dd.validity.lede': '逐级关闭匿名化后的跨事件校准分。如果这个 benchmark 测的是记忆而不是预测,那么摘掉伪装模型就会显得更强 —— 事实正是如此。',
+      'dd.validity.conclusion': '直接用未匿名的真实事件名,跨事件均分虚高 {gap} 分。这个差距来自记忆而非前瞻:有相当比例的题目变成了「认出真实事件」就能答对,而不需要向前推理。',
+      'dd.validity.more': '逐事件明细与审核流程见论文 §4.2。',
+      'dd.intro': '头部数字背后的证据。首先是匿名化是否真的有效 —— 整个 benchmark 的立论成败就在这一条。其次是隔离模型失败之处的压力用例,以及隔离难度来源的三个消融。',
 
       // ---- Qualitative ---------------------------------------------------
       'qual.title': '案例对比',

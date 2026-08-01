@@ -95,8 +95,7 @@
     ],
     "baselines_and_human": [
       {"system": "频率基线 (经验基率)",        "kind": "non-llm", "avg": [12.4, 50.0]},
-      {"system": "动量基线 (7 日滚动)",        "kind": "non-llm", "avg": [13.6, 50.0]},
-      {"system": "人类小组 (n=5 名预测员)",     "kind": "human",   "avg": [41.8, 73.5]}
+      {"system": "动量基线 (7 日滚动)",        "kind": "non-llm", "avg": [13.6, 50.0]}
     ]
   }
 }

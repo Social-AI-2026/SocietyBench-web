@@ -249,12 +249,32 @@ class CrowdAnimation {
     this.isDispersing = true;
     if (this.leftInterval) clearInterval(this.leftInterval);
     if (this.rightInterval) clearInterval(this.rightInterval);
+
+    // Force-cancel any active hover state so the connecting-lines freeze
+    // and the bob-pause CSS rule release immediately, even if the mouse is
+    // still physically over a person when the user starts scrolling. The
+    // dispersing class also overrides the `:hover` pause/dim rules in CSS.
+    this.people.forEach(p => {
+      p._isHovered = false;
+      p.classList.remove('highlighted');
+    });
+    this.container.classList.remove('person-hovered');
+    this.container.classList.add('dispersing');
+    if (this._bubbleTimer) { clearTimeout(this._bubbleTimer); this._bubbleTimer = null; }
+    this.hideBubble();
+
     // Once the crowd starts dispersing, the bottom-fixed container should no
     // longer intercept pointer events — otherwise the user can't select text
     // or click links in the area the container overlays (z-index 9998, 400px
     // tall, position:fixed at bottom).
     this.container.style.pointerEvents = 'none';
-    this.tweenRate(35, 500);
+    // Snap the rate up instantly instead of tweening. When the mouse had
+    // frozen the crowd (rate ≈ 0), a 500 ms tween from 0 → 35 left people
+    // crawling for half a second after the user scrolled. Jumping straight
+    // to 35× makes the disperse feel responsive regardless of prior state.
+    if (this._rateFrame) { cancelAnimationFrame(this._rateFrame); this._rateFrame = null; }
+    this.currentRate = 35;
+    this.applyRateToAll();
   }
 
   setupClickDisperse() {
@@ -309,10 +329,12 @@ class CrowdAnimation {
 
   setupMouseInteraction() {
     this.container.addEventListener('mouseenter', () => {
+      if (this.isDispersing) return;
       this.tweenRate(0, 2000);
     });
 
     this.container.addEventListener('mouseleave', () => {
+      if (this.isDispersing) return;
       this.tweenRate(1, 800);
     });
 

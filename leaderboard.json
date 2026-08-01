@@ -95,8 +95,7 @@
     ],
     "baselines_and_human": [
       {"system": "Frequency baseline (empirical base-rate)", "kind": "non-llm", "avg": [12.4, 50.0]},
-      {"system": "Momentum baseline (7-day rolling)",        "kind": "non-llm", "avg": [13.6, 50.0]},
-      {"system": "Human panel (n=5 forecasters)",            "kind": "human",   "avg": [41.8, 73.5]}
+      {"system": "Momentum baseline (7-day rolling)",        "kind": "non-llm", "avg": [13.6, 50.0]}
     ]
   }
 }

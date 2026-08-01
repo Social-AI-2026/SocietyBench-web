@@ -1,5 +1,8 @@
 /* SocietyBench — brutalist landing page styles */
 
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
 :root {
   --ink: #000000;
   --paper: #F5F9FD;       /* very light blue background for main content */
@@ -9,6 +12,10 @@
   --blue-dark: #0D47A1;   /* deeper blue for external links */
   --blue-light: #64B5F6;  /* light blue accent */
   --sky: #87CEEB;         /* sky blue for sidebar */
+  --cjk: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  --script: "Dancing Script", "Snell Roundhand", "Apple Chancery", cursive;
+  --orange: #F59E0B;      /* amber accent: highlights, badges, extremes */
+  --orange-ink: #B45309;  /* readable amber for text on light backgrounds */
   --muted: #546E7A;       /* blue-grey for muted text */
   --shadow: 4px 4px 0 rgba(33, 150, 243, 0.2);
   --shadow-lg: 8px 8px 0 rgba(33, 150, 243, 0.15);
@@ -136,6 +143,26 @@ img { max-width: 100%; display: block; }
   animation-play-state: paused;
 }
 
+/* When the user scrolls past the threshold, the crowd starts dispersing.
+   The `.dispersing` class overrides every `:hover` rule so the speed-up
+   plays through even if the mouse is still physically over a person. */
+#crowd-container.dispersing,
+#crowd-container.dispersing:hover {
+  pointer-events: none;
+}
+#crowd-container.dispersing .crowd-person-bob,
+#crowd-container.dispersing:hover .crowd-person-bob,
+#crowd-container.dispersing .crowd-person,
+#crowd-container.dispersing:hover .crowd-person {
+  animation-play-state: running !important;
+}
+#crowd-container.dispersing.person-hovered .crowd-person,
+#crowd-container.dispersing .crowd-person.highlighted {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none;
+}
+
 /* Thought bubble that pops above a hovered person, with random question text. */
 .crowd-thought-bubble {
   position: fixed;
@@ -217,9 +244,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* ============================== SHELL LAYOUT ===============================
-   Left sidebar (fixed-width on desktop) + main content column.
-   Pages are toggled via [data-active-page] on the <body>; sections with
-   data-page matching the active value are visible, others are hidden. */
+   Single content column under the fixed pill nav. */
 .shell {
   position: relative;
   display: grid;
@@ -430,19 +455,9 @@ img { max-width: 100%; display: block; }
 }
 .page-header .ph-btn.primary { background: var(--blue); }
 
-/* page visibility */
-.page-section { display: none; }
-body[data-active-page="overview"]    .page-section[data-page="overview"],
-body[data-active-page="method"]      .page-section[data-page="method"],
-body[data-active-page="try"]         .page-section[data-page="try"],
-body[data-active-page="contribute"]  .page-section[data-page="contribute"],
-body[data-active-page="leaderboard"] .page-section[data-page="leaderboard"],
-body[data-active-page="deepdive"]    .page-section[data-page="deepdive"],
-body[data-active-page="qualitative"] .page-section[data-page="qualitative"],
-body[data-active-page="limitations"] .page-section[data-page="limitations"],
-body[data-active-page="cite"]        .page-section[data-page="cite"] {
-  display: block;
-}
+/* One-page scroll: all sections are always rendered. scroll-margin-top keeps
+   anchor jumps clear of the fixed pill nav. */
+.page-section { display: block; scroll-margin-top: 76px; }
 
 /* tighter first-section spacing */
 .page-section:first-of-type { padding-top: clamp(36px, 5vw, 64px); }
@@ -450,6 +465,9 @@ body[data-active-page="cite"]        .page-section[data-page="cite"] {
 .page-section + .page-section {
   border-top: 2px dashed rgba(0,0,0,0.18);
 }
+/* No divider directly under the hero — the video background already provides
+   a strong visual break, the dashed line just clutters it. */
+.hero + .page-section { border-top: 0; }
 
 /* page title (for non-overview pages) */
 .page-title {
@@ -554,10 +572,10 @@ section:last-of-type { border-bottom: none; }
 .hero {
   /* Full-viewport-height hero so the WebP background fills the screen.
      dvh on supporting browsers handles mobile address-bar resize cleanly;
-     vh is the universal fallback. */
+     vh is the universal fallback.
+     display:flex is set just below. */
   min-height: 100vh;
   min-height: 100dvh;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   padding-top: clamp(60px, 8vw, 100px);
@@ -565,6 +583,18 @@ section:last-of-type { border-bottom: none; }
   position: relative;
   overflow: hidden;
   isolation: isolate;
+}
+.hero { display: flex; }
+
+/* Inside the overview page, the sections form a continuous long scroll —
+   no dashed dividers, and a single consistent gap between cards instead of
+   each section's own large padding stacking up. */
+body.layout-pill .page-section + .page-section {
+  border-top: 0 !important;
+}
+body.layout-pill .page-section[data-page="overview"]:not(.hero) {
+  padding-top: clamp(24px, 3vw, 40px);
+  padding-bottom: clamp(24px, 3vw, 40px);
 }
 
 /* Animated WebP background — sits behind .hero-content, in front of page bg.
@@ -579,10 +609,8 @@ section:last-of-type { border-bottom: none; }
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  /* Static fallback if the .webp itself fails to load. */
-  background-image: url('figures/hero-poster.jpg');
-  background-size: cover;
-  background-position: center;
+  /* Static fallback while the video loads / if it fails. */
+  background: #000;
 }
 .hero-video {
   position: absolute;
@@ -740,10 +768,10 @@ h2.section-title {
   font-family: var(--mono);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(30px, 4.4vw, 56px);
-  letter-spacing: -0.01em;
-  line-height: 1;
-  margin: 0 0 32px;
+  font-size: clamp(22px, 2.6vw, 32px);
+  letter-spacing: -0.005em;
+  line-height: 1.1;
+  margin: 0 0 24px;
 }
 .title-mark {
   display: inline-block;
@@ -761,7 +789,7 @@ h3.subsection-title {
   text-transform: uppercase;
   font-size: clamp(18px, 2vw, 24px);
   letter-spacing: 0.04em;
-  margin: 48px 0 22px;
+  margin: 8px 0 12px;
   text-align: center;
 }
 
@@ -881,7 +909,7 @@ h3.subsection-title {
   background: var(--ink);
   color: var(--paper);
   font-weight: 700;
-  font-size: 11.5px;
+  font-size: 14px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -940,42 +968,60 @@ h3.subsection-title {
   line-height: 1.55;
 }
 
-.dual-axis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.dual-axis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
 .axis-card {
-  background: var(--paper-3);
-  border: var(--border-thick);
-  box-shadow: var(--shadow);
-  padding: 26px 24px;
+  background: var(--paper-3, #141414);
+  border: 1.5px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  box-shadow: none;
+  padding: 22px 20px 24px;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+.axis-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 .axis-card .axis-tag {
-  display: inline-block;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 3px 9px;
-  font-size: 11px;
+  display: block;
+  background: none;
+  border: 0;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
+  color: var(--muted);
   margin-bottom: 14px;
 }
 .axis-card h4 {
-  font-family: var(--mono);
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 19px;
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: none;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   margin: 0 0 10px;
+  text-wrap: pretty;
 }
 .axis-card .metric {
   font-family: var(--mono);
-  font-size: 13.5px;
-  line-height: 1.55;
+  font-size: 13px;
+  line-height: 1.6;
   margin: 0 0 14px;
+  color: var(--blue-light);
+  text-wrap: pretty;
 }
+body:not(.dark-theme) .axis-card .metric { color: var(--blue-dark); }
 .axis-card .scale {
   display: flex;
   gap: 14px;
   font-family: var(--mono);
   font-size: 12px;
-  border-top: 1.5px solid var(--ink);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 12px;
 }
 .axis-card .scale b { color: var(--blue); }
@@ -1268,6 +1314,14 @@ h3.subsection-title {
   text-decoration: line-through;
   text-decoration-thickness: 3px;
 }
+/* Chinese ground-truth format is "第 14 日" — the 第 / 日 are full-width CJK
+   glyphs that render at the same 84px height as the digit, making it look
+   like three giant words. Scale the whole num down so the digit still feels
+   like a hero number but the surrounding characters stop overwhelming it. */
+body[data-lang="zh"] .output-cell .num {
+  font-size: clamp(32px, 4vw, 52px);
+  letter-spacing: -0.01em;
+}
 .output-cell .num-label {
   font-family: var(--mono);
   font-size: 10.5px;
@@ -1546,7 +1600,20 @@ h3.subsection-title {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* The 5 question cards stack tall and push the RUN button far down. Cap the
+     list height and let it scroll internally so the panel stays compact. */
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
 }
+.qchoice-list::-webkit-scrollbar { width: 8px; }
+.qchoice-list::-webkit-scrollbar-track { background: transparent; }
+.qchoice-list::-webkit-scrollbar-thumb {
+  background: var(--paper-2);
+  border-radius: 999px;
+}
+body.dark-theme .qchoice-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); }
 .qchoice {
   background: var(--paper);
   border: 2px solid var(--ink);
@@ -2378,7 +2445,16 @@ h3.subsection-title {
   box-shadow: 3px 3px 0 var(--ink);
   padding: 12px 14px;
   font-family: var(--mono);
+  /* Long CAL-GT descriptions can run several lines — cap the card height and
+     let it scroll internally so it stays compact in the panel. */
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
+.preview-gt-card::-webkit-scrollbar { width: 8px; }
+.preview-gt-card::-webkit-scrollbar-track { background: transparent; }
+.preview-gt-card::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 999px; }
+body.dark-theme .preview-gt-card::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.22); }
 .preview-gt-card .pgt-row {
   display: flex;
   align-items: baseline;
@@ -2986,9 +3062,25 @@ html.auth-locked body { overflow: hidden; }
   color: var(--paper-3);
 }
 
-/* CJK text gets a slightly larger line-height for readability. */
+/* Chinese mode retunes the TOKENS rather than overriding consumers: any
+   component that re-declares `font-family: var(--mono)` would otherwise throw
+   away a CJK tail added further up, and terminate in a generic that hands CJK
+   to the OS default (sharp-edged Microsoft YaHei on Windows). CJK families sit
+   after the Latin faces, so Latin and numerals keep the mono/grotesk look. */
 body[data-lang="zh"] {
-  font-family: var(--mono), "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", "Source Han Sans SC", sans-serif;
+  --display: "Space Grotesk", -apple-system, "Helvetica Neue", "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", "Source Han Sans SC", sans-serif;
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* Mono headings are set uppercase with wide tracking — on CJK that reads as
+   harsh and over-spaced, so Chinese headings pull the tracking back in. */
+body[data-lang="zh"] h2.section-title,
+body[data-lang="zh"] h3.subsection-title,
+body[data-lang="zh"] .page-title,
+body[data-lang="zh"] .card-title {
+  letter-spacing: 0.01em;
 }
 body[data-lang="zh"] .pitch,
 body[data-lang="zh"] .abstract-body,
@@ -2996,3 +3088,901 @@ body[data-lang="zh"] .card-body,
 body[data-lang="zh"] .ec-body {
   line-height: 1.75;
 }
+
+/* ============================================================================
+ * DARK THEME — applied when <body class="dark-theme">
+ * Flips the core neutral tokens to a black base while keeping accent blues
+ * as the brand color. A handful of stubbornly-hardcoded #fff / overlays are
+ * patched below.
+ * ========================================================================= */
+body.dark-theme {
+  --ink: #f1f5f9;
+  --paper: #0a0a0a;
+  --paper-2: #1a1a1a;
+  --paper-3: #141414;
+  --blue: #60a5fa;
+  --blue-dark: #3b82f6;
+  --blue-light: #93c5fd;
+  --sky: #1e3a8a;
+  --orange: #F59E0B;
+  --orange-ink: #FBBF24;  /* lifted for contrast against the near-black canvas */
+  --muted: #94a3b8;
+  --shadow: 4px 4px 0 rgba(96, 165, 250, 0.22);
+  --shadow-lg: 8px 8px 0 rgba(96, 165, 250, 0.16);
+  --shadow-xl: 12px 12px 0 rgba(96, 165, 250, 0.12);
+  color-scheme: dark;
+}
+body.dark-theme ::selection { background: #1e40af; color: #f1f5f9; }
+
+/* Crowd people: SVGs use currentColor and inherited body color = #f1f5f9 →
+   they'd glow nearly-white against the dark bg. Tone them to a darker grey
+   so they read as silhouettes, not flashlights. */
+body.dark-theme .crowd-person { color: #cbd5e1; opacity: 0.78; }
+
+/* Topnav: was rgba(255,255,255,…) milky glass — flip to dark glass. */
+body.dark-theme .topnav {
+  background: rgba(18, 18, 18, 0.82);
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
+}
+body.dark-theme .topnav-brand { color: #f1f5f9; }
+body.dark-theme .topnav-brand .brand-mark { border-color: #f1f5f9; box-shadow: 1.5px 1.5px 0 #000; }
+body.dark-theme .topnav .topnav-links a.sb-link { color: #94a3b8; }
+body.dark-theme .topnav .topnav-links a.sb-link:hover { color: #f1f5f9; background: rgba(255,255,255,0.06); }
+body.dark-theme .topnav .topnav-links a.sb-link.active:not(.topnav-cta) { color: #f1f5f9; background: rgba(255,255,255,0.10); }
+body.dark-theme .topnav-aux { border-left-color: rgba(255,255,255,0.10); }
+body.dark-theme .topnav-icon { color: #94a3b8; }
+body.dark-theme .topnav-icon:hover { background: rgba(255,255,255,0.08); color: #f1f5f9; }
+body.dark-theme .topnav-lang { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+body.dark-theme .topnav-lang .lang-btn { color: #94a3b8; }
+body.dark-theme .topnav-lang .lang-btn:hover { color: #f1f5f9; background: rgba(255,255,255,0.08); }
+body.dark-theme .topnav-lang .lang-btn.active { background: #60a5fa; color: #0a0a0a; box-shadow: 0 1px 6px rgba(96,165,250,0.4); }
+
+/* Hero overlay: was a milky-white veil over the video — flip to a dark veil
+   so the video reads as ambient texture, not a foreground. */
+body.dark-theme.layout-pill .hero-video-overlay {
+  background:
+    radial-gradient(ellipse 85% 75% at 50% 50%,
+      rgba(10, 10, 10, 0.45) 0%,
+      rgba(10, 10, 10, 0.65) 50%,
+      rgba(10, 10, 10, 0.85) 100%),
+    linear-gradient(180deg, rgba(10, 10, 10, 0.30) 0%, rgba(10, 10, 10, 0.55) 100%);
+}
+
+body.dark-theme.layout-pill .hero-title-sub { color: #f1f5f9; }
+body.dark-theme.layout-pill .hero-title-sub em {
+  background: linear-gradient(90deg, #93c5fd, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body.dark-theme.layout-pill .hero .pitch { color: #cbd5e1; }
+
+/* Hero pill buttons: white-on-light was the light theme — flip to dark. */
+body.dark-theme.layout-pill .hero .btn {
+  background: linear-gradient(180deg, rgba(32,34,38,0.92) 0%, rgba(18,19,22,0.94) 100%);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #e8ecf2;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.09) inset,
+    0 0 0 0.5px rgba(255,255,255,0.05),
+    0 8px 20px rgba(0,0,0,0.45);
+}
+body.dark-theme.layout-pill .hero .btn:hover,
+body.dark-theme.layout-pill .hero .btn:focus-visible {
+  background: linear-gradient(180deg, rgba(44,47,52,0.95) 0%, rgba(26,28,32,0.96) 100%);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: #fff;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 10px 26px rgba(0,0,0,0.55);
+}
+body.dark-theme.layout-pill .hero .btn.primary {
+  background: linear-gradient(180deg, #ffffff 0%, #e9edf3 100%);
+  color: #0a0a0a;
+  border-color: rgba(255,255,255,0.9);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 8px 22px rgba(0,0,0,0.4);
+}
+body.dark-theme.layout-pill .hero .btn.primary:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
+  color: #0a0a0a;
+  border-color: #fff;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.95) inset,
+    0 12px 30px rgba(0,0,0,0.5);
+}
+
+/* Auth gate, code blocks, and a handful of other hard-coded whites. */
+body.dark-theme #auth-form { background: #141414; border-color: #f1f5f9; box-shadow: 8px 8px 0 #000; }
+body.dark-theme .figbox { background: #f1f5f9; }
+body.dark-theme .figbox img { background: #f1f5f9; }
+body.dark-theme .lb tbody tr.best td,
+body.dark-theme .live-gt-bar,
+body.dark-theme .dd-stress-card .sc-mini.best,
+body.dark-theme .preview-gt-card,
+body.dark-theme .dd-table tbody tr.baseline { background: #1e2a3a; color: #f1f5f9; }
+body.dark-theme .mode-banner.error { background: #3a1a1a; color: #fca5a5; }
+body.dark-theme .custom-q-input:focus { background: #1a1a1a; }
+body.dark-theme code, body.dark-theme pre { background: #161616; color: #f1f5f9; }
+/* NOTE: no blanket `body.dark-theme a { color: inherit }` here — the base
+   `a { color: inherit }` already sets that default at a specificity that
+   accent rules like `.lb-caption a` can beat. Re-declaring it under
+   body.dark-theme (0,2,1) would flatten every accent link to body colour. */
+body.dark-theme a[href^="http"]:not(.btn):not(.topnav-brand):not(.topnav-icon):not(.sb-link):not(.sb-brand) {
+  color: #93c5fd;
+}
+
+/* Light-pill accents that were inverted in the original light theme
+   (white-on-dark looks fine on a paper background, but on a near-black
+   canvas they read as glaring white slabs). Re-invert them in dark mode
+   into subtle outlined chips. */
+body.dark-theme .method-table thead th,
+body.dark-theme .method-table .phase-cell .ph-num,
+body.dark-theme .bar-row .label .type-mini.llm,
+body.dark-theme .lb .type-badge.llm {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+}
+/* Method-table header: a distinct deep-blue band so the column labels read
+   as a header, clearly differentiated from the bright accent blue used for
+   the phase numbers below. */
+body.dark-theme .method-table thead th {
+  background: #15396e;
+  color: #cfe2ff;
+  border-color: #1e4e9c;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+body.dark-theme .method-table .phase-cell .ph-num {
+  background: #60a5fa;
+  color: #0a0a0a;
+  border-color: #60a5fa;
+}
+/* Cell borders inside the dark table look harsh in pure white — soften. */
+body.dark-theme .method-table th,
+body.dark-theme .method-table td {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+/* Striped rows used a light-blue tint — flip to a barely-visible dark wash. */
+body.dark-theme .method-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.025); }
+body.dark-theme .lb tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.025); }
+body.dark-theme .dd-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.025); }
+
+/* Callout (the big blue banner) — the original is solid --blue with dark
+   text. In dark theme keep blue tint but soften so it doesn't feel like
+   a popup card sitting on top of the page. */
+body.dark-theme .callout {
+  background: rgba(96, 165, 250, 0.12);
+  color: #f1f5f9;
+  border-color: #60a5fa;
+}
+
+/* Callout's nested .big stays bright blue */
+body.dark-theme .callout .big { color: #93c5fd; }
+
+/* ----- Abstract: text left, video right (LayerPano3D-style) ----- */
+/* This section breaks out of the 1280px .wrap cap to spread text to the far
+   left and video to the far right, like the reference layout. */
+#abstract .wrap { max-width: 1880px; }
+.abstract-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(48px, 8vw, 140px);
+  align-items: center;
+}
+/* "Abstract" heading is centered over the text column. */
+/* "Abstract" heading is centered over the text column, with the square mark
+   sitting immediately to the left of the centered text. */
+.abstract-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35em;
+  text-align: center;
+  margin-bottom: 22px;
+}
+.abstract-title .title-mark { margin-right: 0; }
+/* The abstract section's .wrap is widened to 1880px for the text+video row,
+   but the teaser figure below it should match the 1280px width used by the
+   method figures further down the page. */
+#abstract > .wrap > .figbox { max-width: var(--max); margin-left: auto; margin-right: auto; }
+.abstract-grid .abstract-body { margin: 0; }
+.abstract-video {
+  margin: 0;
+  position: sticky;
+  top: 90px;
+}
+.abstract-video-el {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: 2.5px solid var(--ink);
+  box-shadow: var(--shadow-lg);
+  object-fit: cover;
+}
+body.dark-theme .abstract-video-el {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+@media (max-width: 860px) {
+  .abstract-grid { grid-template-columns: 1fr; gap: 24px; }
+  .abstract-video { position: static; top: auto; order: -1; }
+}
+body.layout-pill .shell { grid-template-columns: 1fr; }
+body.layout-pill .sidebar,
+body.layout-pill .page-header,
+body.layout-pill .mobile-bar { display: none !important; }
+
+/* The fixed floating nav bar at the top center of the viewport */
+.topnav-wrap {
+  position: fixed;
+  top: 18px;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  padding: 0 16px;
+}
+.topnav {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  padding: 6px 8px 6px 18px;
+  box-shadow:
+    0 10px 28px rgba(13, 71, 161, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.7) inset;
+  max-width: calc(100vw - 32px);
+  min-height: 52px;
+}
+.topnav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  padding: 4px 8px 4px 0;
+  border: 0;
+}
+.topnav-brand .brand-mark {
+  width: 18px;
+  height: 18px;
+  background: var(--blue);
+  border: 2px solid var(--ink);
+  box-shadow: 1.5px 1.5px 0 var(--ink);
+  flex-shrink: 0;
+}
+.topnav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0 4px;
+}
+.topnav-links li { margin: 0; padding: 0; }
+.topnav .topnav-links a.sb-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.005em;
+  color: #475569;
+  text-decoration: none;
+  transition: background 140ms ease, color 140ms ease;
+  white-space: nowrap;
+  /* override sidebar's ::before triangle */
+}
+.topnav .topnav-links a.sb-link::before { content: none; }
+.topnav .topnav-links a.sb-link:hover {
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.04);
+  border-left-color: transparent;
+}
+.topnav .topnav-links a.sb-link.active:not(.topnav-cta) {
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.06);
+  font-weight: 700;
+  border-left-color: transparent;
+}
+.topnav-aux {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 8px;
+  margin-left: 4px;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  align-self: stretch;
+}
+/* "Try it" is the primary call to action — gold shimmering text. */
+.topnav .topnav-links a.sb-link.topnav-cta {
+  position: relative;
+  font-weight: 800;
+  gap: 5px;
+  background: linear-gradient(100deg, #b8860b 0%, #ffd700 35%, #fff6c0 50%, #ffd700 65%, #b8860b 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: ctaShine 3s linear infinite, ctaPulse 2.2s ease-in-out infinite;
+}
+.topnav .topnav-links a.sb-link.topnav-cta:hover,
+.topnav .topnav-links a.sb-link.topnav-cta.active {
+  background: linear-gradient(100deg, #b8860b 0%, #ffd700 35%, #fff6c0 50%, #ffd700 65%, #b8860b 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+@keyframes ctaShine { from { background-position: 200% 0; } to { background-position: -50% 0; } }
+@keyframes ctaPulse {
+  0%, 100% { filter: drop-shadow(0 0 3px rgba(255,190,60,0.55)); }
+  50% { filter: drop-shadow(0 0 9px rgba(255,215,0,0.95)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .topnav .topnav-links a.sb-link.topnav-cta { animation: none; }
+}
+.cta-star { font-size: 11px; line-height: 1; }
+.topnav-icon {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #475569;
+  text-decoration: none;
+  flex-shrink: 0;
+  align-self: center;
+  transition: background 140ms ease, color 140ms ease;
+}
+.topnav-icon:hover { background: rgba(0, 0, 0, 0.06); color: var(--ink); }
+.topnav-icon svg { width: 17px; height: 17px; }
+.topnav-lang {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1.5px solid rgba(0, 0, 0, 0.10);
+  border-radius: 999px;
+  padding: 0 3px;
+  gap: 2px;
+  height: 30px;
+  align-self: center;
+  margin: 0;
+}
+.topnav-lang .lang-btn + .lang-btn { border-left: 0; }
+.topnav-lang .lang-btn {
+  background: transparent;
+  border: 0;
+  padding: 0 12px;
+  height: 24px;
+  min-width: 36px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #475569;
+  cursor: pointer;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 140ms ease, color 140ms ease;
+}
+.topnav-lang .lang-btn:hover { color: var(--ink); background: rgba(0,0,0,0.05); }
+.topnav-lang .lang-btn[data-lang="zh"] {
+  font-family: var(--cjk);
+  font-size: 14px;
+  letter-spacing: 0;
+}
+.topnav-lang .lang-btn.active {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(13, 71, 161, 0.3);
+}
+.topnav-lang .lang-btn + .lang-btn { border-left: 0; }
+.topnav-lang .lang-btn.active {
+  background: var(--ink);
+  color: #fff;
+}
+
+/* ----- Hero composition under the pill layout ----- */
+body.layout-pill .hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: clamp(110px, 14vw, 160px);
+  padding-bottom: clamp(80px, 10vw, 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+body.layout-pill .hero-content {
+  text-align: center;
+  width: 100%;
+  max-width: 1080px;
+  padding: 0 var(--gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Announcement pill */
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  padding: 7px 16px 7px 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  margin: 0 0 28px;
+  text-shadow: none;
+}
+.hero-pill::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+}
+
+/* H1 reset for the pill layout — drop the uppercase + emoji flanking */
+body.layout-pill .hero h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(34px, 5.2vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: none;
+  margin: 0 auto 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  max-width: min(95vw, 1100px);
+  color: var(--ink);
+}
+body.layout-pill .hero h1::before,
+body.layout-pill .hero h1::after { content: none; }
+.hero-title-main {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  font-family: var(--script);
+  font-size: 2.35em;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  /* The script face still descends below its box, so keep a little leading. */
+  line-height: 1.22;
+  background: none;
+  color: var(--ink);
+}
+/* "Society" — the calligraphic half, in gold. */
+.hero-title-main em {
+  font-family: var(--script);
+  font-style: normal;
+  font-weight: 400;
+  background: linear-gradient(170deg, #fff2b8 0%, #ffd700 38%, #e0a80c 72%, #b8860b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+/* "Bench" — rounded geometric sans, softer counterpoint to the script. */
+.hero-title-main b {
+  font-family: "Archivo Black", var(--display);
+  font-weight: 400;
+  font-size: 0.46em;
+  letter-spacing: -0.01em;
+  margin-left: 0.1em;
+  /* Solid black glyphs ringed in gold: paint-order puts the stroke behind the
+     fill so the outline sits outside the letterform instead of eating it. */
+  background: none;
+  color: #000;
+  -webkit-text-fill-color: #000;
+  -webkit-text-stroke: 4px #d4a017;
+  paint-order: stroke fill;
+}
+.wm-slash {
+  font-family: var(--display);
+  font-style: normal;
+  font-weight: 300;
+  font-size: 0.4em;
+  margin: 0 0.22em;
+  transform: translateY(-0.12em);
+  background: linear-gradient(180deg, #ffd700, #b8860b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-title-sub {
+  display: inline-block;
+  /* The script wordmark carries a tall line box (deep descenders need the
+     leading), which leaves a visual gap far bigger than the metric one — pull
+     the sub-title back up into that empty half-leading. */
+  margin-top: -0.06em;
+  font-size: 0.62em;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.hero-title-sub em {
+  font-style: normal;
+  color: var(--blue-dark);
+  background: linear-gradient(90deg, var(--blue-dark), var(--blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.layout-pill .hero .pitch {
+  font-family: var(--display);
+  font-size: clamp(15px, 1.5vw, 19px);
+  font-weight: 500;
+  color: #475569;
+  max-width: 64ch;
+  margin: 0 auto 40px;
+  line-height: 1.55;
+  text-align: center;
+  text-shadow: none;
+}
+body.layout-pill .hero .pitch .cursor { display: none; }
+
+/* Pill action buttons */
+body.layout-pill .hero .btnrow {
+  margin-top: 0;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+body.layout-pill .hero .btn {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14.5px;
+  letter-spacing: -0.005em;
+  /* Labels must never break mid-word: CJK fallbacks differ in width by a
+     fraction of a pixel and the content box has almost no slack, so let the
+     button grow instead of wrapping the text. */
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px solid rgba(0, 0, 0, 0.14);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 15px 30px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 6px 16px rgba(0, 0, 0, 0.04);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
+}
+body.layout-pill .hero .btn:hover,
+body.layout-pill .hero .btn:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
+  background: #fff;
+  outline: none;
+}
+body.layout-pill .hero .btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+body.layout-pill .hero .btn.primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+body.layout-pill .hero .btn.primary:hover {
+  background: #1a1a1a;
+  color: #fff;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.20);
+}
+body.layout-pill .hero .btn .glyph { display: none; }
+body.layout-pill .hero .btn .badge {
+  background: rgba(0, 0, 0, 0.08);
+  color: inherit;
+  border-radius: 999px;
+  padding: 2px 7px;
+  font-size: 9.5px;
+  margin-left: 4px;
+}
+body.layout-pill .hero .btn.primary .badge { background: rgba(255, 255, 255, 0.2); }
+
+/* Slightly stronger overlay so the title stays legible over the video */
+body.layout-pill .hero-video-overlay {
+  background:
+    radial-gradient(ellipse 85% 75% at 50% 50%,
+      rgba(248, 249, 252, 0.72) 0%,
+      rgba(248, 249, 252, 0.55) 45%,
+      rgba(248, 249, 252, 0.35) 100%),
+    linear-gradient(180deg, rgba(248, 249, 252, 0.30) 0%, rgba(248, 249, 252, 0.45) 100%);
+}
+body.layout-pill .hero-content h1,
+body.layout-pill .hero-content .pitch { text-shadow: none; }
+
+/* Reveal the first section right under the hero with a clean offset */
+body.layout-pill main#top { padding-top: 0; }
+/* On non-overview pages there is no hero pushing content down, so add
+   breathing room under the floating pill nav. */
+body.layout-pill.subpage main#top {
+  /* Leave room for the floating pill nav: ~18px top offset + ~52px pill
+     height + breathing room. */
+  padding-top: clamp(86px, 7vw, 100px);
+}
+/* Trim per-section padding on non-overview pages so the title sits close
+   to the floating pill nav instead of hovering in a giant void. */
+body.layout-pill.subpage .page-section {
+  padding-top: clamp(8px, 1vw, 16px);
+  padding-bottom: clamp(40px, 5vw, 64px);
+  /* On subpages only one section is ever visible, so the adjacent-sibling
+     dashed divider would just float as a stray line under the pill nav.
+     Strip it. */
+  border-top: 0 !important;
+}
+/* Smaller page titles — the original 76px hero-size was meant to act as the
+   hero on each subpage; in the new pill-layout the hero only lives on home,
+   so subpage titles can read at a more conventional H1 scale. */
+body.layout-pill.subpage .page-title {
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+body.layout-pill.subpage .page-lede {
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* Tablet — collapse internal nav links */
+@media (max-width: 900px) {
+  .topnav { padding: 6px 10px; gap: 6px; }
+  .topnav-brand { font-size: 15px; padding-right: 4px; }
+  .topnav-links { display: none; }
+  .topnav-aux { padding-left: 6px; margin-left: 2px; }
+}
+/* On narrow screens the sub line is too long to fit even at 0.62em — let it
+   wrap naturally there. */
+@media (max-width: 720px) {
+  .hero-title-sub { white-space: normal; font-size: 0.55em; }
+  body.layout-pill .hero h1 { font-size: clamp(32px, 8vw, 48px); }
+}
+@media (max-width: 540px) {
+  .topnav-wrap { top: 12px; padding: 0 10px; }
+  body.layout-pill .hero { padding-top: 100px; }
+}
+
+
+/* ===================== Deep-dive: validity evidence bars ================== */
+.vb-title { margin-top: 0; }
+.vb-lede {
+  max-width: 78ch;
+  margin: 0 auto 26px;
+  text-align: center;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.vb-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.vb-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 220px) 1fr 92px;
+  align-items: center;
+  gap: 16px;
+}
+.vb-name {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  text-align: right;
+}
+.vb-track {
+  position: relative;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.10);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.vb-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(96, 165, 250, 0.35), rgba(96, 165, 250, 0.7));
+  transition: width 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.vb-val {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.vb-leak {
+  font-style: normal;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #f59e0b;
+}
+/* Our protocol is the reference line — mark it, don't shout it. */
+.vb-row.is-ours .vb-name { color: var(--ink); font-weight: 700; }
+.vb-row.is-ours .vb-track { border-color: rgba(96, 165, 250, 0.55); }
+.vb-row.is-ours .vb-fill { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.vb-conclusion {
+  max-width: 78ch;
+  margin: 28px auto 0;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  font-weight: 500;
+}
+.vb-more {
+  max-width: 78ch;
+  margin: 10px auto 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+@media (max-width: 640px) {
+  .vb-row { grid-template-columns: 1fr; gap: 4px; }
+  .vb-name { text-align: left; }
+}
+
+/* Subpage (demo.html): no hero, so clear the fixed nav. */
+body.layout-pill.subpage main#top { padding-top: clamp(86px, 7vw, 100px); }
+
+/* The generic .sb-link.active background must not flatten the CTA's gradient
+   (background-clip:text + transparent fill would paint nothing). */
+.topnav .topnav-links a.sb-link.topnav-cta.active,
+.topnav .topnav-links a.sb-link.topnav-cta:hover,
+.topnav .topnav-links a.sb-link.topnav-cta {
+  background-image: linear-gradient(100deg, #b8860b 0%, #ffd700 35%, #fff6c0 50%, #ffd700 65%, #b8860b 100%);
+  background-color: transparent;
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Hero actions: keep the three buttons on one row down to small screens so they
+   never wrap 2 + 1 into a stranded centered row. */
+body.layout-pill .hero .btnrow { flex-wrap: nowrap; }
+@media (max-width: 900px) {
+  body.layout-pill .hero .btn { padding: 11px 18px; font-size: 13.5px; }
+}
+@media (max-width: 520px) {
+  body.layout-pill .hero .btnrow { flex-wrap: wrap; }
+}
+
+/* ---------- Method sub-block headings ----------
+   Same eyebrow-over-title pattern as the deep-dive sub-blocks: a small
+   tracked blue label with a rule under it, then the heading, left-aligned. */
+.mth-head { margin: 40px 0 18px; }
+.mth-head .mth-num {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  color: var(--blue);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: inline-block;
+  border-bottom: 2px solid var(--blue);
+  padding-bottom: 2px;
+}
+.mth-head .subsection-title {
+  margin: 0;
+  text-align: left;
+  letter-spacing: -0.005em;
+  font-size: clamp(20px, 2.4vw, 28px);
+}
+body[data-lang="zh"] .mth-head .mth-num { letter-spacing: 0.14em; }
+
+
+/* ---------- Method step cards ----------
+   Numbered cards in a row, replacing the old two-column table and the
+   number-beside-paragraph phase list. Auto-fit so 3- and 4-up rows both
+   reflow to fewer columns on narrow screens instead of squeezing. */
+.step-cards {
+  display: grid;
+  gap: 16px;
+  margin: 0 0 8px;
+}
+.step-cards-4 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.step-cards-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.step-card {
+  background: var(--paper-3, #141414);
+  border: 1.5px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  padding: 22px 20px 24px;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+.step-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+.step-card .sc-num {
+  display: block;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.step-card .sc-title {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.step-card .sc-body {
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  color: var(--blue-light);
+  text-wrap: pretty;
+}
+.step-card .sc-body em { font-style: normal; color: var(--ink); }
+.step-card .sc-body strong { color: var(--ink); }
+body:not(.dark-theme) .step-card {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+body:not(.dark-theme) .step-card .sc-body { color: var(--blue-dark); }
+body[data-lang="zh"] .step-card .sc-title { letter-spacing: 0.01em; }
+
+body:not(.dark-theme) .axis-card {
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+body:not(.dark-theme) .axis-card .scale { border-top-color: rgba(0, 0, 0, 0.1); }
+body[data-lang="zh"] .axis-card h4 { letter-spacing: 0.01em; }

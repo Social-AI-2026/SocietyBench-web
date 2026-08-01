@@ -1,13 +1,12 @@
-# Internal working docs - not for public
+# Design-tool scratch: pasted screenshots, source videos and PDFs from the
+# claude.ai design project. Nothing on the site references them, and they add
+# ~88 MB to a clone. Kept on disk, not in the repository.
 uploads/
-screenshots/
+scraps/
+.thumbnail
+_changed/
 
 # OS / editor
 .DS_Store
 Thumbs.db
 *.swp
-.vscode/
-.idea/
-
-# Logs
-*.log

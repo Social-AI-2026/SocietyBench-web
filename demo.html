@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Try SocietyBench — Interactive Demo</title>
+  <meta name="description" content="Pick an anonymized event and a prediction point. See what a model sees, what it outputs, and how it scores." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Dancing+Script:wght@600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20260801-wm13" />
+</head>
+<body class="layout-pill dark-theme subpage" data-lang="en">
+  <header class="topnav-wrap" aria-label="Primary">
+    <nav class="topnav">
+      <a class="topnav-brand" href="index.html#top">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span data-i18n="nav.brand">SocietyBench</span>
+      </a>
+      <ul class="topnav-links">
+        <li><a class="sb-link" href="index.html#about" data-i18n="nav.overview">Overview</a></li>
+        <li><a class="sb-link" href="index.html#leaderboard" data-i18n="nav.leaderboard">Leaderboard</a></li>
+        <li><a class="sb-link" href="index.html#expand" data-i18n="nav.contribute">Contribute</a></li>
+        <li><a class="sb-link topnav-cta active" href="demo.html" data-i18n="nav.try">Try it ★</a></li>
+        <li><a class="sb-link" href="analysis.html" data-i18n="nav.deepdive">Deep-dive</a></li>
+        <li><a class="sb-link" href="index.html#cite" data-i18n="nav.cite">Cite</a></li>
+      </ul>
+      <div class="topnav-aux">
+        <div class="lang-toggle topnav-lang" role="group" aria-label="Language">
+          <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" class="lang-btn" data-lang="zh" aria-pressed="false">中</button>
+        </div>
+        <a class="topnav-icon" href="https://github.com/Social-AI-2026/SocietyBench-codebase" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.16c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.05.78 2.12v3.14c0 .31.21.67.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+        </a>
+        <a class="topnav-icon" href="https://huggingface.co/datasets/Social-AI-2026/SocietyBench" target="_blank" rel="noopener" aria-label="Dataset on Hugging Face" title="Dataset">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7.5" ry="3"></ellipse><path d="M4.5 5.5v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6"></path><path d="M4.5 11.5v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6"></path></svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+  <div class="shell">
+    <div class="main-col">
+      <main id="top">
+    <!-- =========================== TRY THE BENCHMARK ======================= -->
+    <section class="page-section reveal" data-page="try" id="try">
+      <div class="wrap">
+        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n-html="try.title.html">Try the Benchmark <span style="color: var(--orange);">★</span></span></h2>
+        <p style="font-size: 15.5px; margin-bottom: 24px;" data-i18n="try.subtitle">Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth.</p>
+
+        <!-- Mode tabs -->
+        <div class="tabs" role="tablist" aria-label="Try modes">
+          <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="cached" id="tab-cached"><span class="glyph">▸</span><span data-i18n="try.tab.cached">[ CACHED MODE ]</span></button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="live" id="tab-live"><span class="glyph">▸</span><span data-i18n="try.tab.live">[ LIVE MODE ]</span></button>
+        </div>
+
+        <!-- Global banner area (fallback messages) -->
+        <div id="try-banner-host"></div>
+
+        <!-- ============ CACHED MODE PANE ============ -->
+        <div class="tab-pane active" data-pane="cached" role="tabpanel" aria-labelledby="tab-cached">
+          <div class="try-grid">
+            <!-- LEFT panel: selectors + model buttons -->
+            <aside class="panel">
+              <span class="panel-label" data-i18n="try.cached.controls.label">▸ CONTROLS · CACHED</span>
+
+              <div class="field">
+                <label class="field-label" for="evt-select" data-i18n="try.field.event">EVENT</label>
+                <select class="select" id="evt-select"></select>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="pt-select" data-i18n="try.field.point">PREDICTION POINT</label>
+                <select class="select" id="pt-select"></select>
+              </div>
+
+              <div class="field" style="margin-bottom: 0;">
+                <span class="field-label" data-i18n="try.field.model">MODEL</span>
+                <div class="model-btns" id="model-btns"></div>
+              </div>
+            </aside>
+
+            <!-- RIGHT view -->
+            <div>
+              <div class="view-grid">
+                <div class="view-block full">
+                  <span class="vb-label" data-i18n-html="try.view.ctx.html">CONTEXT (UP TO CUTOFF) — <span class="meta" id="ctx-meta">—</span></span>
+                  <div class="context-box" id="ctx-text">—</div>
+                </div>
+
+                <div class="view-block qbox">
+                  <span class="vb-label" data-i18n="try.view.cal-q">CALIBRATION QUESTION</span>
+                  <p class="q" id="cal-q">—</p>
+                  <p class="qmeta" id="cal-meta">—</p>
+                </div>
+
+                <div class="view-block qbox">
+                  <span class="vb-label" data-i18n="try.view.time-q">TEMPORAL QUESTION</span>
+                  <p class="q" id="time-q">—</p>
+                  <p class="qmeta" id="time-meta">—</p>
+                </div>
+
+                <div class="view-block full">
+                  <span class="vb-label" data-i18n-html="try.view.model-output.html">MODEL OUTPUT — <span class="meta" id="mout-name">—</span></span>
+                  <div class="output-row">
+                    <div class="output-cell">
+                      <span class="num-label" data-i18n="try.view.phat-label">P̂  ·  CALIBRATION</span>
+                      <div class="num" id="phat">—</div>
+                      <div class="reason" id="phat-reason">—</div>
+                    </div>
+                    <div class="output-cell">
+                      <span class="num-label" data-i18n="try.view.dhat-label">D̂  ·  TEMPORAL DAY</span>
+                      <div class="num" id="dhat">—</div>
+                      <div class="reason" id="dhat-reason">—</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="view-block full">
+                  <span class="vb-label" data-i18n="try.view.gt">GROUND TRUTH</span>
+                  <div class="reveal-row">
+                    <button class="btn primary" id="reveal-btn" data-i18n-html="try.btn.reveal-gt.html"><span class="glyph">▸</span> REVEAL GT</button>
+                    <span class="gt-pending" id="gt-pending" data-i18n="try.gt-pending">— click to compare model output against the true outcome</span>
+                    <div class="gt-values hidden" id="gt-values">
+                      <span class="gv" data-i18n-html="try.gv.cal.html">CALIBRATION GT &nbsp;·&nbsp; <b id="gt-cal">—</b> <span style="color:var(--muted)" id="gt-cal-note"></span></span>
+                      <span class="gv" data-i18n-html="try.gv.time.html">TEMPORAL GT &nbsp;·&nbsp; <b id="gt-time">—</b></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="view-block full">
+                  <span class="vb-label" data-i18n="try.view.verdict">VERDICT</span>
+                  <div class="verdict" id="verdict">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /CACHED MODE PANE -->
+
+        <!-- ============ LIVE MODE PANE ============ -->
+        <div class="tab-pane" data-pane="live" role="tabpanel" aria-labelledby="tab-live">
+          <div class="mode-banner info" data-i18n-html="try.live.banner.html"><span class="dot"></span>LIVE MODE — calls a real model API via <code style="margin: 0 4px;">/api/predict</code>. Daily budget applies.</div>
+
+          <div class="live-grid">
+            <!-- LEFT: selectors + question + run -->
+            <aside class="panel">
+              <span class="panel-label" data-i18n="try.live.controls.label">▸ CONTROLS · LIVE</span>
+
+              <div class="field">
+                <label class="field-label" for="live-evt-select" data-i18n="try.field.event">EVENT</label>
+                <select class="select" id="live-evt-select"></select>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="live-pt-select" data-i18n="try.field.point">PREDICTION POINT</label>
+                <select class="select" id="live-pt-select"></select>
+                <button type="button" class="preview-gt-btn" id="preview-gt-btn" aria-expanded="false" data-i18n-html="try.live.preview-gt-btn.html">
+                  <span class="pv-glyph">▸</span> PREVIEW GT FOR THIS POINT
+                </button>
+                <div class="preview-gt-card" id="preview-gt-card" hidden>
+                  <div class="pgt-row">
+                    <span class="pgt-label" data-i18n="try.live.pgt.cal">CAL GT</span>
+                    <b id="pgt-cal">—</b>
+                    <span class="pgt-note" id="pgt-cal-note"></span>
+                  </div>
+                  <div class="pgt-row">
+                    <span class="pgt-label" data-i18n="try.live.pgt.time">TIME GT</span>
+                    <b id="pgt-time">—</b>
+                  </div>
+                  <p class="pgt-hint" data-i18n="try.live.pgt.hint">▸ The widget hides GT from the model cards until you click REVEAL GT. This preview is for the operator only.</p>
+                </div>
+              </div>
+
+              <div class="field">
+                <span class="field-label" data-i18n="try.live.q-field">QUESTION (PICK ONE OR WRITE YOUR OWN)</span>
+                <div class="qchoice-list" id="qchoice-list"></div>
+                <div class="custom-q">
+                  <label class="custom-q-label" for="custom-q-input" data-i18n-html="try.live.custom-q.or.html">
+                    <span class="cq-or">— or write your own —</span>
+                  </label>
+                  <textarea
+                    id="custom-q-input"
+                    class="custom-q-input"
+                    placeholder="Type a custom calibration question (yes/no within a time window) or temporal question (predict a calendar day). The /api/predict backend will receive {question_id: 'custom', question_text: '…'}."
+                    data-i18n-attr="placeholder:try.live.custom-q.placeholder"
+                    rows="3"></textarea>
+                  <div class="custom-q-meta">
+                    <label class="cq-toggle">
+                      <input type="radio" name="cq-type" value="calibration" checked /> <span data-i18n="try.live.cq.cal">CAL</span>
+                    </label>
+                    <label class="cq-toggle">
+                      <input type="radio" name="cq-type" value="temporal" /> <span data-i18n="try.live.cq.time">TIME</span>
+                    </label>
+                    <span class="cq-hint" id="cq-hint" data-i18n="try.live.cq.hint">Typing here clears the preset selection above.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field" style="margin-bottom: 0;">
+                <span class="field-label" data-i18n="try.live.models-field">MODELS — SIDE BY SIDE</span>
+                <div class="model-pair">
+                  <div>
+                    <label for="live-model-a" data-i18n-html="try.live.model-a.label.html"><span class="side-tag">A</span>MODEL A</label>
+                    <select class="select" id="live-model-a"></select>
+                  </div>
+                  <div>
+                    <label for="live-model-b" data-i18n-html="try.live.model-b.label.html"><span class="side-tag b">B</span>MODEL B</label>
+                    <select class="select" id="live-model-b"></select>
+                  </div>
+                </div>
+                <button type="button" class="run-btn" id="run-btn" data-i18n="try.live.run-btn">▶ RUN PREDICTION</button>
+                <div class="budget-bar" id="budget-bar" style="display:none;">
+                  <span data-i18n="try.live.budget">Daily budget</span>
+                  <span class="meter"><span class="fill" id="budget-fill"></span></span>
+                  <span id="budget-pct">—</span>
+                </div>
+              </div>
+            </aside>
+
+            <!-- RIGHT: context + results -->
+            <div>
+              <div class="view-grid">
+                <div class="view-block full">
+                  <span class="vb-label" data-i18n-html="try.live.ctx.html">CONTEXT (UP TO CUTOFF) — <span class="meta" id="live-ctx-meta">—</span></span>
+                  <div class="context-box" id="live-ctx-text">—</div>
+                </div>
+
+                <div class="view-block full">
+                  <span class="vb-label" data-i18n-html="try.live.result.label.html">RESULT — <span class="meta" id="live-result-meta">awaiting run</span></span>
+                  <div class="live-result-grid" id="live-result-grid">
+                    <div class="live-card" id="live-card-a">
+                      <div class="lc-header"><span class="lc-name" data-i18n="try.live.lc.name.a">Model A</span><span class="lc-side">A</span></div>
+                      <span class="lc-num-label" data-i18n="try.live.lc.num-label.before-run">Pick a question and 2 models, then hit RUN ▶ to call the live API</span>
+                      <div class="lc-num" style="color: var(--muted); font-size: 32px;">—</div>
+                      <div class="lc-reason" style="color: var(--muted);" data-i18n="try.live.lc.reason.before-run">Each Run calls the model API in real time (~5–30s). Daily budget applies.</div>
+                    </div>
+                    <div class="live-card" id="live-card-b">
+                      <div class="lc-header"><span class="lc-name" data-i18n="try.live.lc.name.b">Model B</span><span class="lc-side b">B</span></div>
+                      <span class="lc-num-label" data-i18n="try.live.lc.num-label.before-run">Pick a question and 2 models, then hit RUN ▶ to call the live API</span>
+                      <div class="lc-num" style="color: var(--muted); font-size: 32px;">—</div>
+                      <div class="lc-reason" style="color: var(--muted);" data-i18n="try.live.lc.reason.before-run">Each Run calls the model API in real time (~5–30s). Daily budget applies.</div>
+                    </div>
+                  </div>
+
+                  <div id="live-gt-host" style="display:none;"></div>
+                  <div id="live-reveal-row" style="margin-top: 18px; display:none;">
+                    <button class="btn primary" id="live-reveal-btn" data-i18n-html="try.live.reveal-btn.html"><span class="glyph">▸</span> REVEAL GT</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /LIVE MODE PANE -->
+      </div>
+    </section>
+      </main>
+    </div><!-- /.main-col -->
+  </div><!-- /.shell -->
+
+  <script src="i18n.js?v=20260801-r3"></script>
+  <script src="app.js?v=20260801-r3"></script>
+  <script src="demo.js?v=20260801"></script>
+</body>
+</html>
