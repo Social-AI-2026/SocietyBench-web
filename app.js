@@ -111,6 +111,7 @@ function eventLongLabel(key) {
 // the CSS class so colour styling stays intact.
 const TYPE_KEY = {
   "LLM":          "js.lb.type.llm",
+  "AGENT":        "js.lb.type.agent",
   "LLM · proj":   "js.lb.type.llm-proj",
   "AGENT · proj": "js.lb.type.agent-proj",
   "HUMAN":        "js.lb.type.human",
@@ -173,17 +174,27 @@ function rowsForType(systems, type, opts={}) {
 
 // Build a single unified rows[] from leaderboard.json
 function buildUnifiedRows(data) {
-  const rows = [];
-  // Validated LLMs — sorted by Avg Cal desc
-  const validated = (data.validated || []).slice().sort((a, b) => (b.avg?.[0] || 0) - (a.avg?.[0] || 0));
-  rows.push(...rowsForType(validated, "LLM"));
+  // Every row in `validated` is a measured result; the row's own `kind` says
+  // what kind of system it is. Baselines sink to the bottom because they are a
+  // reference line rather than a competitor; LLMs and agents rank together,
+  // which is the comparison the agent tables are actually about.
+  const TYPE = { llm: "LLM", agent: "AGENT", baseline: "BASELINE", human: "HUMAN" };
+  const rank = r => (r.kind === "baseline" || r.kind === "human") ? 1 : 0;
+  const rows = (data.validated || []).slice()
+    .sort((a, b) => (rank(a) - rank(b)) || ((b.avg?.[0] || 0) - (a.avg?.[0] || 0)))
+    .map(r => Object.assign({}, r, {
+      _type: TYPE[r.kind] || "LLM",
+      _italic: false,
+      _reference: r.kind === "baseline" || r.kind === "human",
+      _ref: r.kind === "baseline" || r.kind === "human"
+    }));
 
+  // Kept for backward compatibility: if a future release ever ships projected
+  // numbers again, they still render, italic and badged.
   const p = data.projected || {};
   rows.push(...rowsForType(p.additional_llms  || [], "LLM · proj",   { italic: true }));
   rows.push(...rowsForType(p.agents_on_doubao || [], "AGENT · proj", { italic: true }));
   rows.push(...rowsForType(p.agents_on_qwen3  || [], "AGENT · proj", { italic: true }));
-
-  // Baselines + human go at the bottom
   for (const r of (p.baselines_and_human || [])) {
     const kind = r.kind === "human" ? "HUMAN" : "BASELINE";
     rows.push(Object.assign({}, r, { _type: kind, _italic: true, _reference: kind === "HUMAN" }));
@@ -236,11 +247,14 @@ function renderUnifiedRow(r, events) {
 
 // Render the EVENTS sub-tab — 5 cards, pulls counts from leaderboard.json + content_pack data
 const EVENT_CARDS = [
-  { key: "Wuhan Lib.",   numeral: "01", domain: "Public Controversy", arc: "Online dispute at a major university.",                          n_pts: 26, n_cal: 7392,  n_time: 442 },
-  { key: "Trump Tariff", numeral: "02", domain: "Trade Policy",       arc: "Reciprocal-tariff escalation between two major economies.",       n_pts: 25, n_cal: 9136,  n_time: 339 },
-  { key: "TikTok",       numeral: "03", domain: "Technology Policy",  arc: "National divestiture / ban ruling on an online platform.",        n_pts: 20, n_cal: 5896,  n_time: 388 },
-  { key: "US-Iran",      numeral: "04", domain: "Geopolitical Conflict", arc: "Cross-border military confrontation between two states.",      n_pts: 30, n_cal: 7942,  n_time: 1000 },
-  { key: "SMCI",         numeral: "05", domain: "Financial Markets",  arc: "Delisting crisis of an exchange-listed firm.",                    n_pts: 11, n_cal: 990,   n_time: 55  }
+  // Real counts, per language edition, from the released banks. Points are 25
+  // for every event by construction; the question volumes differ because the
+  // timelines do.
+  { key: "Wuhan Lib.",   numeral: "01", domain: "Public Controversy",    arc: "Online dispute at a major university.",                     n_pts: 25, n_cal: 2862, n_time: 534 },
+  { key: "Trump Tariff", numeral: "02", domain: "Trade Policy",          arc: "Reciprocal-tariff escalation between two major economies.", n_pts: 25, n_cal: 8035, n_time: 976 },
+  { key: "TikTok",       numeral: "03", domain: "Technology Policy",     arc: "National divestiture / ban ruling on an online platform.",  n_pts: 25, n_cal: 6697, n_time: 571 },
+  { key: "US-Iran",      numeral: "04", domain: "Geopolitical Conflict", arc: "Cross-border military confrontation between two states.",   n_pts: 25, n_cal: 4574, n_time: 503 },
+  { key: "SMCI",         numeral: "05", domain: "Financial Markets",     arc: "Delisting crisis of an exchange-listed firm.",              n_pts: 25, n_cal: 3196, n_time: 528 }
 ];
 
 function renderEventsTab() {
@@ -715,11 +729,11 @@ function stressCard(ev) {
           <div class="mvals">${ev.mean.cal.toFixed(1)}<span class="sep">|</span>${ev.mean.time.toFixed(1)}</div>
         </div>
         <div class="sc-mini ${ev.gemini.is_best ? "best" : ""}">
-          <div class="mlabel">${t("js.dd.sc.gemini")}</div>
+          <div class="mlabel">★ ${ev.gemini.label || "—"}</div>
           <div class="mvals">${ev.gemini.cal.toFixed(1)}<span class="sep">|</span>${ev.gemini.time.toFixed(1)}</div>
         </div>
         <div class="sc-mini">
-          <div class="mlabel">${t("js.dd.sc.qwen3")}</div>
+          <div class="mlabel">${ev.qwen3.label || "—"}</div>
           <div class="mvals">${ev.qwen3.cal.toFixed(1)}<span class="sep">|</span>${ev.qwen3.time.toFixed(1)}</div>
         </div>
       </div>

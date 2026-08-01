@@ -124,7 +124,6 @@
       'method.title': 'Method',
 
       // Four-phase pipeline
-      'method.4phase.eyebrow': 'SUB-BLOCK 01 / PIPELINE',
       'method.4phase.title': 'Four-Phase Pipeline',
       'method.4phase.intro': 'Our benchmark operates through a four-phase pipeline: collecting multi-source data, distilling timelines, merging and anonymizing them into counterfactual worlds, and evaluating models on probability calibration and temporal accuracy.',
       'method.4phase.th1': 'Phase',
@@ -143,7 +142,6 @@
       'method.4phase.p03.desc': 'Anonymizes, generates questions, and scores on two axes',
 
       // Three-phase anonymization
-      'method.3anon.eyebrow': 'SUB-BLOCK 02 / ANONYMIZATION',
       'method.3anon.title': 'Three-Phase Anonymization',
       'method.3anon.intro.html': 'The anonymization pipeline renders each merged timeline into a counterfactual world before any candidate model sees it. The auditor loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.',
       'method.3anon.p01.num': '01',
@@ -157,7 +155,6 @@
       'method.3anon.p03.body': 'Paragraph-, event-, and narrative-level comparison against the original, repairing any substitution damage while preserving anonymized entities and shifted dates.',
 
       // Dual-axis evaluation
-      'method.dual.eyebrow': 'SUB-BLOCK 03 / EVALUATION',
       'method.dual.title': 'Dual-Axis Evaluation',
       'method.dual.intro': 'At each accepted prediction point, the candidate sees the context up to a cutoff date and answers two orthogonal question types.',
       'method.dual.a1.tag': 'AXIS 01 — CALIBRATION',
@@ -408,6 +405,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       // Type-badge labels (also used as the text shown inside the "Type" column).
       // The CSS class is still derived from the English original, so styling is unaffected.
       'js.lb.type.llm': 'LLM',
+      'js.lb.type.agent': 'AGENT',
       'js.lb.type.llm-proj': 'LLM · proj',
       'js.lb.type.agent-proj': 'AGENT · proj',
       'js.lb.type.human': 'HUMAN',
@@ -635,7 +633,6 @@ Accepted events join the official catalog and ship in the next benchmark version
       'method.title': '方法',
 
       // Four-phase pipeline
-      'method.4phase.eyebrow': '子块 01 / 流水线',
       'method.4phase.title': '四阶段流水线',
       'method.4phase.intro': '本基准由四阶段流水线驱动:多源数据采集、时间线蒸馏、合并并匿名化为模拟社会世界,以及在概率校准与时间精度两个轴上评测模型。',
       'method.4phase.th1': '阶段',
@@ -654,7 +651,6 @@ Accepted events join the official catalog and ship in the next benchmark version
       'method.4phase.p03.desc': '匿名化、出题,并按双轴评分',
 
       // Three-phase anonymization
-      'method.3anon.eyebrow': '子块 02 / 匿名化',
       'method.3anon.title': '三阶段匿名化',
       'method.3anon.intro.html': '在任何候选模型看到内容之前,匿名化流水线先把每条合并后的时间线渲染为模拟社会世界。审计循环在 <strong>high = 0 与 mid = 0</strong> 处收敛,最多 5 轮。',
       'method.3anon.p01.num': '01',
@@ -668,7 +664,6 @@ Accepted events join the official catalog and ship in the next benchmark version
       'method.3anon.p03.body': '在段落级、事件级、叙事级与原文对比,修复任何替换造成的损伤,同时保留匿名化后的实体与平移后的日期。',
 
       // Dual-axis evaluation
-      'method.dual.eyebrow': '子块 03 / 评测',
       'method.dual.title': '双轴评测',
       'method.dual.intro': '在每个被纳入的预测点上,候选模型只看到截至某截止日期为止的上下文,并回答两类正交问题。',
       'method.dual.a1.tag': '轴 01 — 校准',
@@ -916,6 +911,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'js.lb.cell.subhead': 'Cal | Time',
       'js.lb.cell.notreported.fmt': '— 未报告逐事件分数 ({kind})',
       'js.lb.type.llm': 'LLM',
+      'js.lb.type.agent': '智能体',
       'js.lb.type.llm-proj': 'LLM · 预估',
       'js.lb.type.agent-proj': '智能体 · 预估',
       'js.lb.type.human': '人类',

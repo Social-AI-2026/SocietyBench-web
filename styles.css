@@ -3986,3 +3986,55 @@ body:not(.dark-theme) .axis-card {
 }
 body:not(.dark-theme) .axis-card .scale { border-top-color: rgba(0, 0, 0, 0.1); }
 body[data-lang="zh"] .axis-card h4 { letter-spacing: 0.01em; }
+
+/* ===========================================================================
+   2026-08-02 — layout + chrome adjustments
+   =========================================================================== */
+
+/* The three method sub-blocks lost their "SUB-BLOCK NN / …" eyebrows, so the
+   title and its lead-in now centre over the cards they introduce instead of
+   starting hard against the left rule. */
+.mth-head.mth-center {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.mth-head.mth-center .subsection-title { text-align: center; }
+.mth-intro-center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 78ch;
+}
+
+/* Same treatment for the leaderboard header: title, freshness stamp and the
+   one-line caption all centre; the table and everything below it are
+   untouched. */
+.section-title.lb-center {
+  justify-content: center;
+  text-align: center;
+}
+.lb-stamp.lb-center {
+  justify-content: center;
+  text-align: center;
+}
+.lb-caption.lb-center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Frames: a 2.5–4 px saturated blue ring around every table, card and figure
+   read as glare rather than as structure — at this density the page was more
+   outline than content. Neutral hairlines instead. Blue is kept where it
+   carries meaning: links, title marks, active tabs, the best-in-table row. */
+:root {
+  --border: 1.5px solid rgba(24, 24, 27, 0.14);
+  --border-thick: 2px solid rgba(24, 24, 27, 0.18);
+}
+body.dark-theme {
+  --border: 1.5px solid rgba(255, 255, 255, 0.12);
+  --border-thick: 2px solid rgba(255, 255, 255, 0.16);
+}
+.figbox { border: var(--border) !important; }
+.callout { border: var(--border) !important; }

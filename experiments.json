@@ -6,54 +6,70 @@
   "subtitle": "The two events that stretch the models furthest apart: GPT-5.5 against Kimi-K2.5.",
   "events": [
    {
-    "event": "SMCI",
-    "points": 25,
-    "arc_days": 468,
-    "n_cal": 3196,
-    "n_time": 528,
+    "name": "SMCI",
+    "label": "Financial markets - delisting crisis",
+    "stats": {
+     "n_pts": 25,
+     "arc_days": 468,
+     "n_cal": 3196,
+     "n_time": 528
+    },
     "mean": {
      "cal": 65.7,
      "time": 70.5
     },
-    "gpt": {
+    "gemini": {
      "cal": 74.9,
-     "time": 84.2
+     "time": 84.2,
+     "is_best": true,
+     "label": "GPT-5.5"
     },
-    "kimi": {
+    "qwen3": {
      "cal": 64.8,
-     "time": 64.9
+     "time": 64.9,
+     "label": "Kimi-K2.5"
     },
     "gap": {
      "cal": 10.1,
-     "cal_pct": 16,
+     "cal_pct_of_mean": 16,
      "time": 19.3,
-     "time_pct": 30
-    }
+     "time_pct_of_mean": 30
+    },
+    "axis_winner": "time",
+    "takeaway": "SMCI is built around company-specific numerical disclosures, which reward precise uncertainty handling: the GPT-Kimi gap is double-digit on both axes."
    },
    {
-    "event": "Trump Tariff",
-    "points": 25,
-    "arc_days": 2930,
-    "n_cal": 8035,
-    "n_time": 976,
+    "name": "Trump Tariff",
+    "label": "Trade policy - reciprocal-tariff escalation",
+    "stats": {
+     "n_pts": 25,
+     "arc_days": 2930,
+     "n_cal": 8035,
+     "n_time": 976
+    },
     "mean": {
      "cal": 72.9,
      "time": 71.9
     },
-    "gpt": {
+    "gemini": {
      "cal": 81.7,
-     "time": 85.4
+     "time": 85.4,
+     "is_best": true,
+     "label": "GPT-5.5"
     },
-    "kimi": {
+    "qwen3": {
      "cal": 66.4,
-     "time": 64.0
+     "time": 64.0,
+     "label": "Kimi-K2.5"
     },
     "gap": {
      "cal": 15.3,
-     "cal_pct": 23,
+     "cal_pct_of_mean": 23,
      "time": 21.4,
-     "time_pct": 33
-    }
+     "time_pct_of_mean": 33
+    },
+    "axis_winner": "time",
+    "takeaway": "On the tariff event most models post their best calibration scores, yet the temporal axis opens the largest single-event gap in the whole table: 21.4 points."
    }
   ]
  },

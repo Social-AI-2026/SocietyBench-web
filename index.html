@@ -145,11 +145,10 @@
     <section class="page-section reveal" id="method">
       <div class="wrap">
         <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="method.title">Method</span></h2>
-        <div class="mth-head">
-          <span class="mth-num" data-i18n="method.4phase.eyebrow">SUB-BLOCK 01 / PIPELINE</span>
+        <div class="mth-head mth-center">
           <h3 class="subsection-title" data-i18n="method.4phase.title">Four-Phase Pipeline</h3>
         </div>
-        <p class="abstract-body" style="margin-bottom: 32px;" data-i18n="method.4phase.intro">
+        <p class="abstract-body mth-intro-center" style="margin-bottom: 32px;" data-i18n="method.4phase.intro">
           Our benchmark operates through a four-phase pipeline: collecting multi-source data, distilling timelines, merging and anonymizing them into counterfactual worlds, and evaluating models on probability calibration and temporal accuracy.
         </p>
 
@@ -186,11 +185,10 @@
         </div>
         -->
 
-        <div class="mth-head">
-          <span class="mth-num" data-i18n="method.3anon.eyebrow">SUB-BLOCK 02 / ANONYMIZATION</span>
+        <div class="mth-head mth-center">
           <h3 class="subsection-title" data-i18n="method.3anon.title">Three-Phase Anonymization</h3>
         </div>
-        <p style="font-size: 14.5px; margin: 0 0 22px;" data-i18n-html="method.3anon.intro.html">The anonymization pipeline renders each merged timeline into a counterfactual world before any candidate model sees it. The auditor loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.</p>
+        <p class="mth-intro-center" style="font-size: 14.5px; margin: 0 0 22px;" data-i18n-html="method.3anon.intro.html">The anonymization pipeline renders each merged timeline into a counterfactual world before any candidate model sees it. The auditor loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.</p>
 
         <div class="step-cards step-cards-3">
           <article class="step-card">
@@ -218,11 +216,10 @@
         </div>
         -->
 
-        <div class="mth-head">
-          <span class="mth-num" data-i18n="method.dual.eyebrow">SUB-BLOCK 03 / EVALUATION</span>
+        <div class="mth-head mth-center">
           <h3 class="subsection-title" data-i18n="method.dual.title">Dual-Axis Evaluation</h3>
         </div>
-        <p style="font-size: 14.5px; margin: 0 0 22px;" data-i18n="method.dual.intro">At each accepted prediction point, the candidate sees the context up to a cutoff date and answers two orthogonal question types.</p>
+        <p class="mth-intro-center" style="font-size: 14.5px; margin: 0 0 22px;" data-i18n="method.dual.intro">At each accepted prediction point, the candidate sees the context up to a cutoff date and answers two orthogonal question types.</p>
 
         <div class="dual-axis-grid">
           <div class="axis-card">
@@ -250,15 +247,15 @@
     <!-- =============================== LEADERBOARD ========================= -->
     <section class="page-section reveal" id="leaderboard">
       <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="lb.title">Leaderboard</span></h2>
+        <h2 class="section-title lb-center"><span class="title-mark"></span> <span data-i18n="lb.title">Leaderboard</span></h2>
 
-        <div class="lb-stamp">
+        <div class="lb-stamp lb-center">
           <span class="lb-stamp-item"><span class="dot"></span><span data-i18n="lb.stamp.refreshed">DATA REFRESHED</span> &nbsp;<b id="lb-updated">—</b></span>
           <span class="lb-stamp-item"><span data-i18n="lb.stamp.nextreview">NEXT REVIEW</span> &nbsp;<b id="lb-next">—</b></span>
           <span class="lb-stamp-item"><span data-i18n="lb.stamp.schema">SCHEMA</span> &nbsp;<b id="lb-schema">v—</b></span>
         </div>
 
-        <p class="lb-caption" data-i18n-html="lb.caption.html">Want your model on this table? &nbsp;→&nbsp; see <a href="#expand">EXPAND THE BENCHMARK</a> below.</p>
+        <p class="lb-caption lb-center" data-i18n-html="lb.caption.html">Want your model on this table? &nbsp;→&nbsp; see <a href="#expand">EXPAND THE BENCHMARK</a> below.</p>
 
         <!-- Sub-tabs: Models / Bars / Events / (future: Contributors) -->
         <div class="tabs" role="tablist" aria-label="Leaderboard views">

@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🔮 SocietyBench
+# 🔮 SocietyBench — Web
 
 反事实社会世界的演化预测
 </br>
