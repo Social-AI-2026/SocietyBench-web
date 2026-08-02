@@ -583,7 +583,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'nav.overview': '总览',
       'nav.group.benchmark': '基准',
       'nav.method': '方法',
-      'nav.try': '在线试玩 ★',
+      'nav.try': '在线体验 ★',
       'nav.contribute': '参与贡献',
       'nav.group.results': '结果',
       'nav.leaderboard': '排行榜',
@@ -608,7 +608,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'ph.crumb.root': 'SOCIETYBENCH',
       'ph.crumb.overview': '总览',
       'ph.crumb.method': '方法',
-      'ph.crumb.try': '在线试玩',
+      'ph.crumb.try': '在线体验',
       'ph.crumb.contribute': '参与贡献',
       'ph.crumb.leaderboard': '排行榜',
       'ph.crumb.deepdive': '深度分析',
@@ -779,7 +779,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'lb.events.footer.html': '▸ 更多事件将通过社区贡献加入——见 <a href="#expand" style="color: var(--orange-ink); border-bottom: 2px solid var(--orange); text-decoration: none; font-weight: 700;">参与贡献</a>。',
 
       // ---- Try the Benchmark ---------------------------------------------
-      'try.title.html': '在线试玩 <span style="color: var(--orange);">★</span>',
+      'try.title.html': '在线体验 <span style="color: var(--orange);">★</span>',
       'try.note.anon.label': '全部匿名化',
 'try.subtitle': '选择一个匿名化事件与一个预测点。亲眼看看模型看到了什么、输出了什么,以及与真相相比偏差多大。',
       'try.tab.cached': '[ 缓存模式 ]',
