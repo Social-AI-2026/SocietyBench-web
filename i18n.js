@@ -14,7 +14,7 @@
  *      element AND dispatches a `sb:langchange` event so app.js can re-render
  *      dynamic content (leaderboard, deep-dive, try-mode, etc.).
  *
- * Default language: EN (paper is an English NeurIPS submission).
+ * Default language: EN.
  * Persistence: localStorage key `sb_lang`.
  * Lookup fallback: missing zh key falls back to en, missing en key is left as-is.
  * ========================================================================== */

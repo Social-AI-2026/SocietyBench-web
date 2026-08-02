@@ -3,14 +3,12 @@
 > 截至 2026-05-28，最新 commit `4725209`。
 > Git remote：`git@github.com:Zhenran-Wang/societybench-web.git` (main 分支)
 > 上游 GitHub Pages 部署：https://zhenran-wang.github.io/societybench-web/
-> 配套论文：上一级目录 `/overleaf_69e60208/`（NeurIPS 2026 投稿，匿名版）
 
 ---
 
 ## 0. 项目角色
 
-`societybench-web` 是 NeurIPS 论文 SocietyBench 的**项目主页**（GitHub Pages 静态站，brutalist 风格）。
-- 论文：`overleaf_69e60208/`（英文投稿版）+ `overleaf_69e60208_cn/`（中文翻译版）
+`SocietyBench-web` 是 SocietyBench 的**项目主页**（GitHub Pages 静态站，brutalist 风格）。
 - 配套代码仓库：`Zhenran-Wang/societybench`（开源 release，与本仓库**不是同一个 repo**）
 - 数据仓库：HuggingFace（计划中，未上）
 
@@ -61,7 +59,7 @@ site/
 - HTML 元素打 `data-i18n="key.path"`（textContent）/ `data-i18n-html="key.path"`（innerHTML）/ `data-i18n-attr="placeholder:key,title:key2"`
 - 字典在 `i18n.js`：`{ en: {...}, zh: {...} }`，全部 369 对 key，**en/zh 完全对称**，无缺失
 - 切换按钮在 sidebar 顶部 `.lang-toggle`，存 `localStorage.sb_lang`
-- 默认语言 **EN**（论文是英文投稿）
+- 默认语言 **EN**
 - 切语言触发 `sb:langchange` 自定义事件 → app.js 监听后**重新 fetch 中文版 JSON + 重新渲染所有动态部分**（保留用户在 widget 里的选择）
 
 ### 2.2 数据加载
@@ -94,7 +92,7 @@ e3845ac  尝试: 强制 v.play() 与多事件兜底（仍被 Chrome 拦）
 c6b6f1a  hero overlay 蒙层从过浓改为软 radial
 1c7427c  最初的 hero <video> 实现
 
-b21ffb6  「反事实」→「模拟」中文翻译（参照论文中文版风格，但与论文用语分叉）
+b21ffb6  「反事实」→「模拟」中文翻译（与论文用语分叉）
 0838205  contrib.c01 中文标题修正：counterfactual 修饰 world 不修饰 anonymization
 ```
 
@@ -126,7 +124,7 @@ b21ffb6  「反事实」→「模拟」中文翻译（参照论文中文版风�
 - Try widget Live mode：`/api/predict` 后端目前没部署，预计 fetch 失败后 fallback 到 cached mode；这条 graceful-degrade 路径未实测
 
 ### 4.3 翻译一致性
-- 网页 zh 用了「模拟社会世界」，但论文中文版用「反事实社会世界」。用户 Zhenran 倾向网页保留「模拟」（更直观），论文保留「反事实」（学术准确）。详见 commit `b21ffb6`。
+- 网页 zh 用了「模拟社会世界」，论文用「反事实社会世界」：网页取「模拟」（更直观），论文取「反事实」（学术准确）。详见 commit `b21ffb6`。
 - 其它术语已对齐论文中文版风格（「Web 新闻」/「社媒」/「桶中点」/「真实弧」/「渲染为」）
 
 ### 4.4 占位链接（设计上的待办，与代码无关）
@@ -201,7 +199,7 @@ PY
 ## 6. 用户偏好（来自之前对话）
 
 - 默认全自动，不要在每一步弹确认框
-- 翻译要参照论文中文版的措辞与术语
+- 翻译沿用论文的措辞与术语
 - 代码改动要 commit message 写清楚 why，不只是 what
 - push 必带，commits 不堆积本地
 - 不要随便加新文件 / 文档，除非用户明确要求
