@@ -4120,3 +4120,9 @@ body.dark-theme .q-pick { color: #e8e8ea; background: rgba(255, 255, 255, 0.05);
   color: var(--muted);
   margin: 8px 2px 0;
 }
+
+/* The three difficulty ablations share one block; the buttons swap the table. */
+.dd-head-center { text-align: center; }
+.dd-head-center h3 { margin-left: auto; margin-right: auto; }
+.dd-head-center .dd-sub { margin-left: auto; margin-right: auto; }
+.dd-tabs { justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }

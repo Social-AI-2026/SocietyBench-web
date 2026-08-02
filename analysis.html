@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Dancing+Script:wght@600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260801-wm13" />
+  <link rel="stylesheet" href="styles.css?v=20260802-qb" />
 </head>
 <body class="layout-pill dark-theme subpage" data-lang="en">
   <header class="topnav-wrap" aria-label="Primary">
@@ -46,17 +46,13 @@
     <section class="page-section reveal" id="deepdive">
       <div class="wrap">
         <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="dd.title">Deep Dive</span></h2>
-        <p style="font-size: 15px; margin-bottom: 40px;" data-i18n="dd.intro">Five tables behind the headline number. Stress cases isolate where models break; four ablations isolate where the benchmark's difficulty comes from.</p>
+        <p style="font-size: 15px; margin-bottom: 40px;" data-i18n="dd.intro">The evidence behind the headline number: the stress cases that isolate where models break, and three ablations that isolate where the difficulty comes from — question-bank composition, the scoring formula, and true/false-question bias.</p>
 
-        <div id="dd-validity"></div>
-        <div class="dd-divider"></div>
         <div id="dd-stress"></div>
         <div class="dd-divider"></div>
-        <div id="dd-questionbank"></div>
-        <div class="dd-divider"></div>
-        <div id="dd-scoring"></div>
-        <div class="dd-divider"></div>
-        <div id="dd-reasoning"></div>
+        <!-- Question-bank composition, scoring formula and true/false bias share
+             one block; the buttons swap which table is shown. -->
+        <div id="dd-ablations"></div>
       </div>
     </section>
 
@@ -88,22 +84,11 @@
 
     -->
 
-    <!-- =============================== LIMITATIONS ========================= -->
-    <section class="page-section reveal" id="limitations">
-      <div class="wrap">
-        <h2 class="section-title"><span class="title-mark"></span> <span data-i18n="lim.title">Limitations</span></h2>
-        <ul class="lim-list">
-          <li data-i18n-html="lim.item1.html"><strong>Censored social-media signal.</strong> The Chinese social-media layer is censored and platform-curated; the opinion layer measures "opinion as visible on platform," not ground-truth population sentiment.</li>
-          <li data-i18n-html="lim.item2.html"><strong>Forecasting-only scoring.</strong> The two scoring lines target forecasting; an LLM-as-judge quality axis (narrative coherence, justification rigor) is excluded for now.</li>
-          <li data-i18n-html="lim.item3.html"><strong>Five events is a small sample.</strong> Per-event scores are released alongside the mean so a single long-horizon event cannot silently dominate cross-event conclusions; multi-event evaluation is strongly motivated.</li>
-        </ul>
-      </div>
-    </section>
       </main>
     </div><!-- /.main-col -->
   </div><!-- /.shell -->
 
-  <script src="i18n.js?v=20260801-r3"></script>
-  <script src="app.js?v=20260801-r3"></script>
+  <script src="i18n.js?v=20260802-qb"></script>
+  <script src="app.js?v=20260802-qb"></script>
 </body>
 </html>

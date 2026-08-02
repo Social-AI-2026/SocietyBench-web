@@ -621,34 +621,39 @@ async function loadDeepDive() {
     return;
   }
   renderStressBlock(data.stress_case);
-  renderAblationTable("dd-questionbank",  data.ablations.question_bank_composition, {
-    columns: [
-      { key: "label",  title: t("js.dd.col.qb-comp") },
-      { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
-      { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
-      { key: "mean",   title: t("js.dd.col.mean"), deltaKey: "mean_delta" }
-    ],
-    extremes: ["mean_delta"]
-  }, "02");
-  renderAblationTable("dd-scoring",       data.ablations.scoring_formula, {
-    columns: [
-      { key: "label",  title: t("js.dd.col.scoring-formula") },
-      { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
-      { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
-      { key: "gap",    title: t("js.dd.col.gap") }
-    ]
-  }, "03");
-  renderAblationTable("dd-reasoning",     data.ablations.true_false_bias, {
-    columns: [
-      { key: "label",  title: t("js.dd.col.qb-comp") },
-      { key: "doubao", title: "Doubao" },
-      { key: "dseek",  title: "DSeek" },
-      { key: "opus",   title: "Opus" },
-      { key: "gemini", title: "Gemini" },
-      { key: "gpt",    title: "GPT-5.5" },
-      { key: "mean",   title: t("js.dd.col.mean") }
-    ]
-  }, "04");
+  // Question-bank composition, scoring formula and true/false bias are three
+  // views of the same question -- where the difficulty comes from -- so they
+  // share one block and the buttons swap the table.
+  renderAblationTabs("dd-ablations", [
+    { block: data.ablations.question_bank_composition, spec: {
+        columns: [
+          { key: "label",  title: t("js.dd.col.qb-comp") },
+          { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
+          { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
+          { key: "mean",   title: t("js.dd.col.mean"), deltaKey: "mean_delta" }
+        ],
+        extremes: ["mean_delta"]
+      } },
+    { block: data.ablations.scoring_formula, spec: {
+        columns: [
+          { key: "label",  title: t("js.dd.col.scoring-formula") },
+          { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
+          { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
+          { key: "gap",    title: t("js.dd.col.gap") }
+        ]
+      } },
+    { block: data.ablations.true_false_bias, spec: {
+        columns: [
+          { key: "label",  title: t("js.dd.col.qb-comp") },
+          { key: "doubao", title: "Doubao" },
+          { key: "dseek",  title: "DSeek" },
+          { key: "opus",   title: "Opus" },
+          { key: "gemini", title: "Gemini" },
+          { key: "gpt",    title: "GPT-5.5" },
+          { key: "mean",   title: t("js.dd.col.mean") }
+        ]
+      } }
+  ]);
   renderAblationTable("dd-anonymization", data.ablations.cutoff_gradient, {
     columns: [
       { key: "label",  title: t("js.dd.col.qb-comp") },
@@ -695,8 +700,7 @@ function renderStressBlock(block) {
   const cards = block.events.map(ev => stressCard(ev)).join("");
   host.innerHTML = `
     <div class="dd-block">
-      <div class="dd-head">
-        <span class="dd-num">${tfmt(t("js.dd.subblock.fmt"), { num: "01", title: t("js.dd.stress.subblock-label") })}</span>
+      <div class="dd-head dd-head-center">
         <h3>${block.title}</h3>
         <p class="dd-sub">${block.subtitle}</p>
       </div>
@@ -765,6 +769,81 @@ function formatDelta(d) {
 }
 
 function renderAblationTableSkipped() { /* superseded by renderValidity() */ }
+
+// Three ablations in one block: the buttons swap the table and the takeaway.
+function renderAblationTabs(hostId, items) {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  const live = items.filter(x => x.block);
+  if (!live.length) return;
+  const state = { i: 0 };
+
+  host.innerHTML = `
+    <div class="dd-block">
+      <div class="dd-head dd-head-center">
+        <h3 id="${hostId}-title"></h3>
+        <p class="dd-sub" id="${hostId}-sub"></p>
+      </div>
+      <div class="tabs dd-tabs" role="tablist">
+        ${live.map((x, i) => `<button type="button" class="tab${i ? "" : " active"}" role="tab"
+            aria-selected="${i ? "false" : "true"}" data-i="${i}"><span class="glyph">▸</span><span>[ ${x.block.title.toUpperCase()} ]</span></button>`).join("")}
+      </div>
+      <div id="${hostId}-body"></div>
+    </div>`;
+
+  const paint = () => {
+    const { block, spec } = live[state.i];
+    document.getElementById(`${hostId}-title`).textContent = block.title;
+    document.getElementById(`${hostId}-sub`).textContent = block.subtitle;
+    document.getElementById(`${hostId}-body`).innerHTML = `
+      <div class="dd-table-wrap">
+        <table class="dd-table">${ablationTableHtml(block, spec)}</table>
+      </div>
+      <p class="dd-take">${block.takeaway}</p>`;
+    host.querySelectorAll(".dd-tabs .tab").forEach((b, i) => {
+      b.classList.toggle("active", i === state.i);
+      b.setAttribute("aria-selected", i === state.i ? "true" : "false");
+    });
+  };
+  host.querySelectorAll(".dd-tabs .tab").forEach(b => {
+    b.addEventListener("click", () => { state.i = parseInt(b.dataset.i, 10); paint(); });
+  });
+  paint();
+}
+
+// The <thead> + <tbody> of an ablation table, shared by the single-table and
+// the tabbed renderers.
+function ablationTableHtml(block, spec) {
+  const extremes = {};
+  if (spec.extremes) {
+    for (const k of spec.extremes) {
+      let maxAbs = 0;
+      for (const r of block.rows) {
+        if (r.is_baseline) continue;
+        if (Math.abs(r[k] || 0) > maxAbs) maxAbs = Math.abs(r[k]);
+      }
+      extremes[k] = maxAbs;
+    }
+  }
+  const headHtml = `<thead><tr>${spec.columns.map(c => `<th>${c.title}</th>`).join("")}</tr></thead>`;
+  const bodyHtml = block.rows.map(r => {
+    const tdHtml = spec.columns.map((c, i) => {
+      if (i === 0) {
+        const leak = (spec.showLeak && r.leak) ? `<span class="leak">${tfmt(t("js.dd.leak.fmt"), { leak: r.leak })}</span>` : "";
+        return `<td>${r[c.key]}${leak}</td>`;
+      }
+      const v = r[c.key];
+      const dKey = c.deltaKey;
+      const d = dKey ? r[dKey] : null;
+      const isExtreme = dKey && extremes[dKey] && Math.abs(d) === extremes[dKey];
+      const numCls = isExtreme ? "num extreme" : "num";
+      const deltaHtml = dKey ? formatDelta(d).replace('class="delta"', `class="delta${isExtreme ? " extreme" : ""}"`) : "";
+      return `<td><span class="${numCls}">${typeof v === "number" ? v.toFixed(1) : v ?? "—"}</span>${deltaHtml}</td>`;
+    }).join("");
+    return `<tr class="${r.is_baseline ? "baseline" : ""}">${tdHtml}</tr>`;
+  }).join("");
+  return `${headHtml}<tbody>${bodyHtml}</tbody>`;
+}
 
 function renderAblationTable(hostId, block, spec, num) {
   const host = document.getElementById(hostId);
