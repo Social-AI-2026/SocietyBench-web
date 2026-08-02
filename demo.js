@@ -119,18 +119,23 @@ function renderWidget() {
 
   el("mout-name").textContent = models[mi] + (models[mi] === (widgetState.data.best || "") ? t("js.widget.mout.best") : "");
 
-  // calibration — orange when the direction is right, gray + struck through when not
+  // Before the ground truth is revealed the output stands on its own: no
+  // right/wrong styling, and a caption that states the answer without grading it.
+  const shown = widgetState.revealed;
   const phatEl = el("phat");
   if (ca) {
     const p_hat = ca[1];
     const err = Math.abs(p_hat - cq.gt);
     phatEl.textContent = p_hat.toFixed(2);
-    phatEl.classList.toggle("bad", !evalCalibration(p_hat, cq.gt));
-    el("phat-reason").textContent = tfmt(t("js.widget.cal.reason.fmt"), {
-      p: `${Math.round(p_hat * 100)}%`,
-      gt: cq.gt === 1 ? t("js.widget.gt.yes") : t("js.widget.gt.no"),
-      err: err.toFixed(2), w: (cq.wt || 0).toFixed(2)
-    });
+    phatEl.classList.toggle("bad", shown && !evalCalibration(p_hat, cq.gt));
+    el("phat-reason").textContent = shown
+      ? tfmt(t("js.widget.cal.reason.fmt"), {
+          p: `${Math.round(p_hat * 100)}%`,
+          gt: cq.gt === 1 ? t("js.widget.gt.yes") : t("js.widget.gt.no"),
+          err: err.toFixed(2), w: (cq.wt || 0).toFixed(2)
+        })
+      : tfmt(t("js.widget.cal.reason.plain"), { p: `${Math.round(p_hat * 100)}%`,
+                                                w: (cq.wt || 0).toFixed(2) });
   } else {
     phatEl.textContent = "—";
     phatEl.classList.remove("bad");
@@ -141,10 +146,10 @@ function renderWidget() {
   const dhatEl = el("dhat");
   if (ta) {
     dhatEl.textContent = ta[1];
-    dhatEl.classList.toggle("bad", !(ta[2] <= 7));
-    el("dhat-reason").textContent = tfmt(t("js.widget.time.reason.fmt"), {
-      pred: ta[1], actual: tq.gt, days: Math.round(ta[2])
-    });
+    dhatEl.classList.toggle("bad", shown && !(ta[2] <= 7));
+    el("dhat-reason").textContent = shown
+      ? tfmt(t("js.widget.time.reason.fmt"), { pred: ta[1], actual: tq.gt, days: Math.round(ta[2]) })
+      : tfmt(t("js.widget.time.reason.plain"), { pred: ta[1] });
   } else {
     dhatEl.textContent = "—";
     dhatEl.classList.remove("bad");
@@ -326,7 +331,7 @@ function buildModelButtons() {
 // Reveal is a toggle: the answer can be put back out of sight.
 el("reveal-btn") && el("reveal-btn").addEventListener("click", () => {
   widgetState.revealed = !widgetState.revealed;
-  applyRevealState();
+  renderWidget();          // the output area is graded only once the truth is out
 });
 
 async function loadWidget() {
