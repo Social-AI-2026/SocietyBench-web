@@ -5,8 +5,9 @@ The first three blocks are transcribed from the paper; the rest are read
 straight out of runs_new/_ablation/run_main/, which holds the frozen values the
 paper and the ablation write-up were computed from.
 """
-import json, os
+import json, os, glob
 OUT = "/home/ubuntu/societybench_web/site"
+RUNS = "/home/ubuntu/societybench/runs_new"
 ABL = "/home/ubuntu/societybench/runs_new/_ablation/run_main"
 
 
@@ -117,20 +118,72 @@ def build(zh):
 # Blocks read from the frozen ablation files. Each one carries its own columns
 # so the page does not need a hard-coded spec per table.
 # ----------------------------------------------------------------------------
-FULL7 = "7家均值"
+# The seven systems that ran every point in both languages. The foreign three
+# only ran a cost-saving subset, so they stay out of the mean.
+FULL7 = [("doubao-seed-2-0-pro-260215", "豆包", "Doubao"),
+         ("kimi-k2.5", "kimi", "Kimi"),
+         ("deepseek-v4-pro-guan", "deepseek", "DeepSeek"),
+         ("mirofish__doubao-seed-2-0-pro-260215", "mirofish", "MiroFish"),
+         ("langgraph__doubao-seed-2-0-pro-260215", "langgraph", "LangGraph"),
+         ("autogen__doubao-seed-2-0-pro-260215", "autogen", "AutoGen"),
+         ("grok-3-mini", "grok", "Grok-3-Mini")]
+EVENTS5 = ["event1_library", "event2_trump_tariff", "event3_tiktok", "event4_us_iran", "event5_smci"]
+
+
+def _details(mdir, langdir):
+    """Per-question calibration log rows, pooled over the five events."""
+    out = []
+    for ev in EVENTS5:
+        for f in sorted(glob.glob(f"{RUNS}/{ev}/final/{langdir}/results/run_main/brier/{mdir}/P*_brier.json")):
+            for r in json.load(open(f, encoding="utf-8")).get("details") or []:
+                if not isinstance(r, dict): continue
+                if not r.get("valid_for_scoring", not r.get("parse_failed", False)): continue
+                if r.get("prob") is None or r.get("mae") is None: continue
+                out.append(r)
+    return out
+
+
+def _pooled(rows):
+    """eval/ablation/ablation_qtype.py: 100 * (1 - weighted MAE), baseline 1.0."""
+    w = sum(x.get("weight", 0) for x in rows)
+    if w <= 0: return None
+    return 100.0 * max(0.0, 1.0 - sum(x.get("mae", 0) * x.get("weight", 0) for x in rows) / w)
 
 
 def block_dimension(zh, lang):
-    """Which dimension of question is hardest: event / policy / opinion."""
-    d = abl("维度构成.json")
-    if not d: return None
-    blk = (d.get(lang) or {})
-    means = blk.get("means_7家") or {}
-    if not any(v is not None for v in means.values()): return None      # 英文块尚未回填
-    pm = blk.get("per_model", {})
+    """Which dimension of question is hardest: event / policy / opinion.
+
+    Recomputed from the calibration logs rather than read from the frozen file:
+    the frozen English block is empty because the script that wrote it filtered
+    on the Chinese dimension labels. This is re-analysis of runs that already
+    exist -- no model is called. The Chinese result is checked against the
+    frozen values so any drift shows up here rather than on the page.
+    """
     L = (lambda a, b: a if zh else b)
+    dims = [("事件", "event", L("事件类", "Event")),
+            ("政策", "policy", L("政策类", "Policy")),
+            ("舆论", "opinion", L("舆论类", "Opinion"))]
+    key = (lambda zhk, enk: zhk if lang == "中文" else enk)
+    per, mean = {}, {}
+    for mdir, slug, _disp in FULL7:
+        det = _details(mdir, lang)
+        if not det: return None
+        per[slug] = {zhk: _pooled([x for x in det if x.get("dimension") == key(zhk, enk)])
+                     for zhk, enk, _ in dims}
+    for zhk, _enk, _ in dims:
+        vals = [per[s][zhk] for _, s, _d in FULL7 if per[s][zhk] is not None]
+        mean[zhk] = sum(vals) / len(vals) if vals else None
+
+    frozen = ((abl("维度构成.json") or {}).get("中文") or {}).get("means_7家") or {}
+    if lang == "中文":
+        for zhk, _enk, _ in dims:
+            if frozen.get(zhk) is not None and abs(mean[zhk] - frozen[zhk]) > 0.05:
+                raise SystemExit(f"维度构成 复算与冻结值不符: {zhk} {mean[zhk]:.2f} vs {frozen[zhk]}")
+
     pick = [("豆包", "Doubao"), ("deepseek", "DeepSeek"), ("kimi", "Kimi"), ("mirofish", "MiroFish")]
-    keys = [("事件", L("事件类", "Event")), ("政策", L("政策类", "Policy")), ("舆论", L("舆论类", "Opinion"))]
+    means = mean
+    pm = per
+    keys = [(zhk, lab) for zhk, _enk, lab in dims]
     rows = []
     for k, label in keys:
         row = {"label": label, "mean": r1(means.get(k))}

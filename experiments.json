@@ -249,6 +249,63 @@
    ],
    "takeaway": "Later cutoffs see more of the arc and score higher (66.7 -> 67.6 -> 68.7). That is the closer-is-easier property a forecasting benchmark should show, and a basic sanity check on the construction."
   },
+  "dimension_mix": {
+   "title": "Question dimension",
+   "subtitle": "The same answers regrouped by what the question asks about: a concrete event, a policy move, or where opinion goes. Seven full-coverage systems.",
+   "columns": [
+    {
+     "key": "label",
+     "title": "Dimension"
+    },
+    {
+     "key": "豆包",
+     "title": "Doubao"
+    },
+    {
+     "key": "deepseek",
+     "title": "DeepSeek"
+    },
+    {
+     "key": "kimi",
+     "title": "Kimi"
+    },
+    {
+     "key": "mirofish",
+     "title": "MiroFish"
+    },
+    {
+     "key": "mean",
+     "title": "Mean of 7"
+    }
+   ],
+   "rows": [
+    {
+     "label": "Event",
+     "mean": 58.9,
+     "豆包": 60.6,
+     "deepseek": 59.2,
+     "kimi": 62.0,
+     "mirofish": 60.2
+    },
+    {
+     "label": "Policy",
+     "mean": 61.5,
+     "豆包": 64.3,
+     "deepseek": 61.5,
+     "kimi": 61.0,
+     "mirofish": 64.1
+    },
+    {
+     "label": "Opinion",
+     "mean": 64.4,
+     "豆包": 70.3,
+     "deepseek": 64.1,
+     "kimi": 66.0,
+     "mirofish": 68.3
+    }
+   ],
+   "takeaway": "Opinion questions are the easiest (64.4) and concrete events the hardest (58.9): models read the direction of the wind better than they call a specific event."
+  },
   "window_segments": {
    "title": "Window segments",
    "subtitle": "Temporal questions split by how far the event sits from the cutoff, then scored segment by segment. Segment shares: 52.4%·29.3%·18.3%.",
