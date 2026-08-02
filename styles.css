@@ -4149,3 +4149,62 @@ body.layout-pill .page-section.hero {
   text-align: center;
   margin: 0 auto 18px;
 }
+
+/* --- Dark theme: light-theme leftovers that turn into glare or vanish ------ */
+/* The two baseline rows kept a light-theme background (#eef3fb) while the text
+   stayed light: contrast 1.02, i.e. invisible. Same for the BASELINE badge on
+   #ddd. Both become a quiet tint of the page instead. */
+body.dark-theme .lb tbody tr.reference {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.16);
+}
+body.dark-theme .lb tbody tr.reference td.sys {
+  border-left: 3px solid rgba(255, 255, 255, 0.22);
+}
+body.dark-theme .lb .type-badge.baseline,
+body.dark-theme .lb .type-badge.llm---proj,
+body.dark-theme .lb .type-badge.agent---proj {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+}
+body.dark-theme .lb .type-badge.human {
+  background: transparent;
+  color: #93b4e8;
+  border: 1.5px solid rgba(147, 180, 232, 0.45);
+}
+
+/* Near-white blocks on a dark page read as glare. Table headers, the panel
+   label and the verdict box carry no meaning in their brightness, so they get
+   the same quiet tint as everything else. */
+body.dark-theme .lb thead th,
+body.dark-theme .dd-table thead th {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+}
+body.dark-theme .panel-label {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+}
+body.dark-theme .verdict {
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+
+/* The baseline rows carry a one-sentence footnote in the System cell. The cell
+   is nowrap (so model names never break) and fixed at 224 px, so the sentence
+   ran straight across the next three columns. Let that one span wrap. */
+.lb tbody td.sys .fn {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+  max-width: 100%;
+}
+
+/* The AVG column was tinted with 8% orange, which over a near-black page reads
+   as a muddy brown band rather than as emphasis. Neutral tint instead; the
+   column already stands out through its bold weight and its position. */
+body.dark-theme .lb tbody td.avg { background: rgba(255, 255, 255, 0.05); }
+body.dark-theme .lb tbody tr.best td.avg { background: rgba(147, 180, 232, 0.14); }
+/* BASELINE is the longest type badge and overran its 77 px column by 5 px. */
+.lb .type-badge.baseline { font-size: 8.5px; letter-spacing: 0.1em; }
