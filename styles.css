@@ -4658,14 +4658,15 @@ body.dark-theme .ctx-modal-panel { background: #0f1115; }
    sentence: what is on the menu, and that none of it is the real world. */
 /* One note, centred under the lead sentence: a small chip naming it, the text
    running alongside, and a hairline rule instead of a box. */
-.try-notes { max-width: 860px; margin: 0 auto 30px; }
+.try-notes { max-width: 1100px; margin: 0 auto 30px; }
 .try-note {
   display: flex;
   align-items: baseline;
-  gap: 14px;
+  justify-content: center;
+  gap: 12px;
   padding: 12px 0 0;
   border-top: 1px solid rgba(127, 127, 127, 0.22);
-  text-align: left;
+  text-align: center;
 }
 .try-note p {
   font-family: var(--mono);
@@ -4673,7 +4674,7 @@ body.dark-theme .ctx-modal-panel { background: #0f1115; }
   line-height: 1.7;
   color: var(--muted);
   margin: 0;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
 }
 .tn-label {
