@@ -4209,13 +4209,3 @@ body.dark-theme .lb tbody tr.best td.avg { background: rgba(147, 180, 232, 0.14)
 /* BASELINE is the longest type badge and overran its 77 px column by 5 px. */
 .lb .type-badge.baseline { font-size: 8.5px; letter-spacing: 0.1em; }
 
-/* huggingface.co is blocked on some networks; the mirror link sits under the
-   hero buttons, quiet enough to ignore when the main link works. */
-.mirror-hint {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--muted);
-  margin: 14px 0 0;
-}
-.mirror-hint a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
-.mirror-hint a:hover { color: var(--blue); }
