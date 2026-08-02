@@ -29,9 +29,9 @@ function tfmt(tmpl, vars) {
 // user always knows where they are in the document.
 function el(id) { return document.getElementById(id); }
 
-const SPY_IDS = ["about", "abstract", "method", "leaderboard", "expand", "cite"];
+const SPY_IDS = ["about", "abstract", "method", "leaderboard", "deepdive", "expand", "cite"];
 // Hero, abstract and method all roll up under the "Overview" nav item.
-const SPY_TO_NAV = { about: "about", abstract: "about", method: "about", leaderboard: "leaderboard", expand: "expand", cite: "cite" };
+const SPY_TO_NAV = { about: "about", abstract: "about", method: "about", leaderboard: "leaderboard", deepdive: "deepdive", expand: "expand", cite: "cite" };
 function setActiveNav(navKey) {
   document.querySelectorAll(".topnav-links a.sb-link[data-spy]").forEach(a => {
     a.classList.toggle("active", a.dataset.spy === navKey);
@@ -620,7 +620,6 @@ async function loadDeepDive() {
     console.error("Failed to load experiments.json:", err);
     return;
   }
-  renderStressBlock(data.stress_case);
   // Question-bank composition, scoring formula and true/false bias are three
   // views of the same question -- where the difficulty comes from -- so they
   // share one block and the buttons swap the table.
@@ -666,98 +665,8 @@ async function loadDeepDive() {
   }, "05");
 }
 
-// The single most load-bearing piece of evidence on the page: how much the
-// score inflates when anonymization is switched off. Drawn as bars, not a
-// table — a reader should get it at a glance.
-function renderValidity(block) {
-  const host = document.getElementById("dd-validity");
-  if (!host || !block) return;
-  const rows = block.rows || [];
-  if (!rows.length) return;
-  const ours = rows.find(r => r.is_baseline) || rows[0];
-  const raw = rows.reduce((a, b) => (b.mean > (a?.mean ?? -1) ? b : a), null);
-  const gap = (raw.mean - ours.mean).toFixed(1);
-  const max = Math.max(...rows.map(r => r.mean)) * 1.12;
-  const bars = rows.map(r => {
-    const pct = (r.mean / max) * 100;
-    const isOurs = r === ours;
-    return `<div class="vb-row${isOurs ? " is-ours" : ""}">
-      <span class="vb-name">${r.label}</span>
-      <span class="vb-track"><span class="vb-fill" style="width:${pct.toFixed(1)}%"></span></span>
-      <span class="vb-val">${r.mean.toFixed(1)}${r.leak ? `<i class="vb-leak">+${r.leak}</i>` : ""}</span>
-    </div>`;
-  }).join("");
-  host.innerHTML = `<h3 class="subsection-title vb-title">${t("dd.validity.title")}</h3>
-    <p class="vb-lede">${t("dd.validity.lede")}</p>
-    <div class="vb-chart">${bars}</div>
-    <p class="vb-conclusion">${tfmt(t("dd.validity.conclusion"), { gap })}</p>
-    <p class="vb-more">${t("dd.validity.more")}</p>`;
-}
 
-function renderStressBlock(block) {
-  const host = document.getElementById("dd-stress");
-  if (!host || !block) return;
-  const cards = block.events.map(ev => stressCard(ev)).join("");
-  host.innerHTML = `
-    <div class="dd-block">
-      <div class="dd-head dd-head-center">
-        <h3>${block.title}</h3>
-        <p class="dd-sub">${block.subtitle}</p>
-      </div>
-      <div class="dd-stress-grid">${cards}</div>
-    </div>`;
-}
 
-function stressCard(ev) {
-  const s = ev.stats;
-  const winnerIsCal = ev.axis_winner === "cal";
-  return `
-    <div class="dd-stress-card">
-      <div class="sc-hdr">
-        <div>
-          <div class="sc-name">${ev.name}</div>
-          <div class="sc-label">${ev.label}</div>
-        </div>
-      </div>
-
-      <div class="sc-stats">
-        <span class="sc-stat">${s.n_pts} ${t("js.dd.sc.stat.pts")}</span>
-        <span class="sc-stat">${s.arc_days} ${t("js.dd.sc.stat.days")}</span>
-        <span class="sc-stat">${s.n_cal.toLocaleString()} ${t("js.dd.sc.stat.cal")}</span>
-        <span class="sc-stat">${s.n_time.toLocaleString()} ${t("js.dd.sc.stat.time")}</span>
-      </div>
-
-      <div class="sc-mini-row">
-        <div class="sc-mini">
-          <div class="mlabel">${t("js.dd.sc.mean")}</div>
-          <div class="mvals">${ev.mean.cal.toFixed(1)}<span class="sep">|</span>${ev.mean.time.toFixed(1)}</div>
-        </div>
-        <div class="sc-mini ${ev.gemini.is_best ? "best" : ""}">
-          <div class="mlabel">★ ${ev.gemini.label || "—"}</div>
-          <div class="mvals">${ev.gemini.cal.toFixed(1)}<span class="sep">|</span>${ev.gemini.time.toFixed(1)}</div>
-        </div>
-        <div class="sc-mini">
-          <div class="mlabel">${ev.qwen3.label || "—"}</div>
-          <div class="mvals">${ev.qwen3.cal.toFixed(1)}<span class="sep">|</span>${ev.qwen3.time.toFixed(1)}</div>
-        </div>
-      </div>
-
-      <div class="sc-gap">
-        <div class="gax">
-          <div class="gax-label">${t("js.dd.sc.gap.cal")}</div>
-          <div class="gax-val ${winnerIsCal ? "winner" : ""}">+${ev.gap.cal.toFixed(1)}</div>
-          <div class="gax-pct">${tfmt(t("js.dd.sc.pct-of-mean.fmt"), { pct: ev.gap.cal_pct_of_mean })}</div>
-        </div>
-        <div class="gax">
-          <div class="gax-label">${t("js.dd.sc.gap.time")}</div>
-          <div class="gax-val ${!winnerIsCal ? "winner" : ""}">+${ev.gap.time.toFixed(1)}</div>
-          <div class="gax-pct">${tfmt(t("js.dd.sc.pct-of-mean.fmt"), { pct: ev.gap.time_pct_of_mean })}</div>
-        </div>
-      </div>
-
-      <p class="dd-take" style="margin-top: 4px;">${ev.takeaway}</p>
-    </div>`;
-}
 
 function formatDelta(d) {
   if (d === undefined || d === null) return "";
@@ -768,7 +677,6 @@ function formatDelta(d) {
   return `<span class="delta">${sign}${sub}</span>`;
 }
 
-function renderAblationTableSkipped() { /* superseded by renderValidity() */ }
 
 // Three ablations in one block: the buttons swap the table and the takeaway.
 function renderAblationTabs(hostId, items) {
@@ -896,7 +804,7 @@ function renderAblationTable(hostId, block, spec, num) {
 }
 
 if (document.getElementById("lb-unified")) loadLeaderboards();
-if (document.getElementById("dd-stress") || document.getElementById("dd-validity")) loadDeepDive();
+if (document.getElementById("dd-ablations")) loadDeepDive();
 
 // ============================ Language change hook =======================
 // When the user toggles EN/中 via the sidebar buttons, i18n.js fires
@@ -912,7 +820,7 @@ window.addEventListener("sb:langchange", async () => {
   }
 
   // Deep dive
-  if (document.getElementById("dd-stress") || document.getElementById("dd-validity")) loadDeepDive();
+  if (document.getElementById("dd-ablations")) loadDeepDive();
 
   // Reset drawer toggle button labels to the closed (▾) state in the new language
   document.querySelectorAll(".drawer-toggle").forEach(btn => {

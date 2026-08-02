@@ -10,7 +10,7 @@ Forecasting Counterfactual Social-World Evolution
 [![Site](https://img.shields.io/badge/Site-static%20HTML-1baf7a?style=flat-square)](index.html)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-SocietyBench-eda100?style=flat-square)](https://huggingface.co/datasets/Social-AI-2026/SocietyBench)
 [![Code](https://img.shields.io/badge/GitHub-SocietyBench--codebase-eb6834?style=flat-square&logo=github&logoColor=white)](https://github.com/Social-AI-2026/SocietyBench-codebase)
-[![Pages](https://img.shields.io/badge/Pages-3-e87ba4?style=flat-square)](https://github.com/Social-AI-2026/SocietyBench-web)
+[![Pages](https://img.shields.io/badge/Pages-2-e87ba4?style=flat-square)](https://github.com/Social-AI-2026/SocietyBench-web)
 
 [English](./README.md) | [中文文档](./README-ZH.md)
 
@@ -31,16 +31,16 @@ lives in JSON and in `i18n.js`.
 > deep-dive tables are the paper's ablation tables, and the demo replays our real per-question
 > model outputs. There are no projected or illustrative figures anywhere.
 
-## 🎯 The three pages
+## 🎯 The two pages
 
 | Page | What it shows |
 |------|---------------|
-| **`index.html`** | Overview, abstract, method, leaderboard, contribute, citation |
+| **`index.html`** | Overview, abstract, method, leaderboard, deep-dive, contribute, citation |
 | **`demo.html`** | *Try it* — pick an event and a cutoff, see what the model saw, what it answered, and how far off it was |
-| **`analysis.html`** | *Deep-dive* — stress-case events and the four in-text ablations |
 
-All three share one nav bar, one stylesheet and one translation table, so a change to any of
-those lands on every page at once.
+Both share one nav bar, one stylesheet and one translation table, so a change to any of those
+lands on every page at once. The deep-dive used to be a third page; it is now a section of the
+homepage, right after the leaderboard.
 
 ## 🔄 How the data flows
 
@@ -114,7 +114,7 @@ serving the cached copy.
 
 | Path | Contents |
 |------|----------|
-| `index.html` · `demo.html` · `analysis.html` | The three pages |
+| `index.html` · `demo.html` | The two pages |
 | `styles.css` | One stylesheet for all of them |
 | `app.js` | Leaderboard, deep-dive tables, nav, reveal animations |
 | `demo.js` | The interactive page: cached and live modes |
@@ -150,7 +150,7 @@ Everything on the page is generated, never hand-edited.
 | `leaderboard.json` · `.zh.json` | 6 LLMs + 3 agents + 2 baselines | the paper's Table 2 and agent table |
 | `demo_index.json` · `.zh.json` | 5 events, 125 prediction points | our real per-question run outputs |
 | `demo/<lang>/<event>/P<NN>.json` | 25,364 calibration questions + 3,112 temporal events | the same run outputs, one file per point |
-| `experiments.json` · `.zh.json` | 2 stress cases + 4 ablations | the paper's ablation tables |
+| `experiments.json` · `.zh.json` | the three difficulty ablations | the paper's ablation tables |
 
 Both exams are released whole: every question of every prediction point, not a
 sample. That is 250 point files and ~14 MB, so the page loads the index first and

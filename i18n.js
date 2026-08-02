@@ -367,7 +367,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'dd.validity.lede': 'Cross-event calibration score with each anonymization stage switched off. If the benchmark were measuring recall rather than forecasting, removing the disguise would make models look better — and it does.',
       'dd.validity.conclusion': 'Running on raw, un-anonymized event names inflates the mean by {gap} points. That gap is memory, not foresight: a measurable share of questions become answerable by recognising the real event instead of reasoning forward from it.',
       'dd.validity.more': 'Full per-event breakdown and the audit protocol are in §4.2 of the paper.',
-      'dd.intro': 'The evidence behind the headline number: the stress cases that isolate where models break, and three ablations that isolate where the difficulty comes from — question-bank composition, the scoring formula, and true/false-question bias.',
+      'dd.intro': 'Where the difficulty actually comes from. Three ablations, one at a time: drop a slice of the question bank, re-score under a different rule, or split the bank by whether the answer is yes or no.',
 
       // ---- Qualitative ---------------------------------------------------
       'qual.title': 'Qualitative',
@@ -892,7 +892,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'dd.validity.lede': '逐级关闭匿名化后的跨事件校准分。如果这个 benchmark 测的是记忆而不是预测,那么摘掉伪装模型就会显得更强 —— 事实正是如此。',
       'dd.validity.conclusion': '直接用未匿名的真实事件名,跨事件均分虚高 {gap} 分。这个差距来自记忆而非前瞻:有相当比例的题目变成了「认出真实事件」就能答对,而不需要向前推理。',
       'dd.validity.more': '逐事件明细与审核流程见论文 §4.2。',
-      'dd.intro': '头部数字背后的证据:隔离模型失败之处的压力用例,以及隔离难度来源的三个消融——题库构成、计分公式、真假题偏置。',
+      'dd.intro': '难度到底来自哪里。三个消融,一次动一处:抽掉题库的一类题、换一套计分规则、或者把题按真假拆开看。',
 
       // ---- Qualitative ---------------------------------------------------
       'qual.title': '案例对比',

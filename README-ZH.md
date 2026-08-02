@@ -10,7 +10,7 @@ Forecasting Counterfactual Social-World Evolution
 [![Site](https://img.shields.io/badge/Site-static%20HTML-1baf7a?style=flat-square)](index.html)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-SocietyBench-eda100?style=flat-square)](https://huggingface.co/datasets/Social-AI-2026/SocietyBench)
 [![Code](https://img.shields.io/badge/GitHub-SocietyBench--codebase-eb6834?style=flat-square&logo=github&logoColor=white)](https://github.com/Social-AI-2026/SocietyBench-codebase)
-[![Pages](https://img.shields.io/badge/Pages-3-e87ba4?style=flat-square)](https://github.com/Social-AI-2026/SocietyBench-web)
+[![Pages](https://img.shields.io/badge/Pages-2-e87ba4?style=flat-square)](https://github.com/Social-AI-2026/SocietyBench-web)
 
 [English](./README.md) | [中文文档](./README-ZH.md)
 
@@ -24,15 +24,15 @@ Forecasting Counterfactual Social-World Evolution
 
 > **站点上每一个数字都是实测的。** 榜单就是论文的 Table 2，深入分析的表格就是论文的消融表，演示页回放的是我们真实的逐题模型输出。全站没有任何推算值或示意性数字。
 
-## 🎯 三个页面
+## 🎯 两个页面
 
 | 页面 | 内容 |
 |------|------|
-| **`index.html`** | 概述、摘要、方法、榜单、参与贡献、引用 |
+| **`index.html`** | 概述、摘要、方法、榜单、深入分析、参与贡献、引用 |
 | **`demo.html`** | *在线试用* —— 选一个事件和一个截止点，看模型看到了什么、答了什么、离真相差多远 |
-| **`analysis.html`** | *深入分析* —— 压力事件，以及正文里的四个消融 |
 
-三个页面共用同一套导航栏、同一份样式表、同一张翻译表，所以改其中任何一样，三个页面同时生效。
+两个页面共用同一套导航栏、同一份样式表、同一张翻译表，所以改其中任何一样，两个页面同时生效。
+深入分析原来是第三个页面，现在并进了首页，位置在榜单之后。
 
 ## 🔄 数据是怎么流过来的
 
@@ -100,7 +100,7 @@ ffmpeg -i source.mp4 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 27 \
 
 | 路径 | 内容 |
 |------|------|
-| `index.html` · `demo.html` · `analysis.html` | 三个页面 |
+| `index.html` · `demo.html` | 两个页面 |
 | `styles.css` | 三页共用的样式表 |
 | `app.js` | 榜单、深入分析表格、导航、滚动动画 |
 | `demo.js` | 交互页：缓存模式与实时模式 |
@@ -136,7 +136,7 @@ ffmpeg -i source.mp4 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 27 \
 | `leaderboard.json` · `.zh.json` | 6 个 LLM + 3 个智能体 + 2 个基线 | 论文 Table 2 与智能体表 |
 | `demo_index.json` · `.zh.json` | 5 个事件、125 个预测点 | 我们真实的逐题实验产物 |
 | `demo/<语言>/<事件>/P<NN>.json` | 25,364 道校准题 + 3,112 个时间题 | 同一批实验产物，每个点一个文件 |
-| `experiments.json` · `.zh.json` | 2 个压力事件 + 4 个消融 | 论文的消融表 |
+| `experiments.json` · `.zh.json` | 难度来源的三个消融 | 论文的消融表 |
 
 两场考试是**整套放出**的：每个预测点的每一道题，不是抽样。一共 250 个点文件、约 14 MB，
 所以页面先加载索引，选中哪个点再去取那个点的题目。
