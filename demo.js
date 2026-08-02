@@ -104,6 +104,7 @@ function renderWidget() {
     cutoff: (entry.label || "").toLowerCase()
   });
   el("ctx-text").textContent = point.context_excerpt;
+  setCtxCollapsed(true);
 
   el("cal-q").textContent = cq ? cq.q : "—";
   el("cal-meta").textContent = cq ? tfmt(t("js.widget.cal-meta.fmt"), { days: cq.wd }) : "—";
@@ -160,6 +161,22 @@ function renderWidget() {
 
   applyRevealState();
 }
+
+// The context runs to a few hundred words; it opens clamped with a fade and a
+// toggle, so the two questions stay above the fold.
+function setCtxCollapsed(collapsed) {
+  const box = el("ctx-text"), btn = el("ctx-toggle");
+  if (!box || !btn) return;
+  box.classList.toggle("clamped", collapsed);
+  btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  btn.textContent = collapsed ? t("try.ctx.expand") : t("try.ctx.collapse");
+  // Nothing to expand when the excerpt is short enough to fit.
+  const fits = box.scrollHeight <= box.clientHeight + 2 && collapsed;
+  btn.style.display = fits ? "none" : "";
+}
+el("ctx-toggle") && el("ctx-toggle").addEventListener("click", () => {
+  setCtxCollapsed(!el("ctx-text").classList.contains("clamped"));
+});
 
 function applyRevealState() {
   const cq = currentCal(), tq = currentTime();
@@ -256,8 +273,10 @@ function buildModelButtons() {
   const point = loadedPoint();
   if (!point) { host.innerHTML = ""; return; }
   const best = widgetState.data.best || "";
+  const kinds = widgetState.data.kinds || {};
   host.innerHTML = point.models.map((m, i) => {
-    const tag = m === best ? t("js.widget.tag.best") : t("js.widget.tag.llm");
+    const tag = m === best ? t("js.widget.tag.best")
+              : (kinds[m] === "agent" ? t("js.widget.tag.agent") : t("js.widget.tag.llm"));
     const cls = i === widgetState.modelIdx ? "model-btn active" : "model-btn";
     return `<button type="button" class="${cls}" data-i="${i}">${m}<span class="mtag">${tag}</span></button>`;
   }).join("");

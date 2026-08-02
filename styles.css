@@ -4376,3 +4376,110 @@ body.dark-theme .lb .type-badge.agent---proj {
 }
 .model-btn.active .mtag { background: transparent; color: var(--blue); border-color: transparent; }
 .model-btn .mtag { background: transparent; color: var(--muted); border: none; font-weight: 600; }
+
+/* ================= Ablation tables, matched to the leaderboard ============ */
+/* Same reading: no cell grid, one hairline per row, a transparent header, and
+   the reference row set off by a rule rather than a colour block. */
+.dd-table-wrap {
+  background: transparent;
+  border: var(--border);
+  box-shadow: none;
+}
+.dd-table thead th {
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  padding: 14px 14px 12px;
+  border-right: none;
+  border-bottom: 1.5px solid rgba(127, 127, 127, 0.3);
+}
+.dd-table tbody td {
+  border: none;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.16);
+  padding: 13px 14px;
+}
+.dd-table tbody tr:last-child td { border-bottom: none; }
+.dd-table tbody tr:nth-child(even) { background: transparent; }
+.dd-table tbody tr:hover td { background: rgba(127, 127, 127, 0.06); }
+
+/* The full-bank row is what every other row is measured against: a top rule
+   and full-strength figures, no fill. */
+.dd-table tbody tr.baseline { background: transparent; }
+.dd-table tbody tr.baseline td {
+  font-weight: 700;
+  border-top: 1.5px solid rgba(127, 127, 127, 0.35);
+  border-bottom: none;
+}
+.dd-table tbody tr.baseline td:first-child {
+  border-left: 2px solid var(--blue);
+  padding-left: 16px;
+}
+/* The last column is the one the block is about; set it off like AVG. */
+.dd-table thead th:last-child,
+.dd-table tbody td:last-child { border-left: 1px solid rgba(127, 127, 127, 0.3); }
+
+/* Deltas are annotation, not data: they recede unless they are the extreme. */
+.dd-table .delta { color: var(--muted); font-weight: 600; opacity: 0.85; }
+.dd-table .delta.extreme { opacity: 1; }
+/* Dark theme kept a solid slate fill on the full-bank row and a stripe on the
+   even rows; both predate the hairline treatment above. */
+body.dark-theme .dd-table tbody tr.baseline { background: transparent; }
+body.dark-theme .dd-table tbody tr:nth-child(even) { background: transparent; }
+body.dark-theme .dd-table tbody tr:hover td { background: rgba(255, 255, 255, 0.05); }
+
+/* --- Try-it: readable dropdowns, and a context box that folds ------------- */
+/* A native <select> popup takes its colours from the options; ours had none,
+   so the list rendered white while the text stayed near-white. */
+body.dark-theme .q-pick,
+body.dark-theme .select { color-scheme: dark; }
+body.dark-theme .q-pick option,
+body.dark-theme .select option { background: #15181d; color: #e8e8ea; }
+
+/* The context is a few hundred words. Clamped by default with a fade, so the
+   two questions and the model output stay visible without scrolling. */
+.context-box { position: relative; }
+.context-box.clamped {
+  max-height: 9.2em;
+  overflow: hidden;
+}
+.context-box.clamped::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3.2em;
+  background: linear-gradient(to bottom, transparent, var(--paper));
+  pointer-events: none;
+}
+body.dark-theme .context-box.clamped::after {
+  background: linear-gradient(to bottom, transparent, #0f1115);
+}
+.ctx-toggle {
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: var(--border);
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.ctx-toggle:hover { color: var(--ink); background: rgba(127, 127, 127, 0.07); }
+
+/* --- Try-it: tighter ---------------------------------------------------- */
+/* Boxes were padded like posters and stretched to a common height, so a
+   two-line question sat in a 300 px card. They hug their content now. */
+.view-grid { gap: 14px; align-items: start; }
+.view-block { padding: 16px 18px; }
+.panel { padding: 18px; }
+.model-btn { padding: 9px 12px; }
+.model-btns { gap: 7px; }
+.field { margin-bottom: 14px; }
+/* An 84 px numeral for a two-digit probability was the loudest thing here. */
+.output-cell .num,
+body[data-lang="zh"] .output-cell .num { font-size: clamp(34px, 3.4vw, 46px); line-height: 1.05; }
+.out-num-label, .vb-label { margin-bottom: 8px; }

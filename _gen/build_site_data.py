@@ -20,14 +20,20 @@ EVENTS = [
     ("event5_smci",         "SMCI",          "MARKETS",            "金融市场"),
     ("event2_trump_tariff", "Trump Tariff",  "TRADE POLICY",       "贸易政策"),
 ]
-MODELS = [                       # (dir name, display name)
-    ("gpt-5.5",                   "GPT-5.5"),
-    ("gemini-3.5-flash",          "Gemini-3.5-Flash"),
-    ("claude-opus-4-8",           "Claude-Opus-4.8"),
-    ("deepseek-v4-pro-guan",      "DeepSeek-V4-Pro"),
-    ("kimi-k2.5",                 "Kimi-K2.5"),
-    ("doubao-seed-2-0-pro-260215","Doubao-Seed-2.0-Pro"),
+MODELS = [                       # (dir name, display name, kind)
+    ("gpt-5.5",                   "GPT-5.5",             "llm"),
+    ("gemini-3.5-flash",          "Gemini-3.5-Flash",    "llm"),
+    ("claude-opus-4-8",           "Claude-Opus-4.8",     "llm"),
+    ("deepseek-v4-pro-guan",      "DeepSeek-V4-Pro",     "llm"),
+    ("kimi-k2.5",                 "Kimi-K2.5",           "llm"),
+    ("doubao-seed-2-0-pro-260215","Doubao-Seed-2.0-Pro", "llm"),
+    ("grok-3-mini",               "Grok-3-Mini",         "llm"),
+    # The three agent frameworks, all on the Doubao base model.
+    ("mirofish__doubao-seed-2-0-pro-260215",  "MiroFish (Doubao)",  "agent"),
+    ("langgraph__doubao-seed-2-0-pro-260215", "LangGraph (Doubao)", "agent"),
+    ("autogen__doubao-seed-2-0-pro-260215",   "AutoGen (Doubao)",   "agent"),
 ]
+MODEL_KIND = {name: kind for _, name, kind in MODELS}
 BEST = "GPT-5.5"
 LANGS = [("zh", "中文"), ("en", "英文")]
 
@@ -119,7 +125,7 @@ def load_point(ev, langdir, pid):
     """Real calibration + temporal records for one prediction point, all models."""
     root = f"{RUNS}/{ev}/final/{langdir}/results/run_main"
     cal, tmp, cutoff = {}, {}, None
-    for mdir, mname in MODELS:
+    for mdir, mname, _k in MODELS:
         f = f"{root}/brier/{mdir}/{pid}_brier.json"
         if os.path.exists(f):
             d = json.load(open(f, encoding="utf-8"))
@@ -175,7 +181,7 @@ def build_demo(lang, langdir):
             if not qb: continue
             cal_src, tmp_src, cutoff = load_point(ev, langdir, pid)
             cutoff = cutoff or qb.get("cutoff_date")
-            models = [m for _, m in MODELS if cal_src.get(m) or tmp_src.get(m)]
+            models = [m for _, m, _k in MODELS if cal_src.get(m) or tmp_src.get(m)]
             if not models: continue
             mi = {m: i for i, m in enumerate(models)}
 
@@ -237,7 +243,8 @@ def build_demo(lang, langdir):
         })
     return {
         "schema_version": "3.0",
-        "models": [m for _, m in MODELS],
+        "models": [m for _, m, _k in MODELS],
+        "kinds": MODEL_KIND,
         "best": BEST,
         "totals": {"points": n_files, "calibration_questions": n_cal_total,
                    "temporal_events": n_time_total},

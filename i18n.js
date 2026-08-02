@@ -248,6 +248,8 @@
 
       // Cached mode
       'try.cached.controls.label': '▸ CONTROLS',
+      'try.ctx.expand': '▾ SHOW FULL CONTEXT',
+      'try.ctx.collapse': '▴ COLLAPSE',
       'try.field.event': 'EVENT',
       'try.field.point': 'PREDICTION POINT',
       'try.field.model': 'MODEL',
@@ -458,6 +460,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'js.widget.verdict.right': 'right',
       'js.widget.verdict.wrong': 'wrong',
       'js.widget.tag.proj': 'PROJ',
+      'js.widget.tag.agent': 'AGENT',
       'js.widget.tag.llm': 'LLM',
 
       // Live mode
@@ -773,6 +776,8 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // Cached mode
       'try.cached.controls.label': '▸ 控制面板',
+      'try.ctx.expand': '▾ 展开全文',
+      'try.ctx.collapse': '▴ 收起',
       'try.field.event': '事件',
       'try.field.point': '预测点',
       'try.field.model': '模型',
@@ -980,6 +985,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'js.widget.verdict.right': '正确',
       'js.widget.verdict.wrong': '错误',
       'js.widget.tag.proj': '预估',
+      'js.widget.tag.agent': '智能体',
       'js.widget.tag.llm': 'LLM',
 
       // Live mode
