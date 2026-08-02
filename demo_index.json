@@ -61,7 +61,7 @@
     {
      "point_id": "P03",
      "cutoff": "2023-11-10",
-     "label": "Cutoff 2023-11-10 · 8 models",
+     "label": "Cutoff 2023-11-10",
      "models": 8,
      "n_cal": 91,
      "n_time": 8,
@@ -81,7 +81,7 @@
     {
      "point_id": "P05",
      "cutoff": "2024-07-27",
-     "label": "Cutoff 2024-07-27 · 8 models",
+     "label": "Cutoff 2024-07-27",
      "models": 8,
      "n_cal": 93,
      "n_time": 10,
@@ -161,7 +161,7 @@
     {
      "point_id": "P13",
      "cutoff": "2025-04-23",
-     "label": "Cutoff 2025-04-23 · 8 models",
+     "label": "Cutoff 2025-04-23",
      "models": 8,
      "n_cal": 136,
      "n_time": 27,
@@ -171,7 +171,7 @@
     {
      "point_id": "P14",
      "cutoff": "2025-04-24",
-     "label": "Cutoff 2025-04-24 · 8 models",
+     "label": "Cutoff 2025-04-24",
      "models": 8,
      "n_cal": 98,
      "n_time": 23,
@@ -181,7 +181,7 @@
     {
      "point_id": "P15",
      "cutoff": "2025-04-27",
-     "label": "Cutoff 2025-04-27 · 8 models",
+     "label": "Cutoff 2025-04-27",
      "models": 8,
      "n_cal": 103,
      "n_time": 20,
@@ -201,7 +201,7 @@
     {
      "point_id": "P17",
      "cutoff": "2025-05-01",
-     "label": "Cutoff 2025-05-01 · 8 models",
+     "label": "Cutoff 2025-05-01",
      "models": 8,
      "n_cal": 96,
      "n_time": 24,
@@ -211,7 +211,7 @@
     {
      "point_id": "P18",
      "cutoff": "2025-05-08",
-     "label": "Cutoff 2025-05-08 · 8 models",
+     "label": "Cutoff 2025-05-08",
      "models": 8,
      "n_cal": 90,
      "n_time": 19,
@@ -221,7 +221,7 @@
     {
      "point_id": "P19",
      "cutoff": "2025-05-12",
-     "label": "Cutoff 2025-05-12 · 8 models",
+     "label": "Cutoff 2025-05-12",
      "models": 8,
      "n_cal": 93,
      "n_time": 18,
@@ -251,7 +251,7 @@
     {
      "point_id": "P22",
      "cutoff": "2025-05-30",
-     "label": "Cutoff 2025-05-30 · 8 models",
+     "label": "Cutoff 2025-05-30",
      "models": 8,
      "n_cal": 67,
      "n_time": 14,
@@ -261,7 +261,7 @@
     {
      "point_id": "P23",
      "cutoff": "2025-06-06",
-     "label": "Cutoff 2025-06-06 · 8 models",
+     "label": "Cutoff 2025-06-06",
      "models": 8,
      "n_cal": 48,
      "n_time": 13,
@@ -271,7 +271,7 @@
     {
      "point_id": "P24",
      "cutoff": "2025-06-09",
-     "label": "Cutoff 2025-06-09 · 8 models",
+     "label": "Cutoff 2025-06-09",
      "models": 8,
      "n_cal": 45,
      "n_time": 10,
@@ -379,7 +379,7 @@
     {
      "point_id": "P09",
      "cutoff": "2025-09-23",
-     "label": "Cutoff 2025-09-23 · 7 models",
+     "label": "Cutoff 2025-09-23",
      "models": 7,
      "n_cal": 203,
      "n_time": 29,
@@ -409,7 +409,7 @@
     {
      "point_id": "P12",
      "cutoff": "2025-10-11",
-     "label": "Cutoff 2025-10-11 · 7 models",
+     "label": "Cutoff 2025-10-11",
      "models": 7,
      "n_cal": 219,
      "n_time": 23,
@@ -419,7 +419,7 @@
     {
      "point_id": "P13",
      "cutoff": "2025-10-13",
-     "label": "Cutoff 2025-10-13 · 7 models",
+     "label": "Cutoff 2025-10-13",
      "models": 7,
      "n_cal": 182,
      "n_time": 22,
@@ -439,7 +439,7 @@
     {
      "point_id": "P15",
      "cutoff": "2025-10-19",
-     "label": "Cutoff 2025-10-19 · 7 models",
+     "label": "Cutoff 2025-10-19",
      "models": 7,
      "n_cal": 174,
      "n_time": 19,
@@ -449,7 +449,7 @@
     {
      "point_id": "P16",
      "cutoff": "2025-10-20",
-     "label": "Cutoff 2025-10-20 · 7 models",
+     "label": "Cutoff 2025-10-20",
      "models": 7,
      "n_cal": 111,
      "n_time": 14,
@@ -489,7 +489,7 @@
     {
      "point_id": "P20",
      "cutoff": "2025-10-29",
-     "label": "Cutoff 2025-10-29 · 7 models",
+     "label": "Cutoff 2025-10-29",
      "models": 7,
      "n_cal": 82,
      "n_time": 11,
@@ -499,7 +499,7 @@
     {
      "point_id": "P21",
      "cutoff": "2025-10-30",
-     "label": "Cutoff 2025-10-30 · 7 models",
+     "label": "Cutoff 2025-10-30",
      "models": 7,
      "n_cal": 78,
      "n_time": 12,
@@ -509,7 +509,7 @@
     {
      "point_id": "P22",
      "cutoff": "2025-11-04",
-     "label": "Cutoff 2025-11-04 · 7 models",
+     "label": "Cutoff 2025-11-04",
      "models": 7,
      "n_cal": 66,
      "n_time": 9,
@@ -519,7 +519,7 @@
     {
      "point_id": "P23",
      "cutoff": "2025-11-05",
-     "label": "Cutoff 2025-11-05 · 7 models",
+     "label": "Cutoff 2025-11-05",
      "models": 7,
      "n_cal": 56,
      "n_time": 9,
@@ -529,7 +529,7 @@
     {
      "point_id": "P24",
      "cutoff": "2025-11-08",
-     "label": "Cutoff 2025-11-08 · 7 models",
+     "label": "Cutoff 2025-11-08",
      "models": 7,
      "n_cal": 48,
      "n_time": 7,
@@ -597,7 +597,7 @@
     {
      "point_id": "P05",
      "cutoff": "2023-05-15",
-     "label": "Cutoff 2023-05-15 · 7 models",
+     "label": "Cutoff 2023-05-15",
      "models": 7,
      "n_cal": 321,
      "n_time": 9,
@@ -657,7 +657,7 @@
     {
      "point_id": "P11",
      "cutoff": "2023-12-23",
-     "label": "Cutoff 2023-12-23 · 7 models",
+     "label": "Cutoff 2023-12-23",
      "models": 7,
      "n_cal": 238,
      "n_time": 22,
@@ -667,7 +667,7 @@
     {
      "point_id": "P12",
      "cutoff": "2024-01-01",
-     "label": "Cutoff 2024-01-01 · 7 models",
+     "label": "Cutoff 2024-01-01",
      "models": 7,
      "n_cal": 268,
      "n_time": 23,
@@ -687,7 +687,7 @@
     {
      "point_id": "P14",
      "cutoff": "2024-01-24",
-     "label": "Cutoff 2024-01-24 · 7 models",
+     "label": "Cutoff 2024-01-24",
      "models": 7,
      "n_cal": 220,
      "n_time": 18,
@@ -697,7 +697,7 @@
     {
      "point_id": "P15",
      "cutoff": "2024-03-20",
-     "label": "Cutoff 2024-03-20 · 7 models",
+     "label": "Cutoff 2024-03-20",
      "models": 7,
      "n_cal": 232,
      "n_time": 17,
@@ -707,7 +707,7 @@
     {
      "point_id": "P16",
      "cutoff": "2024-04-08",
-     "label": "Cutoff 2024-04-08 · 7 models",
+     "label": "Cutoff 2024-04-08",
      "models": 7,
      "n_cal": 194,
      "n_time": 16,
@@ -717,7 +717,7 @@
     {
      "point_id": "P17",
      "cutoff": "2024-05-17",
-     "label": "Cutoff 2024-05-17 · 7 models",
+     "label": "Cutoff 2024-05-17",
      "models": 7,
      "n_cal": 248,
      "n_time": 15,
@@ -727,7 +727,7 @@
     {
      "point_id": "P18",
      "cutoff": "2024-06-29",
-     "label": "Cutoff 2024-06-29 · 7 models",
+     "label": "Cutoff 2024-06-29",
      "models": 7,
      "n_cal": 190,
      "n_time": 27,
@@ -787,7 +787,7 @@
     {
      "point_id": "P24",
      "cutoff": "2024-09-05",
-     "label": "Cutoff 2024-09-05 · 7 models",
+     "label": "Cutoff 2024-09-05",
      "models": 7,
      "n_cal": 101,
      "n_time": 21,
@@ -797,7 +797,7 @@
     {
      "point_id": "P25",
      "cutoff": "2024-09-11",
-     "label": "Cutoff 2024-09-11 · 7 models",
+     "label": "Cutoff 2024-09-11",
      "models": 7,
      "n_cal": 81,
      "n_time": 17,
@@ -935,7 +935,7 @@
     {
      "point_id": "P13",
      "cutoff": "2024-06-30",
-     "label": "Cutoff 2024-06-30 · 7 models",
+     "label": "Cutoff 2024-06-30",
      "models": 7,
      "n_cal": 134,
      "n_time": 33,
@@ -945,7 +945,7 @@
     {
      "point_id": "P14",
      "cutoff": "2024-07-08",
-     "label": "Cutoff 2024-07-08 · 7 models",
+     "label": "Cutoff 2024-07-08",
      "models": 7,
      "n_cal": 64,
      "n_time": 26,
@@ -955,7 +955,7 @@
     {
      "point_id": "P15",
      "cutoff": "2024-07-14",
-     "label": "Cutoff 2024-07-14 · 7 models",
+     "label": "Cutoff 2024-07-14",
      "models": 7,
      "n_cal": 146,
      "n_time": 26,
@@ -965,7 +965,7 @@
     {
      "point_id": "P16",
      "cutoff": "2024-07-15",
-     "label": "Cutoff 2024-07-15 · 7 models",
+     "label": "Cutoff 2024-07-15",
      "models": 7,
      "n_cal": 83,
      "n_time": 18,
@@ -975,7 +975,7 @@
     {
      "point_id": "P17",
      "cutoff": "2024-07-23",
-     "label": "Cutoff 2024-07-23 · 7 models",
+     "label": "Cutoff 2024-07-23",
      "models": 7,
      "n_cal": 64,
      "n_time": 23,
@@ -1015,7 +1015,7 @@
     {
      "point_id": "P21",
      "cutoff": "2024-10-02",
-     "label": "Cutoff 2024-10-02 · 7 models",
+     "label": "Cutoff 2024-10-02",
      "models": 7,
      "n_cal": 53,
      "n_time": 13,
@@ -1025,7 +1025,7 @@
     {
      "point_id": "P22",
      "cutoff": "2024-10-11",
-     "label": "Cutoff 2024-10-11 · 7 models",
+     "label": "Cutoff 2024-10-11",
      "models": 7,
      "n_cal": 29,
      "n_time": 13,
@@ -1035,7 +1035,7 @@
     {
      "point_id": "P23",
      "cutoff": "2025-08-13",
-     "label": "Cutoff 2025-08-13 · 7 models",
+     "label": "Cutoff 2025-08-13",
      "models": 7,
      "n_cal": 35,
      "n_time": 3,
@@ -1045,7 +1045,7 @@
     {
      "point_id": "P24",
      "cutoff": "2025-08-13",
-     "label": "Cutoff 2025-08-13 · 7 models",
+     "label": "Cutoff 2025-08-13",
      "models": 7,
      "n_cal": 30,
      "n_time": 3,
@@ -1055,7 +1055,7 @@
     {
      "point_id": "P25",
      "cutoff": "2025-08-13",
-     "label": "Cutoff 2025-08-13 · 7 models",
+     "label": "Cutoff 2025-08-13",
      "models": 7,
      "n_cal": 25,
      "n_time": 9,
@@ -1173,7 +1173,7 @@
     {
      "point_id": "P11",
      "cutoff": "2024-10-21",
-     "label": "Cutoff 2024-10-21 · 7 models",
+     "label": "Cutoff 2024-10-21",
      "models": 7,
      "n_cal": 382,
      "n_time": 58,
@@ -1193,7 +1193,7 @@
     {
      "point_id": "P13",
      "cutoff": "2024-11-02",
-     "label": "Cutoff 2024-11-02 · 7 models",
+     "label": "Cutoff 2024-11-02",
      "models": 7,
      "n_cal": 416,
      "n_time": 47,
@@ -1233,7 +1233,7 @@
     {
      "point_id": "P17",
      "cutoff": "2025-01-24",
-     "label": "Cutoff 2025-01-24 · 7 models",
+     "label": "Cutoff 2025-01-24",
      "models": 7,
      "n_cal": 259,
      "n_time": 46,
@@ -1243,7 +1243,7 @@
     {
      "point_id": "P18",
      "cutoff": "2025-02-01",
-     "label": "Cutoff 2025-02-01 · 7 models",
+     "label": "Cutoff 2025-02-01",
      "models": 7,
      "n_cal": 230,
      "n_time": 45,
@@ -1273,7 +1273,7 @@
     {
      "point_id": "P21",
      "cutoff": "2025-05-03",
-     "label": "Cutoff 2025-05-03 · 7 models",
+     "label": "Cutoff 2025-05-03",
      "models": 7,
      "n_cal": 160,
      "n_time": 29,
@@ -1283,7 +1283,7 @@
     {
      "point_id": "P22",
      "cutoff": "2025-05-22",
-     "label": "Cutoff 2025-05-22 · 7 models",
+     "label": "Cutoff 2025-05-22",
      "models": 7,
      "n_cal": 108,
      "n_time": 24,
@@ -1293,7 +1293,7 @@
     {
      "point_id": "P23",
      "cutoff": "2025-06-27",
-     "label": "Cutoff 2025-06-27 · 7 models",
+     "label": "Cutoff 2025-06-27",
      "models": 7,
      "n_cal": 98,
      "n_time": 21,
@@ -1303,7 +1303,7 @@
     {
      "point_id": "P24",
      "cutoff": "2025-09-09",
-     "label": "Cutoff 2025-09-09 · 7 models",
+     "label": "Cutoff 2025-09-09",
      "models": 7,
      "n_cal": 52,
      "n_time": 19,
@@ -1313,7 +1313,7 @@
     {
      "point_id": "P25",
      "cutoff": "2025-10-02",
-     "label": "Cutoff 2025-10-02 · 7 models",
+     "label": "Cutoff 2025-10-02",
      "models": 7,
      "n_cal": 32,
      "n_time": 12,

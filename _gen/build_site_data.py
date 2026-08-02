@@ -227,9 +227,9 @@ def build_demo(lang, langdir):
             scored = sum(1 for x in time if x["r"])
             index_pts.append({
                 "point_id": pid, "cutoff": cutoff,
-                "label": (f"截止日期 {cutoff}" if zh else f"Cutoff {cutoff}")
-                         + ("" if len(models) == len(MODELS)
-                            else (f" · {len(models)} 个模型" if zh else f" · {len(models)} models")),
+                # The label is just the cutoff; how many systems ran this point is
+                # visible in the model buttons themselves.
+                "label": (f"截止日期 {cutoff}" if zh else f"Cutoff {cutoff}"),
                 "models": len(models), "n_cal": len(cal),
                 "n_time": len(time), "n_time_scored": scored,
                 "file": f"demo/{lang}/{ev}/{pid}.json",

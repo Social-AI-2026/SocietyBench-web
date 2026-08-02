@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Dancing+Script:wght@600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260803-row" />
+  <link rel="stylesheet" href="styles.css?v=20260803-compact2" />
 </head>
 <body class="layout-pill dark-theme subpage" data-lang="en">
   <header class="topnav-wrap" aria-label="Primary">
@@ -120,21 +120,18 @@
                   </div>
                 </div>
 
-                <div class="view-block full">
-                  <span class="vb-label" data-i18n="try.view.gt">GROUND TRUTH</span>
+                <!-- Ground truth and the verdict share one strip: revealing the
+                     answer and reading how far off the model was is one action. -->
+                <div class="view-block full gt-strip">
                   <div class="reveal-row">
                     <button class="btn primary" id="reveal-btn" data-i18n-html="try.btn.reveal-gt.html"><span class="glyph">▸</span> REVEAL GT</button>
                     <span class="gt-pending" id="gt-pending" data-i18n="try.gt-pending">— click to compare model output against the true outcome</span>
                     <div class="gt-values hidden" id="gt-values">
                       <span class="gv" data-i18n-html="try.gv.cal.html">CALIBRATION GT &nbsp;·&nbsp; <b id="gt-cal">—</b> <span style="color:var(--muted)" id="gt-cal-note"></span></span>
                       <span class="gv" data-i18n-html="try.gv.time.html">TEMPORAL GT &nbsp;·&nbsp; <b id="gt-time">—</b></span>
+                      <span class="gv verdict" id="verdict">—</span>
                     </div>
                   </div>
-                </div>
-
-                <div class="view-block full">
-                  <span class="vb-label" data-i18n="try.view.verdict">VERDICT</span>
-                  <div class="verdict" id="verdict">—</div>
                 </div>
               </div>
             </div>
@@ -148,8 +145,8 @@
     </div><!-- /.main-col -->
   </div><!-- /.shell -->
 
-  <script src="i18n.js?v=20260803-row"></script>
-  <script src="app.js?v=20260803-row"></script>
-  <script src="demo.js?v=20260803-row"></script>
+  <script src="i18n.js?v=20260803-compact2"></script>
+  <script src="app.js?v=20260803-compact2"></script>
+  <script src="demo.js?v=20260803-compact2"></script>
 </body>
 </html>
