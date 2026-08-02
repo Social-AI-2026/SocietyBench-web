@@ -183,7 +183,9 @@ function buildUnifiedRows(data) {
   // which is the comparison the agent tables are actually about.
   const TYPE = { llm: "LLM", agent: "AGENT", baseline: "BASELINE", human: "HUMAN" };
   const rank = r => (r.kind === "baseline" || r.kind === "human") ? 1 : 0;
-  const rows = (data.validated || []).slice()
+  // The two model-free baselines are the 50-anchor written out as rows; the
+  // legend says what the anchor is, so the table stays a table of systems.
+  const rows = (data.validated || []).filter(r => r.kind !== "baseline").slice()
     .sort((a, b) => (rank(a) - rank(b)) || ((b.avg?.[0] || 0) - (a.avg?.[0] || 0)))
     .map(r => Object.assign({}, r, {
       _type: TYPE[r.kind] || "LLM",
@@ -407,8 +409,13 @@ function buildBarRows() {
   const v = _lbData.validated || [];
   const p = _lbData.projected || {};
 
-  // validated LLMs
-  for (const r of v) rows.push({ system: r.system, footnote: r.footnote, per_event: r.per_event, avg: r.avg, type: "LLM",          _italic: false, _ref: false });
+  // validated systems; the two model-free baselines are the anchor line, not
+  // competitors, so the bars leave them out exactly like the table does.
+  for (const r of v) {
+    if (r.kind === "baseline") continue;
+    rows.push({ system: r.system, footnote: r.footnote, per_event: r.per_event, avg: r.avg,
+                type: r.kind === "agent" ? "AGENT" : "LLM", _italic: false, _ref: false });
+  }
 
   if (barsState.include === "all" || barsState.include === "ref") {
     for (const r of (p.additional_llms || [])) rows.push({ system: r.system, per_event: r.per_event, avg: r.avg, type: "LLM · proj",   _italic: true });

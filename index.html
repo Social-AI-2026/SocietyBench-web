@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Dancing+Script:wght@600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260802-short" />
+  <link rel="stylesheet" href="styles.css?v=20260802-calm2" />
 </head>
 <body class="layout-pill dark-theme" data-active-page="overview" data-lang="en">
 
@@ -274,7 +274,6 @@
 
           <div class="lb-notes">
             <p data-i18n-html="lb.note.dagger.html"><span class="sym">†</span> Agents run on the <em>Doubao-Seed-2.0-Pro</em> base model; the delta against that base is what the row is measuring.</p>
-            <p data-i18n-html="lb.note.star.html"><span class="sym">★</span> The two model-free baselines emit no dates, so their temporal score is recorded at the bucket-midpoint anchor of 50.</p>
             <p style="margin-top: 10px;" data-i18n-html="lb.note.legend.html">Per-event cells: <code>Cal | Time</code>. Higher is better; 100 = perfect, 50 = the trivial anchor (a uniform 50% predictor on calibration, a bucket-midpoint guesser on time). Per-event labels: PUB = Public Controversy · GEO = Geopolitical · TECH = Tech Policy · MKT = Markets · TRADE = Trade. Every score on this table is measured — this release contains no projected numbers.</p>
           </div>
         </div>
@@ -310,14 +309,6 @@
               </div>
             </div>
 
-            <div class="ctrl-group">
-              <span class="ctrl-label" data-i18n="lb.bars.ctrl.include">Include</span>
-              <div class="ctrl-row" id="bars-include">
-                <button class="ctrl-btn active" data-val="validated" data-i18n="lb.bars.btn.validated">Validated</button>
-                <button class="ctrl-btn" data-val="all" data-i18n="lb.bars.btn.projected">+ Projected</button>
-                <button class="ctrl-btn" data-val="ref" data-i18n="lb.bars.btn.baselines">+ Baselines</button>
-              </div>
-            </div>
           </div>
 
           <div class="bars-meta" id="bars-meta"></div>
@@ -416,7 +407,7 @@ Accepted events join the official catalog and ship in the next benchmark version
           </article>
         </div>
 
-        <p class="expand-note" data-i18n-html="cb.expand-note.html">Contributors and event-growth statistics will appear here as the benchmark grows · current: <strong>5 events</strong> · <strong>125 prediction points</strong> · <strong>11 systems</strong> on the leaderboard</p>
+        <p class="expand-note" data-i18n-html="cb.expand-note.html">Contributors and event-growth statistics will appear here as the benchmark grows · current: <strong>5 events</strong> · <strong>125 prediction points</strong> · <strong>9 systems</strong> on the leaderboard</p>
 
         <!-- Citation closes the same block: contributing and citing are the two
              things a visitor does with the benchmark once convinced. -->
@@ -440,8 +431,8 @@ Accepted events join the official catalog and ship in the next benchmark version
     </div><!-- /.main-col -->
   </div><!-- /.shell -->
 
-  <script src="i18n.js?v=20260802-short"></script>
-  <script src="app.js?v=20260802-short"></script>
+  <script src="i18n.js?v=20260802-calm2"></script>
+  <script src="app.js?v=20260802-calm2"></script>
   <!-- Crowd animation temporarily disabled — see #crowd-container above.
   <script src="crowd-animation.js"></script>
   <script src="crowd-links.js"></script>

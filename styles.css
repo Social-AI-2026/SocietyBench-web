@@ -4209,3 +4209,170 @@ body.dark-theme .lb tbody tr.best td.avg { background: rgba(147, 180, 232, 0.14)
 /* BASELINE is the longest type badge and overran its 77 px column by 5 px. */
 .lb .type-badge.baseline { font-size: 8.5px; letter-spacing: 0.1em; }
 
+
+/* ===================== Small headings, calmed down ======================= */
+/* The view tabs were a solid bright-blue block with a 6 px hard white shadow —
+   the loudest thing on the page for a control that only switches a table. A
+   selected tab now reads through a quiet tint and a thin accent underline. */
+.tab {
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  padding: 9px 16px;
+  background: transparent;
+  border: var(--border);
+  border-bottom: 2px solid transparent;
+  box-shadow: none;
+  color: var(--muted);
+  transition: color 120ms, background 120ms, border-color 120ms;
+}
+.tab:hover {
+  transform: none;
+  box-shadow: none;
+  color: var(--ink);
+  background: rgba(127, 127, 127, 0.07);
+}
+.tab.active {
+  transform: none;
+  box-shadow: none;
+  background: rgba(127, 127, 127, 0.09);
+  color: var(--ink);
+  border-bottom-color: var(--blue);
+}
+.tab .glyph { color: inherit; font-weight: 600; opacity: 0.6; }
+
+/* Eyebrow labels: they name a box, they are not the content. Muted, lighter,
+   and underlined with a hairline instead of a 2 px blue rule. */
+.view-block .vb-label {
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  color: var(--muted);
+  border-bottom: 1px solid rgba(127, 127, 127, 0.25);
+}
+.field-label {
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  color: var(--muted);
+}
+.panel .panel-label {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  background: transparent;
+  border: var(--border);
+  padding: 3px 8px;
+}
+.expand-card .drawer-toggle {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  border: var(--border);
+  color: var(--muted);
+}
+.expand-card .drawer-toggle:hover { color: var(--ink); background: rgba(127, 127, 127, 0.07); }
+
+/* The headline callout kept an 8 px blue hard shadow. Same tint, no shadow. */
+.callout { box-shadow: none; }
+
+/* ======================= Leaderboard table, redrawn ===================== */
+/* It was a grid: every cell boxed in a 1 px rule, a solid black header band,
+   zebra striping, an orange column and a hard-shadowed best row. Six competing
+   signals for one ranking. Now: no vertical rules, one hairline per row, and
+   emphasis carried by weight and a single accent on the leading row. */
+.lb thead th {
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  padding: 0 12px 12px;
+  border-right: none;
+  border-bottom: 1.5px solid rgba(127, 127, 127, 0.3);
+}
+.lb thead .sub { opacity: 0.65; letter-spacing: 0.06em; }
+.lb tbody td {
+  border: none;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.16);
+  padding: 13px 12px;
+}
+.lb tbody tr:last-child td { border-bottom: none; }
+.lb tbody tr:nth-child(even) { background: transparent; }
+.lb tbody tr:hover td { background: rgba(127, 127, 127, 0.06); }
+.lb tbody td.sys { font-weight: 600; letter-spacing: 0.01em; }
+.lb tbody td.sys .fn { font-size: 10px; opacity: 0.85; }
+
+/* The leading row: a tint and a 2 px accent bar, no shadow, no colour block. */
+.lb tbody tr.best td { background: rgba(96, 165, 250, 0.07); }
+.lb tbody tr.best td.sys {
+  border-left: 2px solid var(--blue);
+  padding-left: 14px;
+  box-shadow: none;
+}
+.lb tbody tr.best td:last-child { box-shadow: none; }
+
+/* AVG is the column that decides the order: separated by a hairline and set in
+   the full ink colour, with no fill of its own. */
+.lb thead th:last-child,
+.lb tbody td.avg {
+  border-left: 1px solid rgba(127, 127, 127, 0.3);
+  background: transparent;
+}
+body.dark-theme .lb tbody td.avg { background: transparent; }
+body.dark-theme .lb tbody tr.best td.avg { background: transparent; }
+.lb tbody td.avg .pair .c,
+.lb tbody td.avg .pair .t { color: var(--ink); font-weight: 700; }
+.lb tbody td.avg { font-size: 13.5px; }
+
+/* Cal | Time: the calibration number leads, the temporal number follows in a
+   lighter tone, and the separator recedes. */
+.lb tbody td .pair { gap: 6px; }
+.lb tbody td .pair .sep { opacity: 0.35; font-weight: 400; }
+.lb tbody td .pair .t { opacity: 0.75; }
+
+/* Type badges shrink to a quiet word — the column header already says "type". */
+.lb .type-badge {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  padding: 0;
+}
+body.dark-theme .lb .type-badge.llm,
+body.dark-theme .lb .type-badge.baseline,
+body.dark-theme .lb .type-badge.human,
+body.dark-theme .lb .type-badge.llm---proj,
+body.dark-theme .lb .type-badge.agent---proj {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+}
+.lb tbody tr.best .type-badge { color: var(--blue); }
+
+/* Bars controls: same treatment as the view tabs — selected reads through a
+   quiet tint and the ink colour, not a solid blue chip. */
+.bars-toolbar .ctrl-btn, .ctrl-btn {
+  background: transparent;
+  border: var(--border);
+  color: var(--muted);
+  font-weight: 600;
+  box-shadow: none;
+}
+.bars-toolbar .ctrl-btn:hover, .ctrl-btn:hover { background: rgba(127, 127, 127, 0.07); color: var(--ink); transform: none; }
+.bars-toolbar .ctrl-btn.active, .ctrl-btn.active {
+  background: rgba(127, 127, 127, 0.09);
+  color: var(--ink);
+  border-color: rgba(127, 127, 127, 0.4);
+  box-shadow: none;
+  transform: none;
+}
+.ctrl-label { color: var(--muted); font-weight: 600; }
+
+/* Model picker on the Try-it page: selected reads through a tint and a left
+   accent, matching the tabs and the leaderboard's leading row. */
+.model-btn.active {
+  background: rgba(96, 165, 250, 0.1);
+  border-color: rgba(96, 165, 250, 0.45);
+  border-left: 2px solid var(--blue);
+}
+.model-btn.active .mtag { background: transparent; color: var(--blue); border-color: transparent; }
+.model-btn .mtag { background: transparent; color: var(--muted); border: none; font-weight: 600; }

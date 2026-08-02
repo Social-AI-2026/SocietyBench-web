@@ -133,7 +133,7 @@ ffmpeg -i source.mp4 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 27 \
 
 | 文件 | 行数 | 来源 |
 |------|------|------|
-| `leaderboard.json` · `.zh.json` | 6 个 LLM + 3 个智能体 + 2 个基线 | 论文 Table 2 与智能体表 |
+| `leaderboard.json` · `.zh.json` | 6 个 LLM + 3 个智能体 | 论文 Table 2 与智能体表 |
 | `demo_index.json` · `.zh.json` | 5 个事件、125 个预测点 | 我们真实的逐题实验产物 |
 | `demo/<语言>/<事件>/P<NN>.json` | 25,364 道校准题 + 3,112 个时间题 | 同一批实验产物，每个点一个文件 |
 | `experiments.json` · `.zh.json` | 难度来源的三个消融 | 论文的消融表 |

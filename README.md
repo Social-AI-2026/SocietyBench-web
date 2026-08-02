@@ -147,7 +147,7 @@ Everything on the page is generated, never hand-edited.
 
 | File | Rows | Source |
 |------|------|--------|
-| `leaderboard.json` · `.zh.json` | 6 LLMs + 3 agents + 2 baselines | the paper's Table 2 and agent table |
+| `leaderboard.json` · `.zh.json` | 6 LLMs + 3 agents | the paper's Table 2 and agent table |
 | `demo_index.json` · `.zh.json` | 5 events, 125 prediction points | our real per-question run outputs |
 | `demo/<lang>/<event>/P<NN>.json` | 25,364 calibration questions + 3,112 temporal events | the same run outputs, one file per point |
 | `experiments.json` · `.zh.json` | the three difficulty ablations | the paper's ablation tables |
