@@ -358,7 +358,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'cb.sf.submit': '▸ SUBMIT TOPIC',
 
       // Bottom lines
-      'cb.expand-note.html': 'Contributors and event-growth statistics will appear here as the benchmark grows · current: <strong>5 events</strong> · <strong>6 systems</strong> on the leaderboard',
+      'cb.expand-note.html': 'Contributors and event-growth statistics will appear here as the benchmark grows · current: <strong>5 events</strong> · <strong>125 prediction points</strong> · <strong>11 systems</strong> on the leaderboard',
       'cb.discussions.html': 'Questions about format, methodology, or scoring? &nbsp;→&nbsp; Join the discussion on <a href="#">GitHub Discussions ↗</a>',
 
       // ---- Deep dive (intro only; tables rendered by app.js) -------------
@@ -883,7 +883,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'cb.sf.submit': '▸ 提交选题',
 
       // Bottom lines
-      'cb.expand-note.html': '贡献者与事件成长统计将随基准发展而陆续呈现 · 当前: <strong>5 个事件</strong> · 排行榜上 <strong>6 个系统</strong>',
+      'cb.expand-note.html': '贡献者与事件成长统计将随基准发展而陆续呈现 · 当前: <strong>5 个事件</strong> · <strong>125 个预测点</strong> · 排行榜上 <strong>11 个系统</strong>',
       'cb.discussions.html': '对格式、方法或评分有疑问? &nbsp;→&nbsp; 在 <a href="#">GitHub Discussions ↗</a> 加入讨论',
 
       // ---- Deep dive (intro only; tables rendered by app.js) -------------

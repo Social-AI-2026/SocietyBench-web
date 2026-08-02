@@ -29,9 +29,12 @@ function tfmt(tmpl, vars) {
 // user always knows where they are in the document.
 function el(id) { return document.getElementById(id); }
 
-const SPY_IDS = ["about", "abstract", "method", "leaderboard", "deepdive", "expand", "cite"];
+// Citation lives inside the Contribute section now, so it is not a spy target
+// of its own -- the nav link still jumps to it, but highlighting follows the
+// section that contains it.
+const SPY_IDS = ["about", "abstract", "method", "leaderboard", "deepdive", "expand"];
 // Hero, abstract and method all roll up under the "Overview" nav item.
-const SPY_TO_NAV = { about: "about", abstract: "about", method: "about", leaderboard: "leaderboard", deepdive: "deepdive", expand: "expand", cite: "cite" };
+const SPY_TO_NAV = { about: "about", abstract: "about", method: "about", leaderboard: "leaderboard", deepdive: "deepdive", expand: "expand" };
 function setActiveNav(navKey) {
   document.querySelectorAll(".topnav-links a.sb-link[data-spy]").forEach(a => {
     a.classList.toggle("active", a.dataset.spy === navKey);
@@ -688,10 +691,6 @@ function renderAblationTabs(hostId, items) {
 
   host.innerHTML = `
     <div class="dd-block">
-      <div class="dd-head dd-head-center">
-        <h3 id="${hostId}-title"></h3>
-        <p class="dd-sub" id="${hostId}-sub"></p>
-      </div>
       <div class="tabs dd-tabs" role="tablist">
         ${live.map((x, i) => `<button type="button" class="tab${i ? "" : " active"}" role="tab"
             aria-selected="${i ? "false" : "true"}" data-i="${i}"><span class="glyph">▸</span><span>[ ${x.block.title.toUpperCase()} ]</span></button>`).join("")}
@@ -701,8 +700,8 @@ function renderAblationTabs(hostId, items) {
 
   const paint = () => {
     const { block, spec } = live[state.i];
-    document.getElementById(`${hostId}-title`).textContent = block.title;
-    document.getElementById(`${hostId}-sub`).textContent = block.subtitle;
+    // The buttons name the ablation and the takeaway states the result, so
+    // the block is just those two plus the table.
     document.getElementById(`${hostId}-body`).innerHTML = `
       <div class="dd-table-wrap">
         <table class="dd-table">${ablationTableHtml(block, spec)}</table>

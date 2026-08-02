@@ -4133,3 +4133,19 @@ body.dark-theme .q-pick { color: #e8e8ea; background: rgba(255, 255, 255, 0.05);
 @media (max-width: 900px) {
   .lb-stamp.lb-center { flex-wrap: wrap; white-space: normal; }
 }
+
+/* --- Homepage rhythm ----------------------------------------------------- */
+/* 120 px of padding on both sides of every section put 240 px of nothing
+   between blocks. Even, but far too airy once the page lost two sections. */
+.page-section { padding-top: 76px; padding-bottom: 76px; }
+body.layout-pill .page-section.hero {
+  padding-top: clamp(110px, 14vw, 160px);   /* clears the floating nav */
+  padding-bottom: 84px;
+}
+
+/* Citation now closes the Contribute block instead of owning a section. */
+.cite-sub { margin-top: 52px; }
+.cite-sub-title {
+  text-align: center;
+  margin: 0 auto 18px;
+}
