@@ -4140,7 +4140,10 @@ body.dark-theme .q-pick { color: #e8e8ea; background: rgba(255, 255, 255, 0.05);
 .page-section { padding-top: 76px; padding-bottom: 76px; }
 body.layout-pill .page-section.hero {
   padding-top: clamp(110px, 14vw, 160px);   /* clears the floating nav */
-  padding-bottom: 84px;
+  /* The block is centred between the paddings, so a bottom pad larger than the
+     top one lifts the title off the vertical centre — it reads as sitting too
+     low otherwise, with the nav taking the eye's top edge. */
+  padding-bottom: clamp(150px, 16vw, 232px);
 }
 
 /* Citation now closes the Contribute block instead of owning a section. */
