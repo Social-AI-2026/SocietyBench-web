@@ -663,9 +663,10 @@ async function loadDeepDive() {
       { key: "mean",   title: t("js.dd.col.mean") }
     ] }
   };
-  const ORDER = ["question_bank_composition", "true_false_bias", "cutoff_gradient",
-                 "window_segments", "dimension_mix", "scoring_formula",
-                 "anonymization", "web_access"];
+  // Four views of where the difficulty sits. experiments.json also carries the
+  // question-bank, scoring-formula, anonymization and web-access blocks; add
+  // the key here to put one back on the page.
+  const ORDER = ["true_false_bias", "cutoff_gradient", "window_segments", "dimension_mix"];
   renderAblationTabs("dd-ablations", ORDER.map(k => ({
     block: A[k],
     // Blocks generated from the ablation run files carry their own columns.

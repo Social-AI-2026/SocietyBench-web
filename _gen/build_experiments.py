@@ -150,7 +150,7 @@ def _pooled(rows):
     return 100.0 * max(0.0, 1.0 - sum(x.get("mae", 0) * x.get("weight", 0) for x in rows) / w)
 
 
-def block_dimension(zh, lang):
+def block_dimension(zh, lang="中文"):
     """Which dimension of question is hardest: event / policy / opinion.
 
     Recomputed from the calibration logs rather than read from the frozen file:
@@ -200,7 +200,7 @@ def block_dimension(zh, lang):
     }
 
 
-def block_window(zh, lang):
+def block_window(zh, lang="中文"):
     """Where in the 90-day window the temporal difficulty sits."""
     d = abl("题型构成_f窗口.json")
     if not d: return None
@@ -232,10 +232,10 @@ def block_window(zh, lang):
     }
 
 
-def block_anonymization(zh, lang):
+def block_anonymization(zh, lang="中文"):
     """Does anonymization actually remove the memory signal? (DeepSeek, zh only.)"""
     d = abl("匿名化.json")
-    if not d or lang != "中文": return None                    # 英文一侧未做
+    if not d: return None
     blk = d.get("中文", {})
     per = blk.get("per_event", {})
     L = (lambda a, b: a if zh else b)
@@ -268,10 +268,10 @@ def block_anonymization(zh, lang):
     }
 
 
-def block_web(zh, lang):
+def block_web(zh, lang="中文"):
     """Live web access, held against the memory signal (Doubao, zh only)."""
     d = abl("联网_豆包.json")
-    if not d or lang != "中文": return None
+    if not d: return None
     pairs = d.get("对照") or {}
     L = (lambda a, b: a if zh else b)
     names = {"event1-B": L("武大 · 概率", "Wuhan Lib. · prob"), "event1-F": L("武大 · 时间", "Wuhan Lib. · time"),
@@ -296,10 +296,13 @@ def block_web(zh, lang):
 
 for zh, suf in ((False, ""), (True, ".zh")):
     d = build(zh)
-    lang = "中文" if zh else "英文"
+    # The language toggle on the site is a translation, not a different set of
+    # results -- the leaderboard already shows one set of numbers in both
+    # languages. These blocks therefore always carry the main (Chinese-edition)
+    # figures; only their labels are translated.
     for key, fn in (("anonymization", block_anonymization), ("dimension_mix", block_dimension),
                     ("window_segments", block_window), ("web_access", block_web)):
-        blk = fn(zh, lang)
+        blk = fn(zh)
         if blk: d["ablations"][key] = blk
     json.dump(d, open(f"{OUT}/experiments{suf}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"  experiments{suf}.json  消融 {len(d['ablations'])} 组 / 压力事件 {len(d['stress_case']['events'])} 个")

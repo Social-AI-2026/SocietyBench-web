@@ -249,6 +249,88 @@
    ],
    "takeaway": "Later cutoffs see more of the arc and score higher (66.7 -> 67.6 -> 68.7). That is the closer-is-easier property a forecasting benchmark should show, and a basic sanity check on the construction."
   },
+  "anonymization": {
+   "title": "Does anonymization work?",
+   "subtitle": "One model (DeepSeek) answers the same points twice: once on the anonymized version used in the main experiment, once on the original with real names and real dates restored.",
+   "columns": [
+    {
+     "key": "label",
+     "title": "Event"
+    },
+    {
+     "key": "b_anon",
+     "title": "Prob · anon"
+    },
+    {
+     "key": "b_plain",
+     "title": "Prob · real"
+    },
+    {
+     "key": "f_anon",
+     "title": "Time · anon"
+    },
+    {
+     "key": "f_plain",
+     "title": "Time · real"
+    },
+    {
+     "key": "delta",
+     "title": "Memory signal, time"
+    }
+   ],
+   "rows": [
+    {
+     "label": "Wuhan Lib.",
+     "b_anon": 64.3,
+     "b_plain": 64.9,
+     "f_anon": 54.8,
+     "f_plain": 54.6,
+     "delta": -0.2
+    },
+    {
+     "label": "Trump Tariff",
+     "b_anon": 68.4,
+     "b_plain": 68.8,
+     "f_anon": 58.0,
+     "f_plain": 64.8,
+     "delta": 6.8
+    },
+    {
+     "label": "TikTok",
+     "b_anon": 66.5,
+     "b_plain": 69.6,
+     "f_anon": 54.9,
+     "f_plain": 64.9,
+     "delta": 10.0
+    },
+    {
+     "label": "US-Iran",
+     "b_anon": 57.6,
+     "b_plain": 57.8,
+     "f_anon": 59.0,
+     "f_plain": 57.7,
+     "delta": -1.3
+    },
+    {
+     "label": "SMCI",
+     "b_anon": 65.4,
+     "b_plain": 66.2,
+     "f_anon": 54.5,
+     "f_plain": 63.7,
+     "delta": 9.2
+    },
+    {
+     "label": "Mean delta over 5 events",
+     "b_anon": null,
+     "b_plain": 1.0,
+     "f_anon": null,
+     "f_plain": 4.9,
+     "delta": 4.9,
+     "is_baseline": true
+    }
+   ],
+   "takeaway": "The probability axis barely moves (+1.0 on average): those questions are not answered from memory. The temporal axis gains 4.9 points on average once real names are back - tariffs +6.8, TikTok +10.0, SMCI +9.2 - while the two low-profile arcs move -0.2 and -1.3. Models do remember when famous events happened, which is exactly why the temporal axis needs anonymization."
+  },
   "dimension_mix": {
    "title": "Question dimension",
    "subtitle": "The same answers regrouped by what the question asks about: a concrete event, a policy move, or where opinion goes. Seven full-coverage systems.",
@@ -281,34 +363,34 @@
    "rows": [
     {
      "label": "Event",
-     "mean": 58.9,
-     "豆包": 60.6,
-     "deepseek": 59.2,
-     "kimi": 62.0,
-     "mirofish": 60.2
+     "mean": 59.9,
+     "豆包": 62.3,
+     "deepseek": 62.3,
+     "kimi": 62.4,
+     "mirofish": 61.4
     },
     {
      "label": "Policy",
-     "mean": 61.5,
-     "豆包": 64.3,
-     "deepseek": 61.5,
-     "kimi": 61.0,
-     "mirofish": 64.1
+     "mean": 62.9,
+     "豆包": 64.9,
+     "deepseek": 63.4,
+     "kimi": 62.6,
+     "mirofish": 64.2
     },
     {
      "label": "Opinion",
-     "mean": 64.4,
-     "豆包": 70.3,
-     "deepseek": 64.1,
-     "kimi": 66.0,
-     "mirofish": 68.3
+     "mean": 67.3,
+     "豆包": 71.5,
+     "deepseek": 68.9,
+     "kimi": 66.1,
+     "mirofish": 71.8
     }
    ],
-   "takeaway": "Opinion questions are the easiest (64.4) and concrete events the hardest (58.9): models read the direction of the wind better than they call a specific event."
+   "takeaway": "Opinion questions are the easiest (67.3) and concrete events the hardest (59.9): models read the direction of the wind better than they call a specific event."
   },
   "window_segments": {
    "title": "Window segments",
-   "subtitle": "Temporal questions split by how far the event sits from the cutoff, then scored segment by segment. Segment shares: 52.4%·29.3%·18.3%.",
+   "subtitle": "Temporal questions split by how far the event sits from the cutoff, then scored segment by segment. Segment shares: 52.5%·29.3%·18.2%.",
    "columns": [
     {
      "key": "label",
@@ -334,38 +416,95 @@
    "rows": [
     {
      "label": "0-30 days only",
-     "mean": 62.6,
+     "mean": 63.9,
      "is_baseline": false,
-     "豆包": 61.9,
-     "kimi": 64.0,
-     "deepseek": 65.8
+     "豆包": 63.9,
+     "kimi": 64.9,
+     "deepseek": 64.3
     },
     {
      "label": "31-60 days only",
      "mean": 61.7,
      "is_baseline": false,
-     "豆包": 60.0,
-     "kimi": 61.1,
-     "deepseek": 67.4
+     "豆包": 63.2,
+     "kimi": 59.5,
+     "deepseek": 64.1
     },
     {
      "label": "61-90 days only",
-     "mean": 63.5,
+     "mean": 63.8,
      "is_baseline": false,
-     "豆包": 62.5,
-     "kimi": 63.9,
-     "deepseek": 68.8
+     "豆包": 64.5,
+     "kimi": 64.3,
+     "deepseek": 63.5
     },
     {
      "label": "Full window (ours)",
-     "mean": 62.5,
+     "mean": 63.4,
      "is_baseline": true,
-     "豆包": 61.5,
-     "kimi": 63.4,
-     "deepseek": 66.4
+     "豆包": 63.8,
+     "kimi": 63.7,
+     "deepseek": 64.2
     }
    ],
-   "takeaway": "The three segments differ by only 0.8 points, and the hardest is the middle one, 31-60 days (61.7): distance alone does not drive difficulty."
+   "takeaway": "The three segments differ by only 1.1 points, and the hardest is the middle one, 31-60 days (61.7): distance alone does not drive difficulty."
+  },
+  "web_access": {
+   "title": "Web access",
+   "subtitle": "One model (Doubao) answers the real-name version twice: once with the network off, once allowed to search. Two events, all 25 points.",
+   "columns": [
+    {
+     "key": "label",
+     "title": "Event · axis"
+    },
+    {
+     "key": "nw",
+     "title": "No web"
+    },
+    {
+     "key": "web",
+     "title": "With web"
+    },
+    {
+     "key": "base",
+     "title": "Anonymized baseline"
+    },
+    {
+     "key": "delta",
+     "title": "Delta from web"
+    }
+   ],
+   "rows": [
+    {
+     "label": "Wuhan Lib. · prob",
+     "nw": 64.6,
+     "web": 65.4,
+     "base": 66.4,
+     "delta": 0.8
+    },
+    {
+     "label": "Wuhan Lib. · time",
+     "nw": 58.3,
+     "web": 61.0,
+     "base": 58.9,
+     "delta": 2.7
+    },
+    {
+     "label": "Trump Tariff · prob",
+     "nw": 72.4,
+     "web": 73.9,
+     "base": 71.5,
+     "delta": 1.5
+    },
+    {
+     "label": "Trump Tariff · time",
+     "nw": 64.8,
+     "web": 65.9,
+     "base": 66.4,
+     "delta": 1.1
+    }
+   ],
+   "takeaway": "Search buys 0.8-2.7 points (about +1.5 on average): what can be retrieved does not help much, because the question is about what happens after the cutoff. The offline real-name run holds no steady edge over the anonymized baseline either, so this model carries no memory signal for these two arcs."
   }
  }
 }
