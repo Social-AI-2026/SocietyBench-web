@@ -1,0 +1,1310 @@
+{
+ "schema_version": "3.0",
+ "models": [
+  "GPT-5.5",
+  "Gemini-3.5-Flash",
+  "Claude-Opus-4.8",
+  "DeepSeek-V4-Pro",
+  "Kimi-K2.5",
+  "Doubao-Seed-2.0-Pro"
+ ],
+ "best": "GPT-5.5",
+ "totals": {
+  "points": 125,
+  "calibration_questions": 25364,
+  "temporal_events": 3112
+ },
+ "notes": "缓存模式的每一个数字都取自我们真实的实验输出 (runs_new/<event>/final/中文/results/run_main)，无任何虚构内容。",
+ "events": [
+  {
+   "id": "event1_library",
+   "short": "Wuhan Lib.",
+   "domain_label": "公共舆论",
+   "anonymized_arc": "Wuhan Lib.",
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff": "2023-07-02",
+     "label": "截止日期 2023-07-02",
+     "models": 6,
+     "n_cal": 168,
+     "n_time": 6,
+     "n_time_scored": 0,
+     "file": "demo/zh/event1_library/P01.json"
+    },
+    {
+     "point_id": "P02",
+     "cutoff": "2023-10-25",
+     "label": "截止日期 2023-10-25",
+     "models": 6,
+     "n_cal": 153,
+     "n_time": 19,
+     "n_time_scored": 11,
+     "file": "demo/zh/event1_library/P02.json"
+    },
+    {
+     "point_id": "P03",
+     "cutoff": "2023-11-10",
+     "label": "截止日期 2023-11-10 · 5 个模型",
+     "models": 5,
+     "n_cal": 91,
+     "n_time": 8,
+     "n_time_scored": 0,
+     "file": "demo/zh/event1_library/P03.json"
+    },
+    {
+     "point_id": "P04",
+     "cutoff": "2024-03-15",
+     "label": "截止日期 2024-03-15",
+     "models": 6,
+     "n_cal": 141,
+     "n_time": 8,
+     "n_time_scored": 1,
+     "file": "demo/zh/event1_library/P04.json"
+    },
+    {
+     "point_id": "P05",
+     "cutoff": "2024-07-27",
+     "label": "截止日期 2024-07-27",
+     "models": 6,
+     "n_cal": 93,
+     "n_time": 10,
+     "n_time_scored": 0,
+     "file": "demo/zh/event1_library/P05.json"
+    },
+    {
+     "point_id": "P06",
+     "cutoff": "2025-04-14",
+     "label": "截止日期 2025-04-14",
+     "models": 6,
+     "n_cal": 191,
+     "n_time": 44,
+     "n_time_scored": 44,
+     "file": "demo/zh/event1_library/P06.json"
+    },
+    {
+     "point_id": "P07",
+     "cutoff": "2025-04-15",
+     "label": "截止日期 2025-04-15",
+     "models": 6,
+     "n_cal": 176,
+     "n_time": 38,
+     "n_time_scored": 38,
+     "file": "demo/zh/event1_library/P07.json"
+    },
+    {
+     "point_id": "P08",
+     "cutoff": "2025-04-16",
+     "label": "截止日期 2025-04-16",
+     "models": 6,
+     "n_cal": 175,
+     "n_time": 41,
+     "n_time_scored": 41,
+     "file": "demo/zh/event1_library/P08.json"
+    },
+    {
+     "point_id": "P09",
+     "cutoff": "2025-04-18",
+     "label": "截止日期 2025-04-18",
+     "models": 6,
+     "n_cal": 164,
+     "n_time": 38,
+     "n_time_scored": 38,
+     "file": "demo/zh/event1_library/P09.json"
+    },
+    {
+     "point_id": "P10",
+     "cutoff": "2025-04-19",
+     "label": "截止日期 2025-04-19",
+     "models": 6,
+     "n_cal": 149,
+     "n_time": 36,
+     "n_time_scored": 36,
+     "file": "demo/zh/event1_library/P10.json"
+    },
+    {
+     "point_id": "P11",
+     "cutoff": "2025-04-20",
+     "label": "截止日期 2025-04-20",
+     "models": 6,
+     "n_cal": 153,
+     "n_time": 29,
+     "n_time_scored": 29,
+     "file": "demo/zh/event1_library/P11.json"
+    },
+    {
+     "point_id": "P12",
+     "cutoff": "2025-04-22",
+     "label": "截止日期 2025-04-22",
+     "models": 6,
+     "n_cal": 140,
+     "n_time": 27,
+     "n_time_scored": 26,
+     "file": "demo/zh/event1_library/P12.json"
+    },
+    {
+     "point_id": "P13",
+     "cutoff": "2025-04-23",
+     "label": "截止日期 2025-04-23",
+     "models": 6,
+     "n_cal": 136,
+     "n_time": 27,
+     "n_time_scored": 26,
+     "file": "demo/zh/event1_library/P13.json"
+    },
+    {
+     "point_id": "P14",
+     "cutoff": "2025-04-24",
+     "label": "截止日期 2025-04-24",
+     "models": 6,
+     "n_cal": 98,
+     "n_time": 23,
+     "n_time_scored": 22,
+     "file": "demo/zh/event1_library/P14.json"
+    },
+    {
+     "point_id": "P15",
+     "cutoff": "2025-04-27",
+     "label": "截止日期 2025-04-27",
+     "models": 6,
+     "n_cal": 103,
+     "n_time": 20,
+     "n_time_scored": 19,
+     "file": "demo/zh/event1_library/P15.json"
+    },
+    {
+     "point_id": "P16",
+     "cutoff": "2025-04-30",
+     "label": "截止日期 2025-04-30",
+     "models": 6,
+     "n_cal": 117,
+     "n_time": 23,
+     "n_time_scored": 22,
+     "file": "demo/zh/event1_library/P16.json"
+    },
+    {
+     "point_id": "P17",
+     "cutoff": "2025-05-01",
+     "label": "截止日期 2025-05-01",
+     "models": 6,
+     "n_cal": 96,
+     "n_time": 24,
+     "n_time_scored": 23,
+     "file": "demo/zh/event1_library/P17.json"
+    },
+    {
+     "point_id": "P18",
+     "cutoff": "2025-05-08",
+     "label": "截止日期 2025-05-08",
+     "models": 6,
+     "n_cal": 90,
+     "n_time": 19,
+     "n_time_scored": 18,
+     "file": "demo/zh/event1_library/P18.json"
+    },
+    {
+     "point_id": "P19",
+     "cutoff": "2025-05-12",
+     "label": "截止日期 2025-05-12",
+     "models": 6,
+     "n_cal": 93,
+     "n_time": 18,
+     "n_time_scored": 17,
+     "file": "demo/zh/event1_library/P19.json"
+    },
+    {
+     "point_id": "P20",
+     "cutoff": "2025-05-13",
+     "label": "截止日期 2025-05-13",
+     "models": 6,
+     "n_cal": 83,
+     "n_time": 17,
+     "n_time_scored": 16,
+     "file": "demo/zh/event1_library/P20.json"
+    },
+    {
+     "point_id": "P21",
+     "cutoff": "2025-05-22",
+     "label": "截止日期 2025-05-22 · 5 个模型",
+     "models": 5,
+     "n_cal": 53,
+     "n_time": 15,
+     "n_time_scored": 14,
+     "file": "demo/zh/event1_library/P21.json"
+    },
+    {
+     "point_id": "P22",
+     "cutoff": "2025-05-30",
+     "label": "截止日期 2025-05-30 · 5 个模型",
+     "models": 5,
+     "n_cal": 67,
+     "n_time": 14,
+     "n_time_scored": 13,
+     "file": "demo/zh/event1_library/P22.json"
+    },
+    {
+     "point_id": "P23",
+     "cutoff": "2025-06-06",
+     "label": "截止日期 2025-06-06",
+     "models": 6,
+     "n_cal": 48,
+     "n_time": 13,
+     "n_time_scored": 12,
+     "file": "demo/zh/event1_library/P23.json"
+    },
+    {
+     "point_id": "P24",
+     "cutoff": "2025-06-09",
+     "label": "截止日期 2025-06-09 · 5 个模型",
+     "models": 5,
+     "n_cal": 45,
+     "n_time": 10,
+     "n_time_scored": 9,
+     "file": "demo/zh/event1_library/P24.json"
+    },
+    {
+     "point_id": "P25",
+     "cutoff": "2025-06-10",
+     "label": "截止日期 2025-06-10 · 5 个模型",
+     "models": 5,
+     "n_cal": 39,
+     "n_time": 7,
+     "n_time_scored": 6,
+     "file": "demo/zh/event1_library/P25.json"
+    }
+   ]
+  },
+  {
+   "id": "event4_us_iran",
+   "short": "US-Iran",
+   "domain_label": "地缘政治",
+   "anonymized_arc": "US-Iran",
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff": "2025-08-30",
+     "label": "截止日期 2025-08-30",
+     "models": 6,
+     "n_cal": 262,
+     "n_time": 21,
+     "n_time_scored": 21,
+     "file": "demo/zh/event4_us_iran/P01.json"
+    },
+    {
+     "point_id": "P02",
+     "cutoff": "2025-08-31",
+     "label": "截止日期 2025-08-31",
+     "models": 6,
+     "n_cal": 343,
+     "n_time": 21,
+     "n_time_scored": 21,
+     "file": "demo/zh/event4_us_iran/P02.json"
+    },
+    {
+     "point_id": "P03",
+     "cutoff": "2025-09-07",
+     "label": "截止日期 2025-09-07",
+     "models": 6,
+     "n_cal": 361,
+     "n_time": 31,
+     "n_time_scored": 31,
+     "file": "demo/zh/event4_us_iran/P03.json"
+    },
+    {
+     "point_id": "P04",
+     "cutoff": "2025-09-08",
+     "label": "截止日期 2025-09-08",
+     "models": 6,
+     "n_cal": 329,
+     "n_time": 35,
+     "n_time_scored": 35,
+     "file": "demo/zh/event4_us_iran/P04.json"
+    },
+    {
+     "point_id": "P05",
+     "cutoff": "2025-09-15",
+     "label": "截止日期 2025-09-15",
+     "models": 6,
+     "n_cal": 258,
+     "n_time": 30,
+     "n_time_scored": 30,
+     "file": "demo/zh/event4_us_iran/P05.json"
+    },
+    {
+     "point_id": "P06",
+     "cutoff": "2025-09-16",
+     "label": "截止日期 2025-09-16",
+     "models": 6,
+     "n_cal": 313,
+     "n_time": 30,
+     "n_time_scored": 30,
+     "file": "demo/zh/event4_us_iran/P06.json"
+    },
+    {
+     "point_id": "P07",
+     "cutoff": "2025-09-17",
+     "label": "截止日期 2025-09-17",
+     "models": 6,
+     "n_cal": 297,
+     "n_time": 31,
+     "n_time_scored": 31,
+     "file": "demo/zh/event4_us_iran/P07.json"
+    },
+    {
+     "point_id": "P08",
+     "cutoff": "2025-09-20",
+     "label": "截止日期 2025-09-20",
+     "models": 6,
+     "n_cal": 162,
+     "n_time": 28,
+     "n_time_scored": 28,
+     "file": "demo/zh/event4_us_iran/P08.json"
+    },
+    {
+     "point_id": "P09",
+     "cutoff": "2025-09-23",
+     "label": "截止日期 2025-09-23 · 3 个模型",
+     "models": 3,
+     "n_cal": 203,
+     "n_time": 29,
+     "n_time_scored": 29,
+     "file": "demo/zh/event4_us_iran/P09.json"
+    },
+    {
+     "point_id": "P10",
+     "cutoff": "2025-10-03",
+     "label": "截止日期 2025-10-03",
+     "models": 6,
+     "n_cal": 255,
+     "n_time": 26,
+     "n_time_scored": 26,
+     "file": "demo/zh/event4_us_iran/P10.json"
+    },
+    {
+     "point_id": "P11",
+     "cutoff": "2025-10-04",
+     "label": "截止日期 2025-10-04",
+     "models": 6,
+     "n_cal": 241,
+     "n_time": 24,
+     "n_time_scored": 24,
+     "file": "demo/zh/event4_us_iran/P11.json"
+    },
+    {
+     "point_id": "P12",
+     "cutoff": "2025-10-11",
+     "label": "截止日期 2025-10-11 · 3 个模型",
+     "models": 3,
+     "n_cal": 219,
+     "n_time": 23,
+     "n_time_scored": 23,
+     "file": "demo/zh/event4_us_iran/P12.json"
+    },
+    {
+     "point_id": "P13",
+     "cutoff": "2025-10-13",
+     "label": "截止日期 2025-10-13",
+     "models": 6,
+     "n_cal": 182,
+     "n_time": 22,
+     "n_time_scored": 22,
+     "file": "demo/zh/event4_us_iran/P13.json"
+    },
+    {
+     "point_id": "P14",
+     "cutoff": "2025-10-16",
+     "label": "截止日期 2025-10-16",
+     "models": 6,
+     "n_cal": 194,
+     "n_time": 19,
+     "n_time_scored": 19,
+     "file": "demo/zh/event4_us_iran/P14.json"
+    },
+    {
+     "point_id": "P15",
+     "cutoff": "2025-10-19",
+     "label": "截止日期 2025-10-19 · 3 个模型",
+     "models": 3,
+     "n_cal": 174,
+     "n_time": 19,
+     "n_time_scored": 19,
+     "file": "demo/zh/event4_us_iran/P15.json"
+    },
+    {
+     "point_id": "P16",
+     "cutoff": "2025-10-20",
+     "label": "截止日期 2025-10-20 · 3 个模型",
+     "models": 3,
+     "n_cal": 111,
+     "n_time": 14,
+     "n_time_scored": 14,
+     "file": "demo/zh/event4_us_iran/P16.json"
+    },
+    {
+     "point_id": "P17",
+     "cutoff": "2025-10-22",
+     "label": "截止日期 2025-10-22 · 3 个模型",
+     "models": 3,
+     "n_cal": 101,
+     "n_time": 16,
+     "n_time_scored": 16,
+     "file": "demo/zh/event4_us_iran/P17.json"
+    },
+    {
+     "point_id": "P18",
+     "cutoff": "2025-10-25",
+     "label": "截止日期 2025-10-25",
+     "models": 6,
+     "n_cal": 102,
+     "n_time": 16,
+     "n_time_scored": 16,
+     "file": "demo/zh/event4_us_iran/P18.json"
+    },
+    {
+     "point_id": "P19",
+     "cutoff": "2025-10-27",
+     "label": "截止日期 2025-10-27 · 3 个模型",
+     "models": 3,
+     "n_cal": 92,
+     "n_time": 14,
+     "n_time_scored": 14,
+     "file": "demo/zh/event4_us_iran/P19.json"
+    },
+    {
+     "point_id": "P20",
+     "cutoff": "2025-10-29",
+     "label": "截止日期 2025-10-29 · 3 个模型",
+     "models": 3,
+     "n_cal": 82,
+     "n_time": 11,
+     "n_time_scored": 11,
+     "file": "demo/zh/event4_us_iran/P20.json"
+    },
+    {
+     "point_id": "P21",
+     "cutoff": "2025-10-30",
+     "label": "截止日期 2025-10-30 · 3 个模型",
+     "models": 3,
+     "n_cal": 78,
+     "n_time": 12,
+     "n_time_scored": 12,
+     "file": "demo/zh/event4_us_iran/P21.json"
+    },
+    {
+     "point_id": "P22",
+     "cutoff": "2025-11-04",
+     "label": "截止日期 2025-11-04 · 3 个模型",
+     "models": 3,
+     "n_cal": 66,
+     "n_time": 9,
+     "n_time_scored": 9,
+     "file": "demo/zh/event4_us_iran/P22.json"
+    },
+    {
+     "point_id": "P23",
+     "cutoff": "2025-11-05",
+     "label": "截止日期 2025-11-05",
+     "models": 6,
+     "n_cal": 56,
+     "n_time": 9,
+     "n_time_scored": 9,
+     "file": "demo/zh/event4_us_iran/P23.json"
+    },
+    {
+     "point_id": "P24",
+     "cutoff": "2025-11-08",
+     "label": "截止日期 2025-11-08",
+     "models": 6,
+     "n_cal": 48,
+     "n_time": 7,
+     "n_time_scored": 7,
+     "file": "demo/zh/event4_us_iran/P24.json"
+    },
+    {
+     "point_id": "P25",
+     "cutoff": "2025-11-10",
+     "label": "截止日期 2025-11-10 · 3 个模型",
+     "models": 3,
+     "n_cal": 45,
+     "n_time": 6,
+     "n_time_scored": 6,
+     "file": "demo/zh/event4_us_iran/P25.json"
+    }
+   ]
+  },
+  {
+   "id": "event3_tiktok",
+   "short": "TikTok",
+   "domain_label": "科技监管",
+   "anonymized_arc": "TikTok",
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff": "2022-10-09",
+     "label": "截止日期 2022-10-09",
+     "models": 6,
+     "n_cal": 377,
+     "n_time": 23,
+     "n_time_scored": 20,
+     "file": "demo/zh/event3_tiktok/P01.json"
+    },
+    {
+     "point_id": "P02",
+     "cutoff": "2022-10-22",
+     "label": "截止日期 2022-10-22",
+     "models": 6,
+     "n_cal": 444,
+     "n_time": 17,
+     "n_time_scored": 15,
+     "file": "demo/zh/event3_tiktok/P02.json"
+    },
+    {
+     "point_id": "P03",
+     "cutoff": "2022-11-09",
+     "label": "截止日期 2022-11-09",
+     "models": 6,
+     "n_cal": 354,
+     "n_time": 18,
+     "n_time_scored": 12,
+     "file": "demo/zh/event3_tiktok/P03.json"
+    },
+    {
+     "point_id": "P04",
+     "cutoff": "2022-11-17",
+     "label": "截止日期 2022-11-17",
+     "models": 6,
+     "n_cal": 330,
+     "n_time": 12,
+     "n_time_scored": 6,
+     "file": "demo/zh/event3_tiktok/P04.json"
+    },
+    {
+     "point_id": "P05",
+     "cutoff": "2023-05-15",
+     "label": "截止日期 2023-05-15 · 3 个模型",
+     "models": 3,
+     "n_cal": 321,
+     "n_time": 9,
+     "n_time_scored": 0,
+     "file": "demo/zh/event3_tiktok/P05.json"
+    },
+    {
+     "point_id": "P06",
+     "cutoff": "2023-10-30",
+     "label": "截止日期 2023-10-30",
+     "models": 6,
+     "n_cal": 412,
+     "n_time": 39,
+     "n_time_scored": 39,
+     "file": "demo/zh/event3_tiktok/P06.json"
+    },
+    {
+     "point_id": "P07",
+     "cutoff": "2023-11-05",
+     "label": "截止日期 2023-11-05",
+     "models": 6,
+     "n_cal": 449,
+     "n_time": 37,
+     "n_time_scored": 37,
+     "file": "demo/zh/event3_tiktok/P07.json"
+    },
+    {
+     "point_id": "P08",
+     "cutoff": "2023-11-11",
+     "label": "截止日期 2023-11-11",
+     "models": 6,
+     "n_cal": 388,
+     "n_time": 37,
+     "n_time_scored": 36,
+     "file": "demo/zh/event3_tiktok/P08.json"
+    },
+    {
+     "point_id": "P09",
+     "cutoff": "2023-12-12",
+     "label": "截止日期 2023-12-12",
+     "models": 6,
+     "n_cal": 375,
+     "n_time": 31,
+     "n_time_scored": 26,
+     "file": "demo/zh/event3_tiktok/P09.json"
+    },
+    {
+     "point_id": "P10",
+     "cutoff": "2023-12-16",
+     "label": "截止日期 2023-12-16",
+     "models": 6,
+     "n_cal": 380,
+     "n_time": 28,
+     "n_time_scored": 23,
+     "file": "demo/zh/event3_tiktok/P10.json"
+    },
+    {
+     "point_id": "P11",
+     "cutoff": "2023-12-23",
+     "label": "截止日期 2023-12-23",
+     "models": 6,
+     "n_cal": 238,
+     "n_time": 22,
+     "n_time_scored": 16,
+     "file": "demo/zh/event3_tiktok/P11.json"
+    },
+    {
+     "point_id": "P12",
+     "cutoff": "2024-01-01",
+     "label": "截止日期 2024-01-01 · 3 个模型",
+     "models": 3,
+     "n_cal": 268,
+     "n_time": 23,
+     "n_time_scored": 15,
+     "file": "demo/zh/event3_tiktok/P12.json"
+    },
+    {
+     "point_id": "P13",
+     "cutoff": "2024-01-14",
+     "label": "截止日期 2024-01-14",
+     "models": 6,
+     "n_cal": 261,
+     "n_time": 21,
+     "n_time_scored": 13,
+     "file": "demo/zh/event3_tiktok/P13.json"
+    },
+    {
+     "point_id": "P14",
+     "cutoff": "2024-01-24",
+     "label": "截止日期 2024-01-24 · 3 个模型",
+     "models": 3,
+     "n_cal": 220,
+     "n_time": 18,
+     "n_time_scored": 10,
+     "file": "demo/zh/event3_tiktok/P14.json"
+    },
+    {
+     "point_id": "P15",
+     "cutoff": "2024-03-20",
+     "label": "截止日期 2024-03-20 · 3 个模型",
+     "models": 3,
+     "n_cal": 232,
+     "n_time": 17,
+     "n_time_scored": 11,
+     "file": "demo/zh/event3_tiktok/P15.json"
+    },
+    {
+     "point_id": "P16",
+     "cutoff": "2024-04-08",
+     "label": "截止日期 2024-04-08 · 3 个模型",
+     "models": 3,
+     "n_cal": 194,
+     "n_time": 16,
+     "n_time_scored": 11,
+     "file": "demo/zh/event3_tiktok/P16.json"
+    },
+    {
+     "point_id": "P17",
+     "cutoff": "2024-05-17",
+     "label": "截止日期 2024-05-17 · 3 个模型",
+     "models": 3,
+     "n_cal": 248,
+     "n_time": 15,
+     "n_time_scored": 13,
+     "file": "demo/zh/event3_tiktok/P17.json"
+    },
+    {
+     "point_id": "P18",
+     "cutoff": "2024-06-29",
+     "label": "截止日期 2024-06-29 · 3 个模型",
+     "models": 3,
+     "n_cal": 190,
+     "n_time": 27,
+     "n_time_scored": 27,
+     "file": "demo/zh/event3_tiktok/P18.json"
+    },
+    {
+     "point_id": "P19",
+     "cutoff": "2024-07-30",
+     "label": "截止日期 2024-07-30 · 3 个模型",
+     "models": 3,
+     "n_cal": 216,
+     "n_time": 28,
+     "n_time_scored": 28,
+     "file": "demo/zh/event3_tiktok/P19.json"
+    },
+    {
+     "point_id": "P20",
+     "cutoff": "2024-08-04",
+     "label": "截止日期 2024-08-04 · 3 个模型",
+     "models": 3,
+     "n_cal": 180,
+     "n_time": 27,
+     "n_time_scored": 27,
+     "file": "demo/zh/event3_tiktok/P20.json"
+    },
+    {
+     "point_id": "P21",
+     "cutoff": "2024-08-09",
+     "label": "截止日期 2024-08-09",
+     "models": 6,
+     "n_cal": 159,
+     "n_time": 24,
+     "n_time_scored": 23,
+     "file": "demo/zh/event3_tiktok/P21.json"
+    },
+    {
+     "point_id": "P22",
+     "cutoff": "2024-08-19",
+     "label": "截止日期 2024-08-19 · 3 个模型",
+     "models": 3,
+     "n_cal": 155,
+     "n_time": 25,
+     "n_time_scored": 23,
+     "file": "demo/zh/event3_tiktok/P22.json"
+    },
+    {
+     "point_id": "P23",
+     "cutoff": "2024-08-29",
+     "label": "截止日期 2024-08-29 · 3 个模型",
+     "models": 3,
+     "n_cal": 124,
+     "n_time": 19,
+     "n_time_scored": 18,
+     "file": "demo/zh/event3_tiktok/P23.json"
+    },
+    {
+     "point_id": "P24",
+     "cutoff": "2024-09-05",
+     "label": "截止日期 2024-09-05 · 3 个模型",
+     "models": 3,
+     "n_cal": 101,
+     "n_time": 21,
+     "n_time_scored": 20,
+     "file": "demo/zh/event3_tiktok/P24.json"
+    },
+    {
+     "point_id": "P25",
+     "cutoff": "2024-09-11",
+     "label": "截止日期 2024-09-11 · 3 个模型",
+     "models": 3,
+     "n_cal": 81,
+     "n_time": 17,
+     "n_time_scored": 16,
+     "file": "demo/zh/event3_tiktok/P25.json"
+    }
+   ]
+  },
+  {
+   "id": "event5_smci",
+   "short": "SMCI",
+   "domain_label": "金融市场",
+   "anonymized_arc": "SMCI",
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff": "2024-05-02",
+     "label": "截止日期 2024-05-02",
+     "models": 6,
+     "n_cal": 267,
+     "n_time": 30,
+     "n_time_scored": 26,
+     "file": "demo/zh/event5_smci/P01.json"
+    },
+    {
+     "point_id": "P02",
+     "cutoff": "2024-05-10",
+     "label": "截止日期 2024-05-10",
+     "models": 6,
+     "n_cal": 115,
+     "n_time": 27,
+     "n_time_scored": 24,
+     "file": "demo/zh/event5_smci/P02.json"
+    },
+    {
+     "point_id": "P03",
+     "cutoff": "2024-06-05",
+     "label": "截止日期 2024-06-05",
+     "models": 6,
+     "n_cal": 327,
+     "n_time": 28,
+     "n_time_scored": 24,
+     "file": "demo/zh/event5_smci/P03.json"
+    },
+    {
+     "point_id": "P04",
+     "cutoff": "2024-06-06",
+     "label": "截止日期 2024-06-06",
+     "models": 6,
+     "n_cal": 119,
+     "n_time": 25,
+     "n_time_scored": 21,
+     "file": "demo/zh/event5_smci/P04.json"
+    },
+    {
+     "point_id": "P05",
+     "cutoff": "2024-06-07",
+     "label": "截止日期 2024-06-07",
+     "models": 6,
+     "n_cal": 273,
+     "n_time": 28,
+     "n_time_scored": 22,
+     "file": "demo/zh/event5_smci/P05.json"
+    },
+    {
+     "point_id": "P06",
+     "cutoff": "2024-06-11",
+     "label": "截止日期 2024-06-11",
+     "models": 6,
+     "n_cal": 252,
+     "n_time": 27,
+     "n_time_scored": 20,
+     "file": "demo/zh/event5_smci/P06.json"
+    },
+    {
+     "point_id": "P07",
+     "cutoff": "2024-06-12",
+     "label": "截止日期 2024-06-12",
+     "models": 6,
+     "n_cal": 175,
+     "n_time": 25,
+     "n_time_scored": 18,
+     "file": "demo/zh/event5_smci/P07.json"
+    },
+    {
+     "point_id": "P08",
+     "cutoff": "2024-06-19",
+     "label": "截止日期 2024-06-19",
+     "models": 6,
+     "n_cal": 163,
+     "n_time": 20,
+     "n_time_scored": 14,
+     "file": "demo/zh/event5_smci/P08.json"
+    },
+    {
+     "point_id": "P09",
+     "cutoff": "2024-06-24",
+     "label": "截止日期 2024-06-24",
+     "models": 6,
+     "n_cal": 183,
+     "n_time": 21,
+     "n_time_scored": 15,
+     "file": "demo/zh/event5_smci/P09.json"
+    },
+    {
+     "point_id": "P10",
+     "cutoff": "2024-06-25",
+     "label": "截止日期 2024-06-25",
+     "models": 6,
+     "n_cal": 148,
+     "n_time": 21,
+     "n_time_scored": 15,
+     "file": "demo/zh/event5_smci/P10.json"
+    },
+    {
+     "point_id": "P11",
+     "cutoff": "2024-06-26",
+     "label": "截止日期 2024-06-26",
+     "models": 6,
+     "n_cal": 175,
+     "n_time": 28,
+     "n_time_scored": 22,
+     "file": "demo/zh/event5_smci/P11.json"
+    },
+    {
+     "point_id": "P12",
+     "cutoff": "2024-06-28",
+     "label": "截止日期 2024-06-28 · 3 个模型",
+     "models": 3,
+     "n_cal": 160,
+     "n_time": 27,
+     "n_time_scored": 21,
+     "file": "demo/zh/event5_smci/P12.json"
+    },
+    {
+     "point_id": "P13",
+     "cutoff": "2024-06-30",
+     "label": "截止日期 2024-06-30",
+     "models": 6,
+     "n_cal": 134,
+     "n_time": 33,
+     "n_time_scored": 21,
+     "file": "demo/zh/event5_smci/P13.json"
+    },
+    {
+     "point_id": "P14",
+     "cutoff": "2024-07-08",
+     "label": "截止日期 2024-07-08 · 3 个模型",
+     "models": 3,
+     "n_cal": 64,
+     "n_time": 26,
+     "n_time_scored": 18,
+     "file": "demo/zh/event5_smci/P14.json"
+    },
+    {
+     "point_id": "P15",
+     "cutoff": "2024-07-14",
+     "label": "截止日期 2024-07-14 · 3 个模型",
+     "models": 3,
+     "n_cal": 146,
+     "n_time": 26,
+     "n_time_scored": 18,
+     "file": "demo/zh/event5_smci/P15.json"
+    },
+    {
+     "point_id": "P16",
+     "cutoff": "2024-07-15",
+     "label": "截止日期 2024-07-15 · 3 个模型",
+     "models": 3,
+     "n_cal": 83,
+     "n_time": 18,
+     "n_time_scored": 13,
+     "file": "demo/zh/event5_smci/P16.json"
+    },
+    {
+     "point_id": "P17",
+     "cutoff": "2024-07-23",
+     "label": "截止日期 2024-07-23 · 3 个模型",
+     "models": 3,
+     "n_cal": 64,
+     "n_time": 23,
+     "n_time_scored": 13,
+     "file": "demo/zh/event5_smci/P17.json"
+    },
+    {
+     "point_id": "P18",
+     "cutoff": "2024-07-24",
+     "label": "截止日期 2024-07-24 · 3 个模型",
+     "models": 3,
+     "n_cal": 75,
+     "n_time": 22,
+     "n_time_scored": 12,
+     "file": "demo/zh/event5_smci/P18.json"
+    },
+    {
+     "point_id": "P19",
+     "cutoff": "2024-09-18",
+     "label": "截止日期 2024-09-18 · 3 个模型",
+     "models": 3,
+     "n_cal": 74,
+     "n_time": 17,
+     "n_time_scored": 11,
+     "file": "demo/zh/event5_smci/P19.json"
+    },
+    {
+     "point_id": "P20",
+     "cutoff": "2024-10-01",
+     "label": "截止日期 2024-10-01 · 3 个模型",
+     "models": 3,
+     "n_cal": 27,
+     "n_time": 15,
+     "n_time_scored": 10,
+     "file": "demo/zh/event5_smci/P20.json"
+    },
+    {
+     "point_id": "P21",
+     "cutoff": "2024-10-02",
+     "label": "截止日期 2024-10-02 · 3 个模型",
+     "models": 3,
+     "n_cal": 53,
+     "n_time": 13,
+     "n_time_scored": 6,
+     "file": "demo/zh/event5_smci/P21.json"
+    },
+    {
+     "point_id": "P22",
+     "cutoff": "2024-10-11",
+     "label": "截止日期 2024-10-11 · 3 个模型",
+     "models": 3,
+     "n_cal": 29,
+     "n_time": 13,
+     "n_time_scored": 5,
+     "file": "demo/zh/event5_smci/P22.json"
+    },
+    {
+     "point_id": "P23",
+     "cutoff": "2025-08-13",
+     "label": "截止日期 2025-08-13 · 3 个模型",
+     "models": 3,
+     "n_cal": 35,
+     "n_time": 3,
+     "n_time_scored": 3,
+     "file": "demo/zh/event5_smci/P23.json"
+    },
+    {
+     "point_id": "P24",
+     "cutoff": "2025-08-13",
+     "label": "截止日期 2025-08-13 · 3 个模型",
+     "models": 3,
+     "n_cal": 30,
+     "n_time": 3,
+     "n_time_scored": 3,
+     "file": "demo/zh/event5_smci/P24.json"
+    },
+    {
+     "point_id": "P25",
+     "cutoff": "2025-08-13",
+     "label": "截止日期 2025-08-13 · 3 个模型",
+     "models": 3,
+     "n_cal": 25,
+     "n_time": 9,
+     "n_time_scored": 9,
+     "file": "demo/zh/event5_smci/P25.json"
+    }
+   ]
+  },
+  {
+   "id": "event2_trump_tariff",
+   "short": "Trump Tariff",
+   "domain_label": "贸易政策",
+   "anonymized_arc": "Trump Tariff",
+   "prediction_points": [
+    {
+     "point_id": "P01",
+     "cutoff": "2017-09-24",
+     "label": "截止日期 2017-09-24",
+     "models": 6,
+     "n_cal": 455,
+     "n_time": 25,
+     "n_time_scored": 13,
+     "file": "demo/zh/event2_trump_tariff/P01.json"
+    },
+    {
+     "point_id": "P02",
+     "cutoff": "2017-12-17",
+     "label": "截止日期 2017-12-17",
+     "models": 6,
+     "n_cal": 357,
+     "n_time": 33,
+     "n_time_scored": 22,
+     "file": "demo/zh/event2_trump_tariff/P02.json"
+    },
+    {
+     "point_id": "P03",
+     "cutoff": "2018-02-09",
+     "label": "截止日期 2018-02-09",
+     "models": 6,
+     "n_cal": 458,
+     "n_time": 19,
+     "n_time_scored": 19,
+     "file": "demo/zh/event2_trump_tariff/P03.json"
+    },
+    {
+     "point_id": "P04",
+     "cutoff": "2018-12-06",
+     "label": "截止日期 2018-12-06",
+     "models": 6,
+     "n_cal": 460,
+     "n_time": 18,
+     "n_time_scored": 18,
+     "file": "demo/zh/event2_trump_tariff/P04.json"
+    },
+    {
+     "point_id": "P05",
+     "cutoff": "2024-06-15",
+     "label": "截止日期 2024-06-15",
+     "models": 6,
+     "n_cal": 459,
+     "n_time": 48,
+     "n_time_scored": 48,
+     "file": "demo/zh/event2_trump_tariff/P05.json"
+    },
+    {
+     "point_id": "P06",
+     "cutoff": "2024-08-09",
+     "label": "截止日期 2024-08-09",
+     "models": 6,
+     "n_cal": 430,
+     "n_time": 55,
+     "n_time_scored": 55,
+     "file": "demo/zh/event2_trump_tariff/P06.json"
+    },
+    {
+     "point_id": "P07",
+     "cutoff": "2024-08-20",
+     "label": "截止日期 2024-08-20",
+     "models": 6,
+     "n_cal": 485,
+     "n_time": 60,
+     "n_time_scored": 60,
+     "file": "demo/zh/event2_trump_tariff/P07.json"
+    },
+    {
+     "point_id": "P08",
+     "cutoff": "2024-09-01",
+     "label": "截止日期 2024-09-01",
+     "models": 6,
+     "n_cal": 463,
+     "n_time": 59,
+     "n_time_scored": 59,
+     "file": "demo/zh/event2_trump_tariff/P08.json"
+    },
+    {
+     "point_id": "P09",
+     "cutoff": "2024-09-20",
+     "label": "截止日期 2024-09-20",
+     "models": 6,
+     "n_cal": 461,
+     "n_time": 49,
+     "n_time_scored": 49,
+     "file": "demo/zh/event2_trump_tariff/P09.json"
+    },
+    {
+     "point_id": "P10",
+     "cutoff": "2024-09-29",
+     "label": "截止日期 2024-09-29",
+     "models": 6,
+     "n_cal": 459,
+     "n_time": 41,
+     "n_time_scored": 41,
+     "file": "demo/zh/event2_trump_tariff/P10.json"
+    },
+    {
+     "point_id": "P11",
+     "cutoff": "2024-10-21",
+     "label": "截止日期 2024-10-21",
+     "models": 6,
+     "n_cal": 382,
+     "n_time": 58,
+     "n_time_scored": 58,
+     "file": "demo/zh/event2_trump_tariff/P11.json"
+    },
+    {
+     "point_id": "P12",
+     "cutoff": "2024-10-27",
+     "label": "截止日期 2024-10-27 · 3 个模型",
+     "models": 3,
+     "n_cal": 368,
+     "n_time": 52,
+     "n_time_scored": 52,
+     "file": "demo/zh/event2_trump_tariff/P12.json"
+    },
+    {
+     "point_id": "P13",
+     "cutoff": "2024-11-02",
+     "label": "截止日期 2024-11-02 · 3 个模型",
+     "models": 3,
+     "n_cal": 416,
+     "n_time": 47,
+     "n_time_scored": 47,
+     "file": "demo/zh/event2_trump_tariff/P13.json"
+    },
+    {
+     "point_id": "P14",
+     "cutoff": "2024-11-22",
+     "label": "截止日期 2024-11-22 · 3 个模型",
+     "models": 3,
+     "n_cal": 387,
+     "n_time": 48,
+     "n_time_scored": 48,
+     "file": "demo/zh/event2_trump_tariff/P14.json"
+    },
+    {
+     "point_id": "P15",
+     "cutoff": "2024-12-15",
+     "label": "截止日期 2024-12-15",
+     "models": 6,
+     "n_cal": 349,
+     "n_time": 38,
+     "n_time_scored": 38,
+     "file": "demo/zh/event2_trump_tariff/P15.json"
+    },
+    {
+     "point_id": "P16",
+     "cutoff": "2025-01-15",
+     "label": "截止日期 2025-01-15",
+     "models": 6,
+     "n_cal": 290,
+     "n_time": 46,
+     "n_time_scored": 46,
+     "file": "demo/zh/event2_trump_tariff/P16.json"
+    },
+    {
+     "point_id": "P17",
+     "cutoff": "2025-01-24",
+     "label": "截止日期 2025-01-24",
+     "models": 6,
+     "n_cal": 259,
+     "n_time": 46,
+     "n_time_scored": 45,
+     "file": "demo/zh/event2_trump_tariff/P17.json"
+    },
+    {
+     "point_id": "P18",
+     "cutoff": "2025-02-01",
+     "label": "截止日期 2025-02-01 · 3 个模型",
+     "models": 3,
+     "n_cal": 230,
+     "n_time": 45,
+     "n_time_scored": 42,
+     "file": "demo/zh/event2_trump_tariff/P18.json"
+    },
+    {
+     "point_id": "P19",
+     "cutoff": "2025-02-17",
+     "label": "截止日期 2025-02-17 · 3 个模型",
+     "models": 3,
+     "n_cal": 205,
+     "n_time": 48,
+     "n_time_scored": 48,
+     "file": "demo/zh/event2_trump_tariff/P19.json"
+    },
+    {
+     "point_id": "P20",
+     "cutoff": "2025-04-16",
+     "label": "截止日期 2025-04-16",
+     "models": 6,
+     "n_cal": 212,
+     "n_time": 36,
+     "n_time_scored": 36,
+     "file": "demo/zh/event2_trump_tariff/P20.json"
+    },
+    {
+     "point_id": "P21",
+     "cutoff": "2025-05-03",
+     "label": "截止日期 2025-05-03 · 3 个模型",
+     "models": 3,
+     "n_cal": 160,
+     "n_time": 29,
+     "n_time_scored": 22,
+     "file": "demo/zh/event2_trump_tariff/P21.json"
+    },
+    {
+     "point_id": "P22",
+     "cutoff": "2025-05-22",
+     "label": "截止日期 2025-05-22",
+     "models": 6,
+     "n_cal": 108,
+     "n_time": 24,
+     "n_time_scored": 17,
+     "file": "demo/zh/event2_trump_tariff/P22.json"
+    },
+    {
+     "point_id": "P23",
+     "cutoff": "2025-06-27",
+     "label": "截止日期 2025-06-27 · 3 个模型",
+     "models": 3,
+     "n_cal": 98,
+     "n_time": 21,
+     "n_time_scored": 15,
+     "file": "demo/zh/event2_trump_tariff/P23.json"
+    },
+    {
+     "point_id": "P24",
+     "cutoff": "2025-09-09",
+     "label": "截止日期 2025-09-09 · 3 个模型",
+     "models": 3,
+     "n_cal": 52,
+     "n_time": 19,
+     "n_time_scored": 19,
+     "file": "demo/zh/event2_trump_tariff/P24.json"
+    },
+    {
+     "point_id": "P25",
+     "cutoff": "2025-10-02",
+     "label": "截止日期 2025-10-02",
+     "models": 6,
+     "n_cal": 32,
+     "n_time": 12,
+     "n_time_scored": 12,
+     "file": "demo/zh/event2_trump_tariff/P25.json"
+    }
+   ]
+  }
+ ]
+}

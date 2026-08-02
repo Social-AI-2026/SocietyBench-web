@@ -4112,3 +4112,11 @@ body.dark-theme .q-pick { color: #e8e8ea; background: rgba(255, 255, 255, 0.05);
    own full-width row rather than shrinking to an unreadable stub. */
 .qbox-head { flex-wrap: wrap; }
 .q-pick { flex: 1 1 190px; }
+/* Note under the live-mode preset list: how many questions the point really has. */
+.qchoice-note {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 8px 2px 0;
+}

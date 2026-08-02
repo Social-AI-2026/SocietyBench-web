@@ -120,7 +120,8 @@ serving the cached copy.
 | `demo.js` | The interactive page: cached and live modes |
 | `i18n.js` | Every user-visible string, English and Chinese |
 | `leaderboard.json` · `.zh.json` | The paper's Table 2, plus agents and baselines |
-| `interactive_demo.json` · `.zh.json` | Cached mode — real per-question model outputs |
+| `demo_index.json` · `.zh.json` | Cached mode — the list of events and prediction points |
+| `demo/<lang>/<event>/P<NN>.json` | One file per prediction point: every question, every answer |
 | `experiments.json` · `.zh.json` | Stress cases and the four in-text ablations |
 | `figures/` | Teaser and method figures from the paper |
 | `videos/` | `hero.mp4` (background) and `abstract-demo.mp4` (player) |
@@ -142,13 +143,18 @@ serving the cached copy.
 
 ## 💾 Data
 
-Six JSON files drive everything on the page, and all six are generated, never hand-edited.
+Everything on the page is generated, never hand-edited.
 
 | File | Rows | Source |
 |------|------|--------|
 | `leaderboard.json` · `.zh.json` | 6 LLMs + 3 agents + 2 baselines | the paper's Table 2 and agent table |
-| `interactive_demo.json` · `.zh.json` | 5 events, 121 prediction points | our real per-question run outputs |
+| `demo_index.json` · `.zh.json` | 5 events, 125 prediction points | our real per-question run outputs |
+| `demo/<lang>/<event>/P<NN>.json` | 25,364 calibration questions + 3,112 temporal events | the same run outputs, one file per point |
 | `experiments.json` · `.zh.json` | 2 stress cases + 4 ablations | the paper's ablation tables |
+
+Both exams are released whole: every question of every prediction point, not a
+sample. That is 250 point files and ~14 MB, so the page loads the index first and
+fetches a point's questions when it is picked.
 
 **Cached mode is not a mock-up.** For each prediction point the demo shows the real cutoff
 date, the real context the model was given, one real calibration question with its real
@@ -161,12 +167,13 @@ answer, and what each of the six models actually returned:
 | `context_excerpt` | the released `contexts/P<NN>_context.md` |
 | `gt` · `gt_date` | the held-out ground truth |
 
-Every prediction point that has real answers is offered — all 121 of them, each with up to ten
-calibration questions and eight temporal events to pick between. The three foreign models ran
-a cost-saving subset on four of the five events, so a point may carry fewer than six models;
-the selector says how many, and only the models that actually answered are ever compared.
-The four points not listed are the ones where no model had a temporal event to date. Live mode
-calls a model API at request time; it is wired but not enabled in this build.
+All 125 prediction points are offered, and every question under them. Coverage is uneven and
+the page says so rather than hiding it: the three foreign models ran a cost-saving subset on
+four of the five events, so a point may carry fewer than six models — the point selector says
+how many — and a model that skipped a question shows "—" instead of a number. Temporal events
+beyond the 90-day scoring window were never put to a model; they are listed and marked *not
+scored*. Live mode calls a model API at request time; it is wired but not enabled in this
+build.
 
 The anonymized timelines and question banks themselves live at
 [🤗 Social-AI-2026/SocietyBench](https://huggingface.co/datasets/Social-AI-2026/SocietyBench).

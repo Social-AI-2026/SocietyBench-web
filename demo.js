@@ -14,52 +14,52 @@ const widgetState = {
 
 function el(id) { return document.getElementById(id); }
 
-function currentPoint() {
-  const ev = widgetState.data.events[widgetState.eventIdx];
-  const raw = ev.prediction_points[widgetState.pointIdx];
-  return { event: ev, point: pointWithSelection(raw) };
+// The index lists every prediction point; a point's questions live in their own
+// file (demo/<lang>/<event>/<PID>.json) and are fetched the first time the point
+// is picked. 25k calibration questions cannot travel in one payload.
+const pointCache = new Map();
+
+function currentEvent() { return widgetState.data.events[widgetState.eventIdx]; }
+function currentEntry() { return currentEvent().prediction_points[widgetState.pointIdx]; }
+
+async function ensurePoint(entry) {
+  const key = entry.file;
+  if (pointCache.has(key)) return pointCache.get(key);
+  const res = await fetch(`./${entry.file}`);
+  const data = await res.json();
+  pointCache.set(key, data);
+  return data;
 }
 
-// A prediction point carries several calibration questions and several temporal
-// events, each with its own per-model answers. The widget shows one of each, so
-// project the selection down to the shape the renderers already expect.
-function pointWithSelection(raw) {
-  const cals = raw.calibration_questions || [];
-  const times = raw.temporal_events || [];
-  if (!cals.length || !times.length) return raw;          // older data: use as-is
-  const ci = Math.min(widgetState.calIdx, cals.length - 1);
-  const ti = Math.min(widgetState.timeIdx, times.length - 1);
-  const cq = cals[ci], tq = times[ti];
-  const strip = (o, drop) => Object.fromEntries(Object.entries(o).filter(([k]) => !drop.includes(k)));
-  const byModel = new Map(tq.responses.map(r => [r.model, r]));
-  const responses = cq.responses.filter(c => byModel.has(c.model)).map(c => {
-    const tr = byModel.get(c.model);
-    return {
-      model: c.model,
-      is_best_overall: c.is_best_overall,
-      calibration: strip(c, ["model", "is_best_overall"]),
-      temporal: strip(tr, ["model", "is_best_overall"]),
-      score_label: t("js.widget.verdict.fmt", "")
-        ? tfmt(t("js.widget.verdict.fmt"), {
-            dir: c.correct_side ? t("js.widget.verdict.right") : t("js.widget.verdict.wrong"),
-            err: c.abs_error.toFixed(2), days: Math.round(tr.abs_error_days)
-          })
-        : `${c.correct_side ? "✓" : "✗"} ${c.abs_error.toFixed(2)} · ${Math.round(tr.abs_error_days)}d`
-    };
-  });
-  if (widgetState.modelIdx >= responses.length) widgetState.modelIdx = 0;
-  return Object.assign({}, raw, {
-    calibration_question: strip(cq, ["responses"]),
-    temporal_question: strip(tq, ["responses"]),
-    model_responses: responses
-  });
+// The point currently loaded, or null while a fetch is in flight.
+function loadedPoint() {
+  const e = currentEntry();
+  return e ? (pointCache.get(e.file) || null) : null;
 }
 
-// Fill the two question pickers for the current point.
+function currentCal() {
+  const p = loadedPoint();
+  if (!p || !p.cal.length) return null;
+  return p.cal[Math.min(widgetState.calIdx, p.cal.length - 1)];
+}
+function currentTime() {
+  const p = loadedPoint();
+  if (!p || !p.time.length) return null;
+  return p.time[Math.min(widgetState.timeIdx, p.time.length - 1)];
+}
+
+// A model's own answer to the selected question, or null if it never answered.
+function answerOf(rec, modelIdx) {
+  if (!rec) return null;
+  return (rec.r || []).find(x => x[0] === modelIdx) || null;
+}
+
+// Fill the two question pickers for the current point. Every question of both
+// exams is listed -- a point can carry several hundred calibration questions.
 function renderQuestionPickers() {
-  const raw = widgetState.data.events[widgetState.eventIdx].prediction_points[widgetState.pointIdx];
-  const cals = raw.calibration_questions || [];
-  const times = raw.temporal_events || [];
+  const point = loadedPoint();
+  const cals = point ? point.cal : [];
+  const times = point ? point.time : [];
   const clip = (s, n) => (s || "").length > n ? (s || "").slice(0, n - 1) + "…" : (s || "");
   const zh = currentLang() === "zh";
   const DIFF = { hard: "难", medium: "中", easy: "易" };
@@ -68,13 +68,15 @@ function renderQuestionPickers() {
   const cs = el("cal-q-pick"), ts = el("time-q-pick");
   if (cs) {
     cs.innerHTML = cals.map((q, i) =>
-      `<option value="${i}">${i + 1}/${cals.length} · ${win(q.window_days)} · ${diff(q.difficulty)} — ${clip(q.q, 52)}</option>`).join("");
+      `<option value="${i}">${i + 1}/${cals.length} · ${win(q.wd)} · ${diff(q.diff)} — ${clip(q.q, 52)}</option>`).join("");
     cs.value = String(Math.min(widgetState.calIdx, Math.max(cals.length - 1, 0)));
     cs.style.display = cals.length > 1 ? "" : "none";
   }
   if (ts) {
-    ts.innerHTML = times.map((q, i) =>
-      `<option value="${i}">${i + 1}/${times.length} · ${q.gt_date} — ${clip(q.event_desc, 52)}</option>`).join("");
+    ts.innerHTML = times.map((q, i) => {
+      const tag = (q.r && q.r.length) ? "" : ` · ${t("js.widget.qpick.unscored")}`;
+      return `<option value="${i}">${i + 1}/${times.length} · ${q.gt}${tag} — ${clip(q.desc, 46)}</option>`;
+    }).join("");
     ts.value = String(Math.min(widgetState.timeIdx, Math.max(times.length - 1, 0)));
     ts.style.display = times.length > 1 ? "" : "none";
   }
@@ -87,48 +89,80 @@ function evalCalibration(p_hat, gt) {
 }
 
 function renderWidget() {
-  const { event, point } = currentPoint();
-  const model = point.model_responses[widgetState.modelIdx];
+  const event = currentEvent();
+  const entry = currentEntry();
+  const point = loadedPoint();
+  if (!point) return;                       // still fetching; called again on arrival
+  const models = point.models;
+  if (widgetState.modelIdx >= models.length) widgetState.modelIdx = 0;
+  const mi = widgetState.modelIdx;
+  const cq = currentCal(), tq = currentTime();
+  const ca = answerOf(cq, mi), ta = answerOf(tq, mi);
 
   el("ctx-meta").textContent = tfmt(t("js.widget.ctx-meta.fmt"), {
     domain: (event.domain_label || "").toLowerCase(),
-    cutoff: (point.cutoff_label || "").toLowerCase()
+    cutoff: (entry.label || "").toLowerCase()
   });
   el("ctx-text").textContent = point.context_excerpt;
 
-  el("cal-q").textContent = point.calibration_question.q;
-  el("cal-meta").textContent = tfmt(t("js.widget.cal-meta.fmt"), { days: point.calibration_question.window_days });
+  el("cal-q").textContent = cq ? cq.q : "—";
+  el("cal-meta").textContent = cq ? tfmt(t("js.widget.cal-meta.fmt"), { days: cq.wd }) : "—";
 
-  const tdesc = point.temporal_question.event_desc;
-  el("time-q").textContent = point.temporal_question.q + (tdesc ? " — " + tdesc : "");
+  const timeQ = t("try.view.time-q.text", currentLang() === "zh" ? "这个事件会在哪一天发生？" : "On what date does this event happen?");
+  el("time-q").textContent = tq ? (tq.desc ? `${timeQ} — ${tq.desc}` : timeQ) : "—";
   el("time-meta").textContent = t("js.widget.time-meta");
 
-  // model output
-  el("mout-name").textContent = model.model + (model.is_projected ? t("js.widget.mout.proj") : (model.is_best_overall ? t("js.widget.mout.best") : ""));
+  el("mout-name").textContent = models[mi] + (models[mi] === (widgetState.data.best || "") ? t("js.widget.mout.best") : "");
 
-  // calibration p_hat — orange if correct direction, gray + strikethrough if not
-  const calCorrect = evalCalibration(model.calibration.p_hat, point.calibration_question.gt);
+  // calibration — orange when the direction is right, gray + struck through when not
   const phatEl = el("phat");
-  phatEl.textContent = model.calibration.p_hat.toFixed(2);
-  phatEl.classList.toggle("bad", !calCorrect);
-  el("phat-reason").textContent = model.calibration.reasoning;
+  if (ca) {
+    const p_hat = ca[1];
+    const err = Math.abs(p_hat - cq.gt);
+    phatEl.textContent = p_hat.toFixed(2);
+    phatEl.classList.toggle("bad", !evalCalibration(p_hat, cq.gt));
+    el("phat-reason").textContent = tfmt(t("js.widget.cal.reason.fmt"), {
+      p: `${Math.round(p_hat * 100)}%`,
+      gt: cq.gt === 1 ? t("js.widget.gt.yes") : t("js.widget.gt.no"),
+      err: err.toFixed(2), w: (cq.wt || 0).toFixed(2)
+    });
+  } else {
+    phatEl.textContent = "—";
+    phatEl.classList.remove("bad");
+    el("phat-reason").textContent = t("js.widget.na.model");
+  }
 
-  // temporal d_hat — orange if abs_error<=7 days, otherwise gray + strikethrough
+  // temporal — orange when within a week, gray + struck through beyond it
   const dhatEl = el("dhat");
-  dhatEl.textContent = model.temporal.d_hat_label || tfmt(t("js.widget.gt.day.fmt"), { d: model.temporal.d_hat_day });
-  const timeOk = (model.temporal.abs_error_days !== undefined) ? (model.temporal.abs_error_days <= 7) : true;
-  dhatEl.classList.toggle("bad", !timeOk);
-  el("dhat-reason").textContent = model.temporal.reasoning;
+  if (ta) {
+    dhatEl.textContent = ta[1];
+    dhatEl.classList.toggle("bad", !(ta[2] <= 7));
+    el("dhat-reason").textContent = tfmt(t("js.widget.time.reason.fmt"), {
+      pred: ta[1], actual: tq.gt, days: Math.round(ta[2])
+    });
+  } else {
+    dhatEl.textContent = "—";
+    dhatEl.classList.remove("bad");
+    el("dhat-reason").textContent = (tq && !(tq.r || []).length)
+      ? t("js.widget.na.window") : t("js.widget.na.model");
+  }
 
-  // verdict
-  el("verdict").textContent = model.score_label;
+  // verdict — whichever halves this model actually answered
+  const parts = [];
+  if (ca) parts.push(tfmt(t("js.widget.verdict.cal.fmt"), {
+    dir: evalCalibration(ca[1], cq.gt) ? t("js.widget.verdict.right") : t("js.widget.verdict.wrong"),
+    err: Math.abs(ca[1] - cq.gt).toFixed(2)
+  }));
+  if (ta) parts.push(tfmt(t("js.widget.verdict.time.fmt"), { days: Math.round(ta[2]) }));
+  el("verdict").textContent = parts.length
+    ? parts.join(currentLang() === "zh" ? "；" : "; ") + (currentLang() === "zh" ? "。" : ".")
+    : t("js.widget.na.model");
 
-  // ground truth (apply current reveal state)
   applyRevealState();
 }
 
 function applyRevealState() {
-  const { point } = currentPoint();
+  const cq = currentCal(), tq = currentTime();
   const gtVals = el("gt-values");
   const gtPending = el("gt-pending");
   const btn = el("reveal-btn");
@@ -139,9 +173,11 @@ function applyRevealState() {
     btn.innerHTML = t("js.widget.gt-revealed");
     btn.style.opacity = 0.6;
     btn.style.cursor = "default";
-    el("gt-cal").textContent = point.calibration_question.gt === 1 ? t("js.widget.gt.yes") : t("js.widget.gt.no");
-    el("gt-cal-note").textContent = point.calibration_question.gt_note ? tfmt(t("js.widget.gt-note.fmt"), { note: point.calibration_question.gt_note }) : "";
-    el("gt-time").textContent = point.temporal_question.gt_label || tfmt(t("js.widget.gt.day.fmt"), { d: point.temporal_question.gt_day });
+    el("gt-cal").textContent = cq ? (cq.gt === 1 ? t("js.widget.gt.yes") : t("js.widget.gt.no")) : "—";
+    el("gt-cal-note").textContent = cq ? tfmt(t("js.widget.gt-note.fmt"), {
+      note: cq.gt === 1 ? t("js.widget.gt-note.did") : t("js.widget.gt-note.didnot")
+    }) : "";
+    el("gt-time").textContent = tq ? tq.gt : "—";
   } else {
     gtVals.classList.add("hidden");
     gtPending.style.display = "";
@@ -158,37 +194,49 @@ function buildSelectors() {
     `<option value="${i}">${e.domain_label} — ${e.anonymized_arc}</option>`
   ).join("");
   evSel.value = widgetState.eventIdx;
-  evSel.addEventListener("change", () => {
+  evSel.addEventListener("change", async () => {
     widgetState.eventIdx = parseInt(evSel.value, 10);
-    widgetState.pointIdx = 0;
-    widgetState.calIdx = 0;
-    widgetState.timeIdx = 0;
     widgetState.modelIdx = 0;
-    widgetState.revealed = false;
+    widgetState.pointIdx = 0;
     buildPointSelector();
-    renderQuestionPickers();
-    buildModelButtons();
-    renderWidget();
+    await selectPoint(0);
   });
   buildPointSelector();
-  buildQuestionPickers();
-  buildModelButtons();
+  wireQuestionPickers();
 }
 
-// Wire the two question pickers once; they are refilled on every point change.
-function buildQuestionPickers() {
+// Load the picked point, then refill everything that depends on it.
+async function selectPoint(idx) {
+  widgetState.pointIdx = idx;
+  widgetState.calIdx = 0;
+  widgetState.timeIdx = 0;
+  widgetState.revealed = false;
+  const entry = currentEntry();
+  el("cal-q").textContent = t("js.widget.loading");
+  el("time-q").textContent = t("js.widget.loading");
+  try {
+    await ensurePoint(entry);
+  } catch (err) {
+    console.error("Failed to load prediction point:", entry && entry.file, err);
+    return;
+  }
+  if (currentEntry() !== entry) return;      // the user moved on while we fetched
   renderQuestionPickers();
+  buildModelButtons();
+  renderWidget();
+}
+
+// The two question pickers are wired once and refilled on every point change.
+function wireQuestionPickers() {
   const cs = el("cal-q-pick"), ts = el("time-q-pick");
   if (cs) cs.onchange = () => {
     widgetState.calIdx = parseInt(cs.value, 10);
     widgetState.revealed = false;
-    buildModelButtons();
     renderWidget();
   };
   if (ts) ts.onchange = () => {
     widgetState.timeIdx = parseInt(ts.value, 10);
     widgetState.revealed = false;
-    buildModelButtons();
     renderWidget();
   };
 }
@@ -197,27 +245,21 @@ function buildPointSelector() {
   const ptSel = el("pt-select");
   const ev = widgetState.data.events[widgetState.eventIdx];
   ptSel.innerHTML = ev.prediction_points.map((p, i) =>
-    `<option value="${i}">${p.cutoff_label}</option>`
+    `<option value="${i}">${p.label}</option>`
   ).join("");
   ptSel.value = widgetState.pointIdx;
-  ptSel.onchange = () => {
-    widgetState.pointIdx = parseInt(ptSel.value, 10);
-    widgetState.calIdx = 0;
-    widgetState.timeIdx = 0;
-    widgetState.revealed = false;
-    renderQuestionPickers();
-    buildModelButtons();
-    renderWidget();
-  };
+  ptSel.onchange = () => selectPoint(parseInt(ptSel.value, 10));
 }
 
 function buildModelButtons() {
   const host = el("model-btns");
-  const { point } = currentPoint();
-  host.innerHTML = point.model_responses.map((m, i) => {
-    const tag = m.is_best_overall ? t("js.widget.tag.best") : (m.is_projected ? t("js.widget.tag.proj") : t("js.widget.tag.llm"));
+  const point = loadedPoint();
+  if (!point) { host.innerHTML = ""; return; }
+  const best = widgetState.data.best || "";
+  host.innerHTML = point.models.map((m, i) => {
+    const tag = m === best ? t("js.widget.tag.best") : t("js.widget.tag.llm");
     const cls = i === widgetState.modelIdx ? "model-btn active" : "model-btn";
-    return `<button type="button" class="${cls}" data-i="${i}">${m.model}<span class="mtag">${tag}</span></button>`;
+    return `<button type="button" class="${cls}" data-i="${i}">${m}<span class="mtag">${tag}</span></button>`;
   }).join("");
   host.querySelectorAll(".model-btn").forEach(b => {
     b.addEventListener("click", () => {
@@ -237,14 +279,14 @@ el("reveal-btn") && el("reveal-btn").addEventListener("click", () => {
 
 async function loadWidget() {
   try {
-    const res = await fetch(dataUrl("interactive_demo"));
+    const res = await fetch(dataUrl("demo_index"));
     widgetState.data = await res.json();
   } catch (err) {
-    console.error("Failed to load interactive demo:", err);
+    console.error("Failed to load the demo index:", err);
     return;
   }
   buildSelectors();
-  renderWidget();
+  await selectPoint(widgetState.pointIdx);
 }
 
 
@@ -263,28 +305,39 @@ const MODEL_OPTIONS = [
   { id: "mirofish-doubao",     label: "MiroFish + Doubao",   group: "AGENT" }
 ];
 
-// Live-mode preset questions are sourced per-event from interactive_demo.json
-// (events[i].live_questions). This helper returns the current event's questions,
-// with a graceful fallback to a top-level `live_questions` array (v0.1 schema).
+// Live-mode presets follow the selected event AND prediction point: the same
+// real questions cached mode replays. A point can hold hundreds of them, so the
+// list shows the first LIVE_PRESET_MAX and says how many there are in total; the
+// free-text box takes anything else.
+const LIVE_PRESET_MAX = 12;
+
+function liveEntry() {
+  const ev = widgetState.data?.events?.[liveState.eventIdx];
+  return ev?.prediction_points?.[liveState.pointIdx] || null;
+}
+function livePoint() {
+  const en = liveEntry();
+  return en ? (pointCache.get(en.file) || null) : null;
+}
+async function ensureLivePoint() {
+  const en = liveEntry();
+  if (!en) return null;
+  try { return await ensurePoint(en); }
+  catch (err) { console.error("Failed to load prediction point:", en.file, err); return null; }
+}
+
 function currentLiveQuestions() {
-  if (!widgetState.data) return [];
-  const ev = widgetState.data.events?.[liveState.eventIdx];
-  // Presets follow the selected prediction point: the same real questions the
-  // cached mode replays, so a live run is asked exactly what we asked.
-  const pt = ev?.prediction_points?.[liveState.pointIdx];
-  const cals = pt?.calibration_questions || [];
-  const times = pt?.temporal_events || [];
-  if (cals.length || times.length) {
-    return cals.map((q, i) => ({
-      id: `${pt.point_id}·C${i + 1}`, type: "calibration",
-      window: q.window_days, text: q.q
-    })).concat(times.map((e, i) => ({
-      id: `${pt.point_id}·T${i + 1}`, type: "temporal",
-      window: null, text: e.event_desc ? `${e.q} — ${e.event_desc}` : e.q
-    })));
-  }
-  if (ev && Array.isArray(ev.live_questions)) return ev.live_questions;
-  return Array.isArray(widgetState.data.live_questions) ? widgetState.data.live_questions : [];
+  const pt = livePoint();
+  if (!pt) return [];
+  const timeQ = t("try.view.time-q.text");
+  const cals = pt.cal.slice(0, LIVE_PRESET_MAX).map((q, i) => ({
+    id: `${pt.point_id}·C${i + 1}`, type: "calibration", window: q.wd, text: q.q
+  }));
+  const times = pt.time.slice(0, LIVE_PRESET_MAX).map((e, i) => ({
+    id: `${pt.point_id}·T${i + 1}`, type: "temporal", window: null,
+    text: e.desc ? `${timeQ} — ${e.desc}` : timeQ
+  }));
+  return cals.concat(times);
 }
 
 const liveState = {
@@ -360,6 +413,13 @@ function renderLiveQuestions() {
         <div class="qtxt">${q.text}</div>
       </label>`;
   }).join("");
+  // Say what the list leaves out — a point can hold hundreds of questions.
+  const pt = livePoint();
+  if (pt && (pt.cal.length > LIVE_PRESET_MAX || pt.time.length > LIVE_PRESET_MAX)) {
+    host.insertAdjacentHTML("beforeend",
+      `<p class="qchoice-note">${tfmt(t("js.live.qchoice.more.fmt"), {
+        shown: Qs.length, cal: pt.cal.length, time: pt.time.length })}</p>`);
+  }
   host.querySelectorAll(".qchoice").forEach(c => {
     c.addEventListener("click", (e) => {
       e.preventDefault();
@@ -457,30 +517,31 @@ function refreshLivePtSelector() {
   const ev = widgetState.data.events[liveState.eventIdx];
   const ptSel = el("live-pt-select");
   ptSel.innerHTML = ev.prediction_points.map((p, i) =>
-    `<option value="${i}">${p.cutoff_label}</option>`
+    `<option value="${i}">${p.label}</option>`
   ).join("");
   ptSel.value = liveState.pointIdx;
-  ptSel.onchange = () => {
+  ptSel.onchange = async () => {
     liveState.pointIdx = parseInt(ptSel.value, 10);
     liveState.questionIdx = 0;
+    await ensureLivePoint();
     renderLiveQuestions();
     refreshLiveContext();
     refreshPreviewGT();
     closePreviewGT();
   };
-  refreshPreviewGT();
+  ensureLivePoint().then(() => { renderLiveQuestions(); refreshLiveContext(); refreshPreviewGT(); });
 }
 
 function refreshPreviewGT() {
   if (!widgetState.data) return;
-  const ev = widgetState.data.events[liveState.eventIdx];
-  const pt = ev?.prediction_points?.[liveState.pointIdx];
+  const pt = livePoint();
   if (!pt) return;
-  const calGt = pt.calibration_question?.gt === 1 ? t("js.widget.gt.yes")
-              : (pt.calibration_question?.gt === 0 ? t("js.widget.gt.no") : "—");
-  const timeGt = pt.temporal_question?.gt_label
-              || (pt.temporal_question?.gt_day ? tfmt(t("js.widget.gt.day.fmt"), { d: pt.temporal_question.gt_day }) : "—");
-  const note = pt.calibration_question?.gt_note ? tfmt(t("js.widget.gt-note.fmt"), { note: pt.calibration_question.gt_note }) : "";
+  const q = pt.cal[0], e0 = pt.time[0];
+  const calGt = q ? (q.gt === 1 ? t("js.widget.gt.yes") : t("js.widget.gt.no")) : "—";
+  const timeGt = e0 ? e0.gt : "—";
+  const note = q ? tfmt(t("js.widget.gt-note.fmt"), {
+    note: q.gt === 1 ? t("js.widget.gt-note.did") : t("js.widget.gt-note.didnot")
+  }) : "";
   const setT = (id, v) => { const e = el(id); if (e) e.textContent = v; };
   setT("pgt-cal", calGt);
   setT("pgt-cal-note", note);
@@ -513,12 +574,12 @@ function togglePreviewGT() {
 
 function refreshLiveContext() {
   const ev = widgetState.data.events[liveState.eventIdx];
-  const pt = ev.prediction_points[liveState.pointIdx];
+  const en = liveEntry(), pt = livePoint();
   el("live-ctx-meta").textContent = tfmt(t("js.widget.ctx-meta.fmt"), {
     domain: (ev.domain_label || "").toLowerCase(),
-    cutoff: (pt.cutoff_label || "").toLowerCase()
+    cutoff: (en?.label || "").toLowerCase()
   });
-  el("live-ctx-text").textContent = pt.context_excerpt;
+  el("live-ctx-text").textContent = pt ? pt.context_excerpt : t("js.widget.loading");
 }
 
 function modelLabel(id) {
@@ -737,13 +798,21 @@ loadWidget();
 // ---- Language flip: rebuild the widget and live panes, preserving state ----
 window.SB_DEMO = {
   async onLangChange() {
-    const saved = { e: widgetState.eventIdx, p: widgetState.pointIdx, m: widgetState.modelIdx, r: widgetState.revealed };
+    const saved = { e: widgetState.eventIdx, p: widgetState.pointIdx, m: widgetState.modelIdx,
+                    c: widgetState.calIdx, tt: widgetState.timeIdx, r: widgetState.revealed };
+    pointCache.clear();                       // point files are per-language
     await loadWidget();
     widgetState.eventIdx = Math.min(saved.e, (widgetState.data?.events?.length || 1) - 1);
     widgetState.pointIdx = Math.min(saved.p, (widgetState.data?.events?.[widgetState.eventIdx]?.prediction_points?.length || 1) - 1);
-    widgetState.modelIdx = Math.min(saved.m, (widgetState.data?.events?.[widgetState.eventIdx]?.prediction_points?.[widgetState.pointIdx]?.model_responses?.length || 1) - 1);
-    widgetState.revealed = saved.r;
     buildSelectors();
+    await selectPoint(widgetState.pointIdx);
+    const pt = loadedPoint();
+    widgetState.modelIdx = Math.min(saved.m, (pt?.models?.length || 1) - 1);
+    widgetState.calIdx = Math.min(saved.c, (pt?.cal?.length || 1) - 1);
+    widgetState.timeIdx = Math.min(saved.tt, (pt?.time?.length || 1) - 1);
+    widgetState.revealed = saved.r;
+    renderQuestionPickers();
+    buildModelButtons();
     if (widgetState.data) {
       const liveEvSel = el("live-evt-select");
       if (liveEvSel) {
@@ -752,6 +821,7 @@ window.SB_DEMO = {
         liveEvSel.value = liveState.eventIdx;
       }
       refreshLivePtSelector();
+      await ensureLivePoint();
       refreshLiveContext();
       renderLiveQuestions();
       refreshPreviewGT();
