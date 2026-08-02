@@ -120,7 +120,6 @@ ffmpeg -i source.mp4 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 27 \
 
 | 文档 | 回答什么问题 |
 |------|-------------|
-| [`HANDOFF.md`](HANDOFF.md) | 页面是怎么搭的：版式类名、滚动显现机制、怎么加一个新板块 |
 | [`_gen/build_site_data.py`](_gen/build_site_data.py) | 哪些实验产物变成了榜单和演示，预测点是怎么挑的 |
 | [`_gen/build_experiments.py`](_gen/build_experiments.py) | 论文的哪张表对应深入分析的哪一块 |
 | [`i18n.js`](i18n.js) | 所有用户可见文案；键名规则写在文件开头 |

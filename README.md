@@ -134,7 +134,6 @@ serving the cached copy.
 
 | Document | What it answers |
 |----------|-----------------|
-| [`HANDOFF.md`](HANDOFF.md) | How the page is wired: layout classes, the reveal system, how a section is added |
 | [`_gen/build_site_data.py`](_gen/build_site_data.py) | Which run outputs become the leaderboard and the demo, and how points are chosen |
 | [`_gen/build_experiments.py`](_gen/build_experiments.py) | Which paper table becomes which deep-dive block |
 | [`i18n.js`](i18n.js) | Every user-visible string; the key naming scheme is documented at the top |
