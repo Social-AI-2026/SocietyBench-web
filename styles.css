@@ -4126,3 +4126,10 @@ body.dark-theme .q-pick { color: #e8e8ea; background: rgba(255, 255, 255, 0.05);
 .dd-head-center h3 { margin-left: auto; margin-right: auto; }
 .dd-head-center .dd-sub { margin-left: auto; margin-right: auto; }
 .dd-tabs { justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+
+/* The freshness stamp and the "want your model here?" line are one row. */
+.lb-stamp-cta { font-weight: 600; }
+.lb-stamp-cta a { white-space: nowrap; }
+@media (max-width: 900px) {
+  .lb-stamp.lb-center { flex-wrap: wrap; white-space: normal; }
+}
