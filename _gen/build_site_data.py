@@ -217,8 +217,17 @@ def build_demo(lang, langdir):
                              "dfc": e.get("days_from_cutoff"), "r": r})
 
             if not cal and not time: continue
+            # The excerpt is what the box shows; the whole context is copied
+            # next to it and fetched only when the reader asks for it.
+            ctx_src = f"{DATA}/{ev}/{lang}/contexts/{pid}_context.md"
+            ctx_file = None
+            if os.path.exists(ctx_src):
+                ctx_file = f"demo/{lang}/{ev}/{pid}_context.md"
+                open(f"{outdir}/{pid}_context.md", "w", encoding="utf-8").write(
+                    open(ctx_src, encoding="utf-8").read())
             json.dump({"point_id": pid, "cutoff": cutoff, "models": models,
                        "context_excerpt": context_excerpt(ev, lang, pid),
+                       "context_file": ctx_file,
                        "window_days": 90, "cal": cal, "time": time},
                       open(f"{outdir}/{pid}.json", "w", encoding="utf-8"),
                       ensure_ascii=False, separators=(",", ":"))

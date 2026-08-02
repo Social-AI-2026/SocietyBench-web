@@ -249,6 +249,10 @@
       // Cached mode
       'try.cached.controls.label': '▸ CONTROLS',
       'try.ctx.expand': '▾ SHOW FULL CONTEXT',
+      'try.ctx.open': '▸ READ THE FULL CONTEXT',
+      'try.ctx.modal.title': 'FULL CONTEXT — UP TO CUTOFF',
+      'try.ctx.loading': 'loading…',
+      'try.anon.note': 'Anonymized: entities are replaced and every date is shifted by one shared offset, so the names and the calendar here do not match the real world. The ground truth on this page sits on the same shifted timeline.',
       'try.ctx.collapse': '▴ COLLAPSE',
       'try.field.event': 'EVENT',
       'try.field.point': 'PREDICTION POINT',
@@ -779,6 +783,10 @@ Accepted events join the official catalog and ship in the next benchmark version
       // Cached mode
       'try.cached.controls.label': '▸ 控制面板',
       'try.ctx.expand': '▾ 展开全文',
+      'try.ctx.open': '▸ 查看完整上下文',
+      'try.ctx.modal.title': '完整上下文 — 截止日期之前',
+      'try.ctx.loading': '加载中…',
+      'try.anon.note': '这里的内容是匿名化后的:实体被替换,所有日期整体平移同一个偏移量,所以这里的人名、机构名和日历日期都不对应真实世界。页面上的标准答案用的也是平移后的同一条时间线。',
       'try.ctx.collapse': '▴ 收起',
       'try.field.event': '事件',
       'try.field.point': '预测点',

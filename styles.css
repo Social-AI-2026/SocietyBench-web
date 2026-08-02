@@ -4567,3 +4567,45 @@ body[data-lang="zh"] .output-cell .num { font-size: clamp(34px, 3.4vw, 46px); li
 /* The verdict's label was baked into CSS content, so it stayed English in the
    Chinese view. The strip already reads as the result line; drop the prefix. */
 .verdict::before { content: none; }
+
+/* --- Full context in its own window -------------------------------------- */
+.ctx-foot { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; margin-top: 10px; }
+.anon-note {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0;
+  flex: 1 1 320px;
+  min-width: 0;
+}
+.ctx-modal { position: fixed; inset: 0; z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 4vh 4vw; }
+.ctx-modal[hidden] { display: none; }
+.ctx-modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.72); }
+.ctx-modal-panel {
+  position: relative;
+  width: min(900px, 100%);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  background: var(--paper);
+  border: var(--border-thick);
+}
+body.dark-theme .ctx-modal-panel { background: #0f1115; }
+.ctx-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ctx-modal-close {
+  background: transparent; border: var(--border); color: var(--muted);
+  font-size: 14px; line-height: 1; padding: 5px 9px; cursor: pointer;
+}
+.ctx-modal-close:hover { color: var(--ink); background: rgba(127, 127, 127, 0.08); }
+.ctx-modal-body {
+  overflow-y: auto;
+  white-space: pre-wrap;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  border: var(--border);
+  padding: 14px 16px;
+}

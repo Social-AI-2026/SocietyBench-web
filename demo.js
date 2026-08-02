@@ -104,7 +104,7 @@ function renderWidget() {
     cutoff: (entry.label || "").toLowerCase()
   });
   el("ctx-text").textContent = point.context_excerpt;
-  setCtxCollapsed(true);
+  setCtxCollapsed();
 
   el("cal-q").textContent = cq ? cq.q : "—";
   el("cal-meta").textContent = cq ? tfmt(t("js.widget.cal-meta.fmt"), { days: cq.wd }) : "—";
@@ -162,20 +162,47 @@ function renderWidget() {
   applyRevealState();
 }
 
-// The context runs to a few hundred words; it opens clamped with a fade and a
-// toggle, so the two questions stay above the fold.
-function setCtxCollapsed(collapsed) {
-  const box = el("ctx-text"), btn = el("ctx-toggle");
-  if (!box || !btn) return;
-  box.classList.toggle("clamped", collapsed);
-  btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
-  btn.textContent = collapsed ? t("try.ctx.expand") : t("try.ctx.collapse");
-  // Nothing to expand when the excerpt is short enough to fit.
-  const fits = box.scrollHeight <= box.clientHeight + 2 && collapsed;
-  btn.style.display = fits ? "none" : "";
+// The box always shows the opening excerpt; the whole context — often tens of
+// thousands of characters — opens in its own window, fetched on demand.
+const ctxCache = new Map();
+
+function setCtxCollapsed() {
+  const btn = el("ctx-toggle");
+  if (btn) btn.textContent = t("try.ctx.open");
 }
-el("ctx-toggle") && el("ctx-toggle").addEventListener("click", () => {
-  setCtxCollapsed(!el("ctx-text").classList.contains("clamped"));
+
+async function openCtxModal() {
+  const modal = el("ctx-modal"), body = el("ctx-modal-body");
+  const point = loadedPoint();
+  if (!modal || !body || !point) return;
+  modal.hidden = false;
+  document.body.style.overflow = "hidden";
+  const file = point.context_file;
+  if (!file) { body.textContent = point.context_excerpt || "—"; return; }
+  if (ctxCache.has(file)) { body.textContent = ctxCache.get(file); return; }
+  body.textContent = t("try.ctx.loading");
+  try {
+    const text = await (await fetch(`./${file}`)).text();
+    ctxCache.set(file, text);
+    body.textContent = text;
+  } catch (err) {
+    console.error("Failed to load the full context:", file, err);
+    body.textContent = point.context_excerpt || "—";
+  }
+  body.scrollTop = 0;
+}
+
+function closeCtxModal() {
+  const modal = el("ctx-modal");
+  if (!modal) return;
+  modal.hidden = true;
+  document.body.style.overflow = "";
+}
+
+el("ctx-toggle") && el("ctx-toggle").addEventListener("click", openCtxModal);
+document.querySelectorAll("[data-ctx-close]").forEach(x => x.addEventListener("click", closeCtxModal));
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && el("ctx-modal") && !el("ctx-modal").hidden) closeCtxModal();
 });
 
 function applyRevealState() {

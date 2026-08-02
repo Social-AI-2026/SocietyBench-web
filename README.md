@@ -150,10 +150,11 @@ Everything on the page is generated, never hand-edited.
 | `leaderboard.json` · `.zh.json` | 6 LLMs + 3 agents | the paper's Table 2 and agent table |
 | `demo_index.json` · `.zh.json` | 5 events, 125 prediction points | our real per-question run outputs |
 | `demo/<lang>/<event>/P<NN>.json` | 25,364 calibration questions + 3,112 temporal events, answered by 10 systems | the same run outputs, one file per point |
+| `demo/<lang>/<event>/P<NN>_context.md` | the full anonymized context of that point | the released dataset, copied verbatim |
 | `experiments.json` · `.zh.json` | the three difficulty ablations | the paper's ablation tables |
 
 Both exams are released whole: every question of every prediction point, not a
-sample. That is 250 point files and ~18 MB, so the page loads the index first and
+sample. That is 250 point files plus their 250 contexts, ~37 MB, so the page loads the index first and
 fetches a point's questions when it is picked.
 
 **Cached mode is not a mock-up.** For each prediction point the demo shows the real cutoff
