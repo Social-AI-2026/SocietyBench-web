@@ -175,6 +175,9 @@ def build_demo(lang, langdir):
     for ev, short, dom_en, dom_zh in EVENTS:
         outdir = f"{OUT}/demo/{lang}/{ev}"
         os.makedirs(outdir, exist_ok=True)
+        # Start clean: a point that no longer qualifies must not linger on disk.
+        for stale in glob.glob(f"{outdir}/P*.json") + glob.glob(f"{outdir}/P*_context.md"):
+            os.remove(stale)
         index_pts = []
         for pid in [f"P{i:02d}" for i in range(1, 26)]:
             qb = questionbank(ev, langdir, pid)
@@ -216,6 +219,21 @@ def build_demo(lang, langdir):
                              "gt": e.get("gt_date") or e.get("date"),
                              "dfc": e.get("days_from_cutoff"), "r": r})
 
+            # Only points where both exams actually ran are offered: a temporal
+            # event past the 90-day window was never put to a model, and a model
+            # that answered only one axis here would show a blank on the other.
+            time = [e for e in time if e["r"]]
+            both = ({r[0] for q in cal for r in q["r"]} & {r[0] for e in time for r in e["r"]})
+            if not cal or not time or not both: continue
+            keep = sorted(both)
+            remap = {old: i for i, old in enumerate(keep)}
+            models = [models[i] for i in keep]
+            for q in cal: q["r"] = [[remap[m], v] for m, v in q["r"] if m in remap]
+            for e in time: e["r"] = [[remap[m], d, er] for m, d, er in e["r"] if m in remap]
+            cal = [q for q in cal if q["r"]]
+            time = [e for e in time if e["r"]]      # a model dropped above can empty one
+            if not cal or not time: continue
+
             # Reading order for the two pickers: calibration questions by window
             # (7 -> 14 -> 30 -> 60 -> 90) then by how far the target sits from the
             # cutoff; temporal events by the date they actually happened.
@@ -223,7 +241,6 @@ def build_demo(lang, langdir):
                                     q["dfc"] if q["dfc"] is not None else 999, q["q"]))
             time.sort(key=lambda e: (e["gt"] or "9999-99-99", e["eid"]))
 
-            if not cal and not time: continue
             # The excerpt is what the box shows; the whole context is copied
             # next to it and fetched only when the reader asks for it.
             ctx_src = f"{DATA}/{ev}/{lang}/contexts/{pid}_context.md"

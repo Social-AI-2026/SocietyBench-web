@@ -79,10 +79,8 @@ function renderQuestionPickers() {
     cs.style.display = cals.length > 1 ? "" : "none";
   }
   if (ts) {
-    ts.innerHTML = times.map((q, i) => {
-      const tag = (q.r && q.r.length) ? "" : ` · ${t("js.widget.qpick.unscored")}`;
-      return `<option value="${i}">${i + 1}/${times.length} · ${q.gt}${tag} — ${clip(q.desc, 46)}</option>`;
-    }).join("");
+    ts.innerHTML = times.map((q, i) =>
+      `<option value="${i}">${i + 1}/${times.length} · ${q.gt} — ${clip(q.desc, 46)}</option>`).join("");
     ts.value = String(Math.min(widgetState.timeIdx, Math.max(times.length - 1, 0)));
     ts.style.display = times.length > 1 ? "" : "none";
   }

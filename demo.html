@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SocietyBench — Replay a Prediction Point</title>
+  <title>Try SocietyBench — Interactive Demo</title>
   <meta name="description" content="Pick an anonymized event and a prediction point. See what a model sees, what it outputs, and how it scores." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Dancing+Script:wght@600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260803-gold" />
+  <link rel="stylesheet" href="styles.css?v=20260803-both2" />
 </head>
 <body class="layout-pill dark-theme subpage" data-lang="en">
   <header class="topnav-wrap" aria-label="Primary">
@@ -23,7 +23,7 @@
         <li><a class="sb-link" href="index.html#deepdive" data-i18n="nav.deepdive">Deep-dive</a></li>
         <li><a class="sb-link" href="index.html#expand" data-i18n="nav.contribute">Contribute</a></li>
         <li><a class="sb-link" href="index.html#cite" data-i18n="nav.cite">Cite</a></li>
-        <li><a class="sb-link topnav-cta active" href="demo.html" data-i18n="nav.try">Replay ★</a></li>
+        <li><a class="sb-link topnav-cta active" href="demo.html" data-i18n="nav.try">Try it ★</a></li>
       </ul>
       <div class="topnav-aux">
         <div class="lang-toggle topnav-lang" role="group" aria-label="Language">
@@ -45,8 +45,8 @@
     <!-- =========================== TRY THE BENCHMARK ======================= -->
     <section class="page-section reveal" data-page="try" id="try">
       <div class="wrap">
-        <h2 class="section-title lb-center"><span data-i18n-html="try.title.html">Replay a Prediction Point <span style="color: var(--orange);">★</span></span></h2>
-        <p class="mth-intro-center" style="font-size: 15.5px; margin-bottom: 10px;" data-i18n="try.subtitle">Pick an event and a cutoff, and replay what really happened: the context the model was given, the question it was asked, the answer it returned, and the outcome it was scored against.</p>
+        <h2 class="section-title lb-center"><span data-i18n-html="try.title.html">Try the Benchmark <span style="color: var(--orange);">★</span></span></h2>
+        <p class="mth-intro-center" style="font-size: 15.5px; margin-bottom: 10px;" data-i18n="try.subtitle">Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth. Only points where both exams ran are listed, and only the systems that sat both of them.</p>
         <p class="anon-note intro-anon" data-i18n="try.anon.note">Anonymized: entities are replaced and every date is shifted by one shared offset, so the names and the calendar here do not match the real world. The ground truth on this page sits on the same shifted timeline.</p>
 
         <!-- Global banner area (fallback messages) -->
@@ -162,8 +162,8 @@
     </div><!-- /.main-col -->
   </div><!-- /.shell -->
 
-  <script src="i18n.js?v=20260803-gold"></script>
-  <script src="app.js?v=20260803-gold"></script>
-  <script src="demo.js?v=20260803-gold"></script>
+  <script src="i18n.js?v=20260803-both2"></script>
+  <script src="app.js?v=20260803-both2"></script>
+  <script src="demo.js?v=20260803-both2"></script>
 </body>
 </html>

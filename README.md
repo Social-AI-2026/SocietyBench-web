@@ -36,7 +36,7 @@ lives in JSON and in `i18n.js`.
 | Page | What it shows |
 |------|---------------|
 | **`index.html`** | Overview, abstract, method, leaderboard, deep-dive, contribute, citation |
-| **`demo.html`** | *Replay* — pick an event and a cutoff, see what the model saw, what it answered, and how far off it was |
+| **`demo.html`** | *Try it* — pick an event and a cutoff, see what the model saw, what it answered, and how far off it was |
 
 Both share one nav bar, one stylesheet and one translation table, so a change to any of those
 lands on every page at once. The deep-dive used to be a third page; it is now a section of the
@@ -148,13 +148,13 @@ Everything on the page is generated, never hand-edited.
 | File | Rows | Source |
 |------|------|--------|
 | `leaderboard.json` · `.zh.json` | 6 LLMs + 3 agents | the paper's Table 2 and agent table |
-| `demo_index.json` · `.zh.json` | 5 events, 125 prediction points | our real per-question run outputs |
-| `demo/<lang>/<event>/P<NN>.json` | 25,364 calibration questions + 3,112 temporal events, answered by 10 systems | the same run outputs, one file per point |
+| `demo_index.json` · `.zh.json` | 5 events, 121 prediction points | our real per-question run outputs |
+| `demo/<lang>/<event>/P<NN>.json` | 24,691 calibration questions + 2,782 temporal events, answered by up to 10 systems | the same run outputs, one file per point |
 | `demo/<lang>/<event>/P<NN>_context.md` | the full anonymized context of that point | the released dataset, copied verbatim |
 | `experiments.json` · `.zh.json` | the three difficulty ablations | the paper's ablation tables |
 
 Both exams are released whole: every question of every prediction point, not a
-sample. That is 250 point files plus their 250 contexts, ~37 MB, so the page loads the index first and
+sample. That is 242 point files plus their 242 contexts, ~36 MB, so the page loads the index first and
 fetches a point's questions when it is picked.
 
 **Cached mode is not a mock-up.** For each prediction point the demo shows the real cutoff
@@ -168,13 +168,12 @@ answer, and what each of the six models actually returned:
 | `context_excerpt` | the released `contexts/P<NN>_context.md` |
 | `gt` · `gt_date` | the held-out ground truth |
 
-All 125 prediction points are offered, and every question under them. Coverage is uneven and
-the page says so rather than hiding it: the three foreign models ran a cost-saving subset on
-four of the five events, so a point may carry fewer than six models — the point selector says
-how many — and a model that skipped a question shows "—" instead of a number. Temporal events
-beyond the 90-day scoring window were never put to a model; they are listed and marked *not
-scored*. Live mode — calling a model API at request time — is not part of this build: the
-pane is gone from the page and the code that drives it no-ops.
+A point is listed only if both exams ran on it, and a system is listed only if it sat both of
+them — so nothing on the page is a blank cell. That leaves 121 of the 125 points: at the other
+four, every temporal event falls outside the 90-day scoring window, so no model was ever asked
+one. Coverage is still uneven underneath (the three foreign models ran a cost-saving subset on
+four of the five events), which is why a point may offer seven systems and another ten. Live
+mode — calling a model API at request time — is not part of this build.
 
 The anonymized timelines and question banks themselves live at
 [🤗 Social-AI-2026/SocietyBench](https://huggingface.co/datasets/Social-AI-2026/SocietyBench).

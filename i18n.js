@@ -45,7 +45,7 @@
       'nav.overview': 'Overview',
       'nav.group.benchmark': 'BENCHMARK',
       'nav.method': 'Method',
-      'nav.try': 'Replay ★',
+      'nav.try': 'Try it ★',
       'nav.contribute': 'Contribute',
       'nav.group.results': 'RESULTS',
       'nav.leaderboard': 'Leaderboard',
@@ -70,7 +70,7 @@
       'ph.crumb.root': 'SOCIETYBENCH',
       'ph.crumb.overview': 'OVERVIEW',
       'ph.crumb.method': 'METHOD',
-      'ph.crumb.try': 'REPLAY',
+      'ph.crumb.try': 'TRY IT',
       'ph.crumb.contribute': 'CONTRIBUTE',
       'ph.crumb.leaderboard': 'LEADERBOARD',
       'ph.crumb.deepdive': 'DEEP-DIVE',
@@ -241,8 +241,8 @@
       'lb.events.footer.html': '▸ More events expected via community contributions — see <a href="#expand" style="color: var(--orange-ink); border-bottom: 2px solid var(--orange); text-decoration: none; font-weight: 700;">EXPAND THE BENCHMARK</a>.',
 
       // ---- Try the Benchmark ---------------------------------------------
-      'try.title.html': 'Replay a Prediction Point <span style="color: var(--orange);">★</span>',
-      'try.subtitle': 'Pick an event and a cutoff, and replay what really happened: the context the model was given, the question it was asked, the answer it returned, and the outcome it was scored against.',
+      'try.title.html': 'Try the Benchmark <span style="color: var(--orange);">★</span>',
+      'try.subtitle': 'Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth. Only points where both exams ran are listed, and only the systems that sat both of them.',
       'try.tab.cached': '[ CACHED MODE ]',
       'try.tab.live': '[ LIVE MODE ]',
 
@@ -580,7 +580,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'nav.overview': '总览',
       'nav.group.benchmark': '基准',
       'nav.method': '方法',
-      'nav.try': '逐题回放 ★',
+      'nav.try': '在线试玩 ★',
       'nav.contribute': '参与贡献',
       'nav.group.results': '结果',
       'nav.leaderboard': '排行榜',
@@ -605,7 +605,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'ph.crumb.root': 'SOCIETYBENCH',
       'ph.crumb.overview': '总览',
       'ph.crumb.method': '方法',
-      'ph.crumb.try': '逐题回放',
+      'ph.crumb.try': '在线试玩',
       'ph.crumb.contribute': '参与贡献',
       'ph.crumb.leaderboard': '排行榜',
       'ph.crumb.deepdive': '深度分析',
@@ -776,8 +776,8 @@ Accepted events join the official catalog and ship in the next benchmark version
       'lb.events.footer.html': '▸ 更多事件将通过社区贡献加入——见 <a href="#expand" style="color: var(--orange-ink); border-bottom: 2px solid var(--orange); text-decoration: none; font-weight: 700;">参与贡献</a>。',
 
       // ---- Try the Benchmark ---------------------------------------------
-      'try.title.html': '逐题回放 <span style="color: var(--orange);">★</span>',
-      'try.subtitle': '选一个事件和一个截止日期,把当时真实发生的过程回放一遍:模型看到的上下文、被问到的题目、它给出的答案,以及用来给它打分的真实结果。',
+      'try.title.html': '在线试玩 <span style="color: var(--orange);">★</span>',
+      'try.subtitle': '选择一个匿名化事件与一个预测点。亲眼看看模型看到了什么、输出了什么,以及与真相相比偏差多大。这里只列两场考试都跑过的预测点,模型也只列两场都参加了的。',
       'try.tab.cached': '[ 缓存模式 ]',
       'try.tab.live': '[ 实时模式 ]',
 
