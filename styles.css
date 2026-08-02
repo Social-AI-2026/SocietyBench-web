@@ -4411,12 +4411,17 @@ body.dark-theme .lb .type-badge.agent---proj {
 .dd-table tbody tr.baseline { background: transparent; }
 .dd-table tbody tr.baseline td {
   font-weight: 700;
+  /* An older rule painted every border on this row #4f7fc7, which showed up as
+     a blue column separator on the last cell only. */
+  border-color: rgba(127, 127, 127, 0.3);
   border-top: 1.5px solid rgba(127, 127, 127, 0.35);
   border-bottom: none;
 }
+/* No accent bar on the reference row: it reads as a different kind of cell
+   next to the rows above it. The top rule and the heavier figures are enough. */
 .dd-table tbody tr.baseline td:first-child {
-  border-left: 2px solid var(--blue);
-  padding-left: 16px;
+  border-left: none;
+  padding-left: 14px;
 }
 /* The last column is the one the block is about; set it off like AVG. */
 .dd-table thead th:last-child,
