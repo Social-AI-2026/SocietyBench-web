@@ -248,6 +248,67 @@
     }
    ],
    "takeaway": "Later cutoffs see more of the arc and score higher (66.7 -> 67.6 -> 68.7). That is the closer-is-easier property a forecasting benchmark should show, and a basic sanity check on the construction."
+  },
+  "window_segments": {
+   "title": "Window segments",
+   "subtitle": "Temporal questions split by how far the event sits from the cutoff, then scored segment by segment. Segment shares: 52.4%·29.3%·18.3%.",
+   "columns": [
+    {
+     "key": "label",
+     "title": "Segment"
+    },
+    {
+     "key": "豆包",
+     "title": "Doubao"
+    },
+    {
+     "key": "kimi",
+     "title": "Kimi"
+    },
+    {
+     "key": "deepseek",
+     "title": "DeepSeek"
+    },
+    {
+     "key": "mean",
+     "title": "Mean of 7"
+    }
+   ],
+   "rows": [
+    {
+     "label": "0-30 days only",
+     "mean": 62.6,
+     "is_baseline": false,
+     "豆包": 61.9,
+     "kimi": 64.0,
+     "deepseek": 65.8
+    },
+    {
+     "label": "31-60 days only",
+     "mean": 61.7,
+     "is_baseline": false,
+     "豆包": 60.0,
+     "kimi": 61.1,
+     "deepseek": 67.4
+    },
+    {
+     "label": "61-90 days only",
+     "mean": 63.5,
+     "is_baseline": false,
+     "豆包": 62.5,
+     "kimi": 63.9,
+     "deepseek": 68.8
+    },
+    {
+     "label": "Full window (ours)",
+     "mean": 62.5,
+     "is_baseline": true,
+     "豆包": 61.5,
+     "kimi": 63.4,
+     "deepseek": 66.4
+    }
+   ],
+   "takeaway": "The three segments differ by only 0.8 points, and the hardest is the middle one, 31-60 days (61.7): distance alone does not drive difficulty."
   }
  }
 }

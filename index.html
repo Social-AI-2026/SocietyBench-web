@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Dancing+Script:wght@600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260802-events" />
+  <link rel="stylesheet" href="styles.css?v=20260803-abl" />
 </head>
 <body class="layout-pill dark-theme" data-active-page="overview" data-lang="en">
 
@@ -324,9 +324,6 @@
         <div class="lb-tab-pane" data-lbpane="events">
           <p class="mth-intro-center" style="max-width: 75ch; font-size: 14.5px; margin-bottom: 24px; color: var(--muted);" data-i18n="lb.events.intro">Five anonymized arcs. Each card shows the arc description, prediction-point count, and the question volume that point supplies to the bank.</p>
           <div class="cards cards-5" id="lb-events-grid"></div>
-          <p style="margin-top: 24px; font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.04em;" data-i18n-html="lb.events.footer.html">
-            ▸ More events expected via community contributions — see <a href="#expand" style="color: var(--orange-ink); border-bottom: 2px solid var(--orange); text-decoration: none; font-weight: 700;">EXPAND THE BENCHMARK</a>.
-          </p>
         </div>
       </div>
     </section>
@@ -354,46 +351,12 @@
             <div class="numeral" data-i18n="cb.c1.num">01</div>
             <h3 class="card-title" data-i18n="cb.c1.title">Bring Your Model</h3>
             <p class="ec-body" data-i18n="cb.c1.body">Run our 5 events on your LLM or agent, submit your scorecard via PR. The team replays your raw answers with our scoring code — no honor system.</p>
-            <button type="button" class="drawer-toggle" data-drawer-id="dr-model" aria-expanded="false" data-i18n="cb.c1.drawer-toggle">[ SHOW SUBMISSION DETAILS ▾ ]</button>
-            <div class="drawer" id="dr-model">
-<pre class="drawer-pre" data-i18n-html="cb.c1.drawer.html">WHAT TO SUBMIT  <span class="dim">(place in submissions/&lt;your-name&gt;/&lt;model-name&gt;/)</span>
-  <span class="kw">▸</span> model_card.md         <span class="dim">— name, version, params, training cutoff</span>
-  <span class="kw">▸</span> predictions.jsonl     <span class="dim">— one line per question: {point_id, q_id, p_hat or d_hat}</span>
-  <span class="kw">▸</span> run_metadata.json     <span class="dim">— reasoning depth, decoding params, API provider, dates</span>
-  <span class="kw">▸</span> scorecard.json        <span class="dim">— scores computed by /eval/predict_step4_scorecard.py</span>
-
-PROCESS
-  <span class="kw">01</span>  Clone the repo, read README quickstart
-  <span class="kw">02</span>  Run `python main.py --model &lt;your-model&gt; --workspace ./run_&lt;your-model&gt;`
-  <span class="kw">03</span>  Verify your scorecard matches what the script computed
-  <span class="kw">04</span>  Open a PR with the four files above
-
-The team replays your raw answers with our official scoring code.
-Match → added to the leaderboard. No honor system.</pre>
-            </div>
           </article>
 
           <article class="card expand-card">
             <div class="numeral" data-i18n="cb.c2.num">02</div>
             <h3 class="card-title" data-i18n="cb.c2.title">Bring a New Event</h3>
             <p class="ec-body" data-i18n="cb.c2.body">Use our public pipeline (web-crawl → media-crawl → merge → anonymize → questionbank) to construct a new anonymized event. Submit it via PR; if accepted it joins the official 5+.</p>
-            <button type="button" class="drawer-toggle" data-drawer-id="dr-event" aria-expanded="false" data-i18n="cb.c2.drawer-toggle">[ SHOW SUBMISSION DETAILS ▾ ]</button>
-            <div class="drawer" id="dr-event">
-<pre class="drawer-pre" data-i18n-html="cb.c2.drawer.html">WHAT TO SUBMIT  <span class="dim">(place in submissions/&lt;your-name&gt;/event-&lt;slug&gt;/)</span>
-  <span class="kw">▸</span> event_meta.json       <span class="dim">— slug, domain, arc dates, source platforms</span>
-  <span class="kw">▸</span> timeline_anon.md      <span class="dim">— final anonymized timeline</span>
-  <span class="kw">▸</span> replacements.json     <span class="dim">— substitution table (for audit)</span>
-  <span class="kw">▸</span> questionbank/*.json   <span class="dim">— per prediction point</span>
-  <span class="kw">▸</span> gt/*.md               <span class="dim">— per prediction point</span>
-  <span class="kw">▸</span> audit_report.json     <span class="dim">— Phase 2 must show high=0 and mid=0</span>
-
-PROCESS
-  <span class="kw">01</span>  Use `eval/total_pipeline.py` to crawl + process + anonymize your event
-  <span class="kw">02</span>  Verify the anonymization audit converges (high=0, mid=0)
-  <span class="kw">03</span>  Open a PR adding the event folder
-
-Accepted events join the official catalog and ship in the next benchmark version.</pre>
-            </div>
           </article>
 
           <article class="card expand-card">
@@ -427,8 +390,8 @@ Accepted events join the official catalog and ship in the next benchmark version
     </div><!-- /.main-col -->
   </div><!-- /.shell -->
 
-  <script src="i18n.js?v=20260802-events"></script>
-  <script src="app.js?v=20260802-events"></script>
+  <script src="i18n.js?v=20260803-abl"></script>
+  <script src="app.js?v=20260803-abl"></script>
   <!-- Crowd animation temporarily disabled — see #crowd-container above.
   <script src="crowd-animation.js"></script>
   <script src="crowd-links.js"></script>

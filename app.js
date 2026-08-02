@@ -633,36 +633,44 @@ async function loadDeepDive() {
   // Question-bank composition, scoring formula and true/false bias are three
   // views of the same question -- where the difficulty comes from -- so they
   // share one block and the buttons swap the table.
-  renderAblationTabs("dd-ablations", [
-    { block: data.ablations.question_bank_composition, spec: {
-        columns: [
-          { key: "label",  title: t("js.dd.col.qb-comp") },
-          { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
-          { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
-          { key: "mean",   title: t("js.dd.col.mean"), deltaKey: "mean_delta" }
-        ],
-        extremes: ["mean_delta"]
-      } },
-    { block: data.ablations.scoring_formula, spec: {
-        columns: [
-          { key: "label",  title: t("js.dd.col.scoring-formula") },
-          { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
-          { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
-          { key: "gap",    title: t("js.dd.col.gap") }
-        ]
-      } },
-    { block: data.ablations.true_false_bias, spec: {
-        columns: [
-          { key: "label",  title: t("js.dd.col.qb-comp") },
-          { key: "doubao", title: "Doubao" },
-          { key: "dseek",  title: "DSeek" },
-          { key: "opus",   title: "Opus" },
-          { key: "gemini", title: "Gemini" },
-          { key: "gpt",    title: "GPT-5.5" },
-          { key: "mean",   title: t("js.dd.col.mean") }
-        ]
-      } }
-  ]);
+  // Question-bank composition, scoring formula and the rest are all answers to
+  // "where does the difficulty come from"; they share one block and the buttons
+  // swap the table. Blocks that a language has no data for drop out silently.
+  const A = data.ablations || {};
+  const SPECS = {
+    question_bank_composition: { columns: [
+      { key: "label",  title: t("js.dd.col.qb-comp") },
+      { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
+      { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
+      { key: "mean",   title: t("js.dd.col.mean"), deltaKey: "mean_delta" }
+    ], extremes: ["mean_delta"] },
+    scoring_formula: { columns: [
+      { key: "label",  title: t("js.dd.col.scoring-formula") },
+      { key: "doubao", title: "Doubao", deltaKey: "doubao_delta" },
+      { key: "gpt",    title: "GPT-5.5", deltaKey: "gpt_delta" },
+      { key: "gap",    title: t("js.dd.col.gap") }
+    ] },
+    true_false_bias: { columns: [
+      { key: "label",  title: t("js.dd.col.truth") },
+      { key: "doubao", title: "Doubao" }, { key: "dseek", title: "DSeek" },
+      { key: "opus",   title: "Opus" },   { key: "gemini", title: "Gemini" },
+      { key: "gpt",    title: "GPT-5.5" },{ key: "mean",  title: t("js.dd.col.mean") }
+    ] },
+    cutoff_gradient: { columns: [
+      { key: "label",  title: t("js.dd.col.tercile") },
+      { key: "doubao", title: "Doubao" }, { key: "opus", title: "Opus" },
+      { key: "gemini", title: "Gemini" }, { key: "gpt",  title: "GPT-5.5" },
+      { key: "mean",   title: t("js.dd.col.mean") }
+    ] }
+  };
+  const ORDER = ["question_bank_composition", "true_false_bias", "cutoff_gradient",
+                 "window_segments", "dimension_mix", "scoring_formula",
+                 "anonymization", "web_access"];
+  renderAblationTabs("dd-ablations", ORDER.map(k => ({
+    block: A[k],
+    // Blocks generated from the ablation run files carry their own columns.
+    spec: SPECS[k] || { columns: (A[k] && A[k].columns) || [] }
+  })));
   renderAblationTable("dd-anonymization", data.ablations.cutoff_gradient, {
     columns: [
       { key: "label",  title: t("js.dd.col.qb-comp") },

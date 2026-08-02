@@ -533,6 +533,8 @@ Accepted events join the official catalog and ship in the next benchmark version
       'js.dd.sc.gap.time': 'Δ Time',
       'js.dd.sc.pct-of-mean.fmt': '{pct}% of mean',
       // Deep-dive table column titles
+      'js.dd.col.truth': 'Ground truth',
+      'js.dd.col.tercile': 'Cutoff tercile',
       'js.dd.col.qb-comp': 'Question-bank composition',
       'js.dd.col.scoring-formula': 'Calibration scoring formula',
       'js.dd.col.reasoning-effort': 'Reasoning effort',
@@ -1058,6 +1060,8 @@ Accepted events join the official catalog and ship in the next benchmark version
       'js.dd.sc.gap.time': 'Δ Time',
       'js.dd.sc.pct-of-mean.fmt': '占均值 {pct}%',
       // Deep-dive table column titles
+      'js.dd.col.truth': '真值',
+      'js.dd.col.tercile': '截止点档位',
       'js.dd.col.qb-comp': '题库构成',
       'js.dd.col.scoring-formula': '校准评分公式',
       'js.dd.col.reasoning-effort': '推理预算',

@@ -248,6 +248,263 @@
     }
    ],
    "takeaway": "越靠后的截止点看到的弧线越多,分数越高(66.7 → 67.6 → 68.7)。这是预测基准该有的'越近越容易'性质,也是对构造方式的一次基本合理性检查。"
+  },
+  "anonymization": {
+   "title": "匿名化有效性",
+   "subtitle": "同一个模型(DeepSeek)在同样的点上答两遍:一遍是主实验的全匿名版本,一遍是撤销替换、还原真名真日期的原文。",
+   "columns": [
+    {
+     "key": "label",
+     "title": "事件"
+    },
+    {
+     "key": "b_anon",
+     "title": "概率·匿名"
+    },
+    {
+     "key": "b_plain",
+     "title": "概率·真名"
+    },
+    {
+     "key": "f_anon",
+     "title": "时间·匿名"
+    },
+    {
+     "key": "f_plain",
+     "title": "时间·真名"
+    },
+    {
+     "key": "delta",
+     "title": "时间轴记忆信号"
+    }
+   ],
+   "rows": [
+    {
+     "label": "武大",
+     "b_anon": 64.3,
+     "b_plain": 64.9,
+     "f_anon": 54.8,
+     "f_plain": 54.6,
+     "delta": -0.2
+    },
+    {
+     "label": "关税",
+     "b_anon": 68.4,
+     "b_plain": 68.8,
+     "f_anon": 58.0,
+     "f_plain": 64.8,
+     "delta": 6.8
+    },
+    {
+     "label": "TikTok",
+     "b_anon": 66.5,
+     "b_plain": 69.6,
+     "f_anon": 54.9,
+     "f_plain": 64.9,
+     "delta": 10.0
+    },
+    {
+     "label": "美伊",
+     "b_anon": 57.6,
+     "b_plain": 57.8,
+     "f_anon": 59.0,
+     "f_plain": 57.7,
+     "delta": -1.3
+    },
+    {
+     "label": "SMCI",
+     "b_anon": 65.4,
+     "b_plain": 66.2,
+     "f_anon": 54.5,
+     "f_plain": 63.7,
+     "delta": 9.2
+    },
+    {
+     "label": "五事件平均 Δ",
+     "b_anon": null,
+     "b_plain": 1.0,
+     "f_anon": null,
+     "f_plain": 4.9,
+     "delta": 4.9,
+     "is_baseline": true
+    }
+   ],
+   "takeaway": "概率轴几乎不动(均 +1.0)——判断题不靠记忆;时间轴还原真名后平均涨 4.9 分,关税 +6.8、TikTok +10.0、SMCI +9.2,而冷门的武大 −0.2、美伊 −1.3。模型确实记得住热门事件的时点,所以匿名化对时间轴是必要的,主实验也因此没被记忆污染。"
+  },
+  "dimension_mix": {
+   "title": "题目维度",
+   "subtitle": "同一批作答按题目问的是什么重新分组:具体事件、政策动作、还是舆论走向。7 家全量模型。",
+   "columns": [
+    {
+     "key": "label",
+     "title": "维度"
+    },
+    {
+     "key": "豆包",
+     "title": "Doubao"
+    },
+    {
+     "key": "deepseek",
+     "title": "DeepSeek"
+    },
+    {
+     "key": "kimi",
+     "title": "Kimi"
+    },
+    {
+     "key": "mirofish",
+     "title": "MiroFish"
+    },
+    {
+     "key": "mean",
+     "title": "7 家均值"
+    }
+   ],
+   "rows": [
+    {
+     "label": "事件类",
+     "mean": 59.9,
+     "豆包": 62.3,
+     "deepseek": 62.3,
+     "kimi": 62.4,
+     "mirofish": 61.4
+    },
+    {
+     "label": "政策类",
+     "mean": 62.9,
+     "豆包": 64.9,
+     "deepseek": 63.4,
+     "kimi": 62.5,
+     "mirofish": 64.2
+    },
+    {
+     "label": "舆论类",
+     "mean": 67.3,
+     "豆包": 71.5,
+     "deepseek": 68.9,
+     "kimi": 66.1,
+     "mirofish": 71.8
+    }
+   ],
+   "takeaway": "舆论题最好答(67.3),具体事件最难(59.9)——模型对'风向往哪边吹'比对'某件事会不会发生'更有把握。"
+  },
+  "window_segments": {
+   "title": "时间窗口分段",
+   "subtitle": "时间题按事件距截止日多远分成三段再单独计分。段内题量占比 52.5%·29.3%·18.2%。",
+   "columns": [
+    {
+     "key": "label",
+     "title": "窗口段"
+    },
+    {
+     "key": "豆包",
+     "title": "Doubao"
+    },
+    {
+     "key": "kimi",
+     "title": "Kimi"
+    },
+    {
+     "key": "deepseek",
+     "title": "DeepSeek"
+    },
+    {
+     "key": "mean",
+     "title": "7 家均值"
+    }
+   ],
+   "rows": [
+    {
+     "label": "仅 0–30 天",
+     "mean": 63.9,
+     "is_baseline": false,
+     "豆包": 63.9,
+     "kimi": 64.9,
+     "deepseek": 64.3
+    },
+    {
+     "label": "仅 31–60 天",
+     "mean": 61.7,
+     "is_baseline": false,
+     "豆包": 63.2,
+     "kimi": 59.5,
+     "deepseek": 64.1
+    },
+    {
+     "label": "仅 61–90 天",
+     "mean": 63.8,
+     "is_baseline": false,
+     "豆包": 64.5,
+     "kimi": 64.3,
+     "deepseek": 63.5
+    },
+    {
+     "label": "完整窗口(本文)",
+     "mean": 63.4,
+     "is_baseline": true,
+     "豆包": 63.8,
+     "kimi": 63.7,
+     "deepseek": 64.2
+    }
+   ],
+   "takeaway": "三段之间只差 1.1 分,最难的是中段 31–60 天(61.7)——不是越远越难,而是中间那段最不好判断。"
+  },
+  "web_access": {
+   "title": "联网检索",
+   "subtitle": "同一个模型(Doubao)在真名版本上答两遍:一遍彻底断网,一遍允许联网检索。两个事件、全部 25 个点。",
+   "columns": [
+    {
+     "key": "label",
+     "title": "事件 · 轴"
+    },
+    {
+     "key": "nw",
+     "title": "断网"
+    },
+    {
+     "key": "web",
+     "title": "联网"
+    },
+    {
+     "key": "base",
+     "title": "全匿名基线"
+    },
+    {
+     "key": "delta",
+     "title": "Δ 联网"
+    }
+   ],
+   "rows": [
+    {
+     "label": "武大 · 概率",
+     "nw": 64.6,
+     "web": 65.4,
+     "base": 66.4,
+     "delta": 0.8
+    },
+    {
+     "label": "武大 · 时间",
+     "nw": 58.3,
+     "web": 61.0,
+     "base": 58.9,
+     "delta": 2.7
+    },
+    {
+     "label": "关税 · 概率",
+     "nw": 72.4,
+     "web": 73.9,
+     "base": 71.5,
+     "delta": 1.5
+    },
+    {
+     "label": "关税 · 时间",
+     "nw": 64.8,
+     "web": 65.9,
+     "base": 66.4,
+     "delta": 1.1
+    }
+   ],
+   "takeaway": "给它联网只涨 0.8–2.7 分(均约 +1.5)——能查到的资料帮不上多少忙,因为要预测的是截止日之后的事。断网的真名版对全匿名基线也没有稳定优势,说明 Doubao 对这两个事件没有记忆信号。"
   }
  }
 }

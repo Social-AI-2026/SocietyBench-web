@@ -1,7 +1,28 @@
 #!/usr/bin/env python3
-"""Rebuild experiments.json from the paper's own ablation and stress-case tables."""
-import json
+"""Rebuild experiments.json from the paper's tables and the ablation run files.
+
+The first three blocks are transcribed from the paper; the rest are read
+straight out of runs_new/_ablation/run_main/, which holds the frozen values the
+paper and the ablation write-up were computed from.
+"""
+import json, os
 OUT = "/home/ubuntu/societybench_web/site"
+ABL = "/home/ubuntu/societybench/runs_new/_ablation/run_main"
+
+
+def abl(name):
+    p = f"{ABL}/{name}"
+    if not os.path.exists(p): return None
+    return json.load(open(p, encoding="utf-8"))
+
+
+def r1(x):
+    return None if x is None else round(float(x), 1)
+
+
+def cols(*pairs):
+    return [{"key": k, "title": ti} for k, ti in pairs]
+
 
 def rows(items):
     return [dict(zip(("label","doubao","doubao_delta","gpt","gpt_delta","mean","mean_delta","is_baseline"), r))
@@ -91,7 +112,141 @@ def build(zh):
       },
     }
 
+
+# ----------------------------------------------------------------------------
+# Blocks read from the frozen ablation files. Each one carries its own columns
+# so the page does not need a hard-coded spec per table.
+# ----------------------------------------------------------------------------
+FULL7 = "7家均值"
+
+
+def block_dimension(zh, lang):
+    """Which dimension of question is hardest: event / policy / opinion."""
+    d = abl("维度构成.json")
+    if not d: return None
+    blk = (d.get(lang) or {})
+    means = blk.get("means_7家") or {}
+    if not any(v is not None for v in means.values()): return None      # 英文块尚未回填
+    pm = blk.get("per_model", {})
+    L = (lambda a, b: a if zh else b)
+    pick = [("豆包", "Doubao"), ("deepseek", "DeepSeek"), ("kimi", "Kimi"), ("mirofish", "MiroFish")]
+    keys = [("事件", L("事件类", "Event")), ("政策", L("政策类", "Policy")), ("舆论", L("舆论类", "Opinion"))]
+    rows = []
+    for k, label in keys:
+        row = {"label": label, "mean": r1(means.get(k))}
+        for src, _ in pick: row[src] = r1((pm.get(src) or {}).get(k))
+        rows.append(row)
+    return {
+        "title": L("题目维度", "Question dimension"),
+        "subtitle": L("同一批作答按题目问的是什么重新分组:具体事件、政策动作、还是舆论走向。7 家全量模型。",
+                      "The same answers regrouped by what the question asks about: a concrete event, a policy move, or where opinion goes. Seven full-coverage systems."),
+        "columns": cols(("label", L("维度", "Dimension")), *[(s, n) for s, n in pick], ("mean", L("7 家均值", "Mean of 7"))),
+        "rows": rows,
+        "takeaway": L(f"舆论题最好答({r1(means.get('舆论'))}),具体事件最难({r1(means.get('事件'))})——模型对'风向往哪边吹'比对'某件事会不会发生'更有把握。",
+                      f"Opinion questions are the easiest ({r1(means.get('舆论'))}) and concrete events the hardest ({r1(means.get('事件'))}): models read the direction of the wind better than they call a specific event."),
+    }
+
+
+def block_window(zh, lang):
+    """Where in the 90-day window the temporal difficulty sits."""
+    d = abl("题型构成_f窗口.json")
+    if not d: return None
+    blk = (d.get(lang) or {})
+    means = blk.get("means_7家") or {}
+    pm = blk.get("per_model", {})
+    if not means: return None
+    L = (lambda a, b: a if zh else b)
+    pick = [("豆包", "Doubao"), ("kimi", "Kimi"), ("deepseek", "DeepSeek")]
+    keys = [("仅段1_0-30", L("仅 0–30 天", "0-30 days only")),
+            ("仅段2_31-60", L("仅 31–60 天", "31-60 days only")),
+            ("仅段3_61-90", L("仅 61–90 天", "61-90 days only")),
+            ("full", L("完整窗口(本文)", "Full window (ours)"))]
+    rows = []
+    for k, label in keys:
+        row = {"label": label, "mean": r1(means.get(k)), "is_baseline": k == "full"}
+        for src, _ in pick: row[src] = r1((pm.get(src) or {}).get(k))
+        rows.append(row)
+    share = means.get("_段占比%_7家均") or []
+    sh = ("·".join(f"{s}%" for s in share)) if share else ""
+    return {
+        "title": L("时间窗口分段", "Window segments"),
+        "subtitle": L(f"时间题按事件距截止日多远分成三段再单独计分。段内题量占比 {sh}。",
+                      f"Temporal questions split by how far the event sits from the cutoff, then scored segment by segment. Segment shares: {sh}."),
+        "columns": cols(("label", L("窗口段", "Segment")), *[(s, n) for s, n in pick], ("mean", L("7 家均值", "Mean of 7"))),
+        "rows": rows,
+        "takeaway": L(f"三段之间只差 {r1(means.get('最大摆动'))} 分,最难的是中段 31–60 天({r1(means.get('仅段2_31-60'))})——不是越远越难,而是中间那段最不好判断。",
+                      f"The three segments differ by only {r1(means.get('最大摆动'))} points, and the hardest is the middle one, 31-60 days ({r1(means.get('仅段2_31-60'))}): distance alone does not drive difficulty."),
+    }
+
+
+def block_anonymization(zh, lang):
+    """Does anonymization actually remove the memory signal? (DeepSeek, zh only.)"""
+    d = abl("匿名化.json")
+    if not d or lang != "中文": return None                    # 英文一侧未做
+    blk = d.get("中文", {})
+    per = blk.get("per_event", {})
+    L = (lambda a, b: a if zh else b)
+    names = [("武大", L("武大", "Wuhan Lib.")), ("关税", L("关税", "Trump Tariff")),
+             ("TikTok", "TikTok"), ("美伊", L("美伊", "US-Iran")), ("SMCI", "SMCI")]
+    rows = []
+    for k, label in names:
+        e = per.get(k) or {}
+        b, f = e.get("B") or {}, e.get("F") or {}
+        rows.append({"label": label,
+                     "b_anon": r1(b.get("主版全匿名")), "b_plain": r1(b.get("plain全真")),
+                     "f_anon": r1(f.get("主版全匿名")), "f_plain": r1(f.get("plain全真")),
+                     "delta": r1(f.get("Δ记忆信号"))})
+    dm = blk.get("Δ均") or {}
+    rows.append({"label": L("五事件平均 Δ", "Mean delta over 5 events"),
+                 "b_anon": None, "b_plain": r1(dm.get("B概率")),
+                 "f_anon": None, "f_plain": r1(dm.get("F时间")),
+                 "delta": r1(dm.get("F时间")), "is_baseline": True})
+    return {
+        "title": L("匿名化有效性", "Does anonymization work?"),
+        "subtitle": L("同一个模型(DeepSeek)在同样的点上答两遍:一遍是主实验的全匿名版本,一遍是撤销替换、还原真名真日期的原文。",
+                      "One model (DeepSeek) answers the same points twice: once on the anonymized version used in the main experiment, once on the original with real names and real dates restored."),
+        "columns": cols(("label", L("事件", "Event")),
+                        ("b_anon", L("概率·匿名", "Prob · anon")), ("b_plain", L("概率·真名", "Prob · real")),
+                        ("f_anon", L("时间·匿名", "Time · anon")), ("f_plain", L("时间·真名", "Time · real")),
+                        ("delta", L("时间轴记忆信号", "Memory signal, time"))),
+        "rows": rows,
+        "takeaway": L("概率轴几乎不动(均 +1.0)——判断题不靠记忆;时间轴还原真名后平均涨 4.9 分,关税 +6.8、TikTok +10.0、SMCI +9.2,而冷门的武大 −0.2、美伊 −1.3。模型确实记得住热门事件的时点,所以匿名化对时间轴是必要的,主实验也因此没被记忆污染。",
+                      "The probability axis barely moves (+1.0 on average): those questions are not answered from memory. The temporal axis gains 4.9 points on average once real names are back - tariffs +6.8, TikTok +10.0, SMCI +9.2 - while the two low-profile arcs move -0.2 and -1.3. Models do remember when famous events happened, which is exactly why the temporal axis needs anonymization."),
+    }
+
+
+def block_web(zh, lang):
+    """Live web access, held against the memory signal (Doubao, zh only)."""
+    d = abl("联网_豆包.json")
+    if not d or lang != "中文": return None
+    pairs = d.get("对照") or {}
+    L = (lambda a, b: a if zh else b)
+    names = {"event1-B": L("武大 · 概率", "Wuhan Lib. · prob"), "event1-F": L("武大 · 时间", "Wuhan Lib. · time"),
+             "event2-B": L("关税 · 概率", "Trump Tariff · prob"), "event2-F": L("关税 · 时间", "Trump Tariff · time")}
+    rows = []
+    for k, label in names.items():
+        e = pairs.get(k) or {}
+        rows.append({"label": label, "nw": r1(e.get("不联网plain")), "web": r1(e.get("联网plain")),
+                     "base": r1(e.get("全匿名基线")), "delta": r1(e.get("Δ联网(web-nw)"))})
+    return {
+        "title": L("联网检索", "Web access"),
+        "subtitle": L("同一个模型(Doubao)在真名版本上答两遍:一遍彻底断网,一遍允许联网检索。两个事件、全部 25 个点。",
+                      "One model (Doubao) answers the real-name version twice: once with the network off, once allowed to search. Two events, all 25 points."),
+        "columns": cols(("label", L("事件 · 轴", "Event · axis")),
+                        ("nw", L("断网", "No web")), ("web", L("联网", "With web")),
+                        ("base", L("全匿名基线", "Anonymized baseline")), ("delta", L("Δ 联网", "Delta from web"))),
+        "rows": rows,
+        "takeaway": L("给它联网只涨 0.8–2.7 分(均约 +1.5)——能查到的资料帮不上多少忙,因为要预测的是截止日之后的事。断网的真名版对全匿名基线也没有稳定优势,说明 Doubao 对这两个事件没有记忆信号。",
+                      "Search buys 0.8-2.7 points (about +1.5 on average): what can be retrieved does not help much, because the question is about what happens after the cutoff. The offline real-name run holds no steady edge over the anonymized baseline either, so this model carries no memory signal for these two arcs."),
+    }
+
+
 for zh, suf in ((False, ""), (True, ".zh")):
     d = build(zh)
+    lang = "中文" if zh else "英文"
+    for key, fn in (("anonymization", block_anonymization), ("dimension_mix", block_dimension),
+                    ("window_segments", block_window), ("web_access", block_web)):
+        blk = fn(zh, lang)
+        if blk: d["ablations"][key] = blk
     json.dump(d, open(f"{OUT}/experiments{suf}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"  experiments{suf}.json  消融 {len(d['ablations'])} 组 / 压力事件 {len(d['stress_case']['events'])} 个")
