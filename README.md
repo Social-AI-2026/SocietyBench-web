@@ -36,7 +36,7 @@ lives in JSON and in `i18n.js`.
 | Page | What it shows |
 |------|---------------|
 | **`index.html`** | Overview, abstract, method, leaderboard, deep-dive, contribute, citation |
-| **`demo.html`** | *Try it* — pick an event and a cutoff, see what the model saw, what it answered, and how far off it was |
+| **`demo.html`** | *Replay* — pick an event and a cutoff, see what the model saw, what it answered, and how far off it was |
 
 Both share one nav bar, one stylesheet and one translation table, so a change to any of those
 lands on every page at once. The deep-dive used to be a third page; it is now a section of the

@@ -216,6 +216,13 @@ def build_demo(lang, langdir):
                              "gt": e.get("gt_date") or e.get("date"),
                              "dfc": e.get("days_from_cutoff"), "r": r})
 
+            # Reading order for the two pickers: calibration questions by window
+            # (7 -> 14 -> 30 -> 60 -> 90) then by how far the target sits from the
+            # cutoff; temporal events by the date they actually happened.
+            cal.sort(key=lambda q: (q["wd"] if q["wd"] is not None else 999,
+                                    q["dfc"] if q["dfc"] is not None else 999, q["q"]))
+            time.sort(key=lambda e: (e["gt"] or "9999-99-99", e["eid"]))
+
             if not cal and not time: continue
             # The excerpt is what the box shows; the whole context is copied
             # next to it and fetched only when the reader asks for it.

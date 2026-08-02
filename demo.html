@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Try SocietyBench — Interactive Demo</title>
+  <title>SocietyBench — Replay a Prediction Point</title>
   <meta name="description" content="Pick an anonymized event and a prediction point. See what a model sees, what it outputs, and how it scores." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Dancing+Script:wght@600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260803-ctxmodal" />
+  <link rel="stylesheet" href="styles.css?v=20260803-replay" />
 </head>
 <body class="layout-pill dark-theme subpage" data-lang="en">
   <header class="topnav-wrap" aria-label="Primary">
@@ -23,7 +23,7 @@
         <li><a class="sb-link" href="index.html#deepdive" data-i18n="nav.deepdive">Deep-dive</a></li>
         <li><a class="sb-link" href="index.html#expand" data-i18n="nav.contribute">Contribute</a></li>
         <li><a class="sb-link" href="index.html#cite" data-i18n="nav.cite">Cite</a></li>
-        <li><a class="sb-link topnav-cta active" href="demo.html" data-i18n="nav.try">Try it ★</a></li>
+        <li><a class="sb-link topnav-cta active" href="demo.html" data-i18n="nav.try">Replay ★</a></li>
       </ul>
       <div class="topnav-aux">
         <div class="lang-toggle topnav-lang" role="group" aria-label="Language">
@@ -45,8 +45,9 @@
     <!-- =========================== TRY THE BENCHMARK ======================= -->
     <section class="page-section reveal" data-page="try" id="try">
       <div class="wrap">
-        <h2 class="section-title lb-center"><span data-i18n-html="try.title.html">Try the Benchmark <span style="color: var(--orange);">★</span></span></h2>
-        <p class="mth-intro-center" style="font-size: 15.5px; margin-bottom: 24px;" data-i18n="try.subtitle">Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth.</p>
+        <h2 class="section-title lb-center"><span data-i18n-html="try.title.html">Replay a Prediction Point <span style="color: var(--orange);">★</span></span></h2>
+        <p class="mth-intro-center" style="font-size: 15.5px; margin-bottom: 10px;" data-i18n="try.subtitle">Pick an event and a cutoff, and replay what really happened: the context the model was given, the question it was asked, the answer it returned, and the outcome it was scored against.</p>
+        <p class="anon-note intro-anon" data-i18n="try.anon.note">Anonymized: entities are replaced and every date is shifted by one shared offset, so the names and the calendar here do not match the real world. The ground truth on this page sits on the same shifted timeline.</p>
 
         <!-- Global banner area (fallback messages) -->
         <div id="try-banner-host"></div>
@@ -83,13 +84,12 @@
                   <div class="ctx-foot">
                     <button type="button" class="ctx-toggle" id="ctx-toggle"
                             data-i18n="try.ctx.open">▸ READ THE FULL CONTEXT</button>
-                    <p class="anon-note" data-i18n="try.anon.note">Anonymized: entities are replaced and every date is shifted by one shared offset, so the names and the calendar here do not match the real world. The ground truth on this page sits on the same shifted timeline.</p>
                   </div>
                 </div>
 
                 <div class="view-block qbox">
                   <div class="qbox-head">
-                    <span class="vb-label" data-i18n="try.view.cal-q">CALIBRATION QUESTION</span>
+                    <span class="vb-label" data-i18n="try.view.cal-q">CALIBRATION</span>
                     <!-- Which of this point's calibration questions to show. The
                          list is rebuilt whenever the event or the point changes. -->
                     <select class="q-pick" id="cal-q-pick" aria-label="Pick a calibration question"></select>
@@ -100,7 +100,7 @@
 
                 <div class="view-block qbox">
                   <div class="qbox-head">
-                    <span class="vb-label" data-i18n="try.view.time-q">TEMPORAL QUESTION</span>
+                    <span class="vb-label" data-i18n="try.view.time-q">TEMPORAL</span>
                     <select class="q-pick" id="time-q-pick" aria-label="Pick a temporal event"></select>
                   </div>
                   <p class="q" id="time-q">—</p>
@@ -162,8 +162,8 @@
     </div><!-- /.main-col -->
   </div><!-- /.shell -->
 
-  <script src="i18n.js?v=20260803-ctxmodal"></script>
-  <script src="app.js?v=20260803-ctxmodal"></script>
-  <script src="demo.js?v=20260803-ctxmodal"></script>
+  <script src="i18n.js?v=20260803-replay"></script>
+  <script src="app.js?v=20260803-replay"></script>
+  <script src="demo.js?v=20260803-replay"></script>
 </body>
 </html>

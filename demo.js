@@ -13,6 +13,12 @@ const widgetState = {
 };
 
 function el(id) { return document.getElementById(id); }
+// One accent per event, so the picker reads as five arcs rather than five lines
+// of text. Native <select> can colour a whole option, not part of one.
+const EVENT_COLORS = ["#7aa2f7", "#e0af68", "#7dcfb6", "#f7768e", "#bb9af7"];
+function eventColor(i) { return EVENT_COLORS[i % EVENT_COLORS.length]; }
+function paintEventSelect(sel, i) { if (sel) sel.style.color = eventColor(i); }
+
 
 // The index lists every prediction point; a point's questions live in their own
 // file (demo/<lang>/<event>/<PID>.json) and are fetched the first time the point
@@ -213,10 +219,10 @@ function applyRevealState() {
   if (widgetState.revealed) {
     gtVals.classList.remove("hidden");
     gtPending.style.display = "none";
-    btn.disabled = true;
-    btn.innerHTML = t("js.widget.gt-revealed");
-    btn.style.opacity = 0.6;
-    btn.style.cursor = "default";
+    btn.disabled = false;
+    btn.innerHTML = t("js.widget.gt-hide");
+    btn.style.opacity = "";
+    btn.style.cursor = "";
     el("gt-cal").textContent = cq ? (cq.gt === 1 ? t("js.widget.gt.yes") : t("js.widget.gt.no")) : "—";
     el("gt-cal-note").textContent = cq ? tfmt(t("js.widget.gt-note.fmt"), {
       note: cq.gt === 1 ? t("js.widget.gt-note.did") : t("js.widget.gt-note.didnot")
@@ -235,11 +241,13 @@ function applyRevealState() {
 function buildSelectors() {
   const evSel = el("evt-select");
   evSel.innerHTML = widgetState.data.events.map((e, i) =>
-    `<option value="${i}">${e.domain_label} — ${e.anonymized_arc}</option>`
+    `<option value="${i}" style="color:${eventColor(i)}">${e.anonymized_arc} — ${e.domain_label}</option>`
   ).join("");
   evSel.value = widgetState.eventIdx;
+  paintEventSelect(evSel, widgetState.eventIdx);
   evSel.addEventListener("change", async () => {
     widgetState.eventIdx = parseInt(evSel.value, 10);
+    paintEventSelect(evSel, widgetState.eventIdx);
     widgetState.modelIdx = 0;
     widgetState.pointIdx = 0;
     buildPointSelector();
@@ -317,9 +325,9 @@ function buildModelButtons() {
   });
 }
 
+// Reveal is a toggle: the answer can be put back out of sight.
 el("reveal-btn") && el("reveal-btn").addEventListener("click", () => {
-  if (widgetState.revealed) return;
-  widgetState.revealed = true;
+  widgetState.revealed = !widgetState.revealed;
   applyRevealState();
 });
 
@@ -499,7 +507,7 @@ function initLiveSelectors() {
     if (!widgetState.data) { setTimeout(tryInit, 100); return; }
     const evSel = el("live-evt-select");
     evSel.innerHTML = widgetState.data.events.map((e, i) =>
-      `<option value="${i}">${e.domain_label} — ${e.anonymized_arc}</option>`
+      `<option value="${i}" style="color:${eventColor(i)}">${e.anonymized_arc} — ${e.domain_label}</option>`
     ).join("");
     evSel.value = liveState.eventIdx;
     evSel.addEventListener("change", () => {
@@ -867,7 +875,7 @@ window.SB_DEMO = {
       const liveEvSel = el("live-evt-select");
       if (liveEvSel) {
         liveEvSel.innerHTML = widgetState.data.events.map((e, i) =>
-          `<option value="${i}">${e.domain_label} — ${e.anonymized_arc}</option>`).join("");
+          `<option value="${i}" style="color:${eventColor(i)}">${e.anonymized_arc} — ${e.domain_label}</option>`).join("");
         liveEvSel.value = liveState.eventIdx;
       }
       refreshLivePtSelector();
