@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Dancing+Script:wght@600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260802-simpler" />
+  <link rel="stylesheet" href="styles.css?v=20260802-mirror" />
 </head>
 <body class="layout-pill dark-theme" data-active-page="overview" data-lang="en">
 
@@ -114,6 +114,9 @@
           <a class="btn" href="https://github.com/Social-AI-2026/SocietyBench-codebase" target="_blank"><span class="glyph">▸</span> <span data-i18n="hero.btn.code">Code</span></a>
           <a class="btn" href="https://huggingface.co/datasets/Social-AI-2026/SocietyBench" target="_blank"><span class="glyph">▸</span> <span data-i18n="hero.btn.dataset">Dataset</span></a>
         </div>
+        <!-- huggingface.co is unreachable from some networks (mainland China
+             among them). hf-mirror.com serves the same dataset page. -->
+        <p class="mirror-hint" data-i18n-html="hero.mirror.html">huggingface.co unreachable? &nbsp;→&nbsp; <a href="https://hf-mirror.com/datasets/Social-AI-2026/SocietyBench" target="_blank" rel="noopener">open the dataset on the hf-mirror</a></p>
       </div>
     </section>
 
@@ -472,8 +475,8 @@ Accepted events join the official catalog and ship in the next benchmark version
     </div><!-- /.main-col -->
   </div><!-- /.shell -->
 
-  <script src="i18n.js?v=20260802-simpler"></script>
-  <script src="app.js?v=20260802-simpler"></script>
+  <script src="i18n.js?v=20260802-mirror"></script>
+  <script src="app.js?v=20260802-mirror"></script>
   <!-- Crowd animation temporarily disabled — see #crowd-container above.
   <script src="crowd-animation.js"></script>
   <script src="crowd-links.js"></script>
