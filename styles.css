@@ -4621,3 +4621,32 @@ body.dark-theme .ctx-modal-panel { background: #0f1115; }
   text-align: center;
 }
 .ctx-foot { margin-top: 10px; }
+
+/* --- Replay page: quieter controls, gold model names --------------------- */
+/* The two selects carried a 2 px near-white border and a 3 px hard shadow in
+   the same colour — two bright rectangles above the fold. */
+.panel .select {
+  border: var(--border);
+  box-shadow: none;
+  background: rgba(127, 127, 127, 0.06);
+  padding: 9px 12px;
+}
+.panel .select:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+
+/* Model names in gold; the row is otherwise plain, and the selected one is
+   carried by a tint and a left bar rather than by a brighter frame. */
+.model-btn {
+  color: #e6c07b;
+  border: var(--border);
+  box-shadow: none;
+  background: transparent;
+}
+.model-btn:hover { background: rgba(230, 192, 123, 0.07); }
+.model-btn.active {
+  background: rgba(230, 192, 123, 0.12);
+  border-color: rgba(230, 192, 123, 0.45);
+  border-left: 2px solid #e6c07b;
+  color: #f0d29b;
+}
+.model-btn .mtag { color: var(--muted); }
+.model-btn.active .mtag { color: #e6c07b; }
