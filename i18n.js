@@ -146,13 +146,13 @@
       'method.3anon.intro.html': 'The anonymization pipeline renders each merged timeline into a counterfactual world before any candidate model sees it. The auditor loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.',
       'method.3anon.p01.num': '01',
       'method.3anon.p01.title': 'Rule-based Replacement',
-      'method.3anon.p01.body': 'Swap entities by longest match against a per-event table, then shift every date by one offset δ ~ U(±180 d) — the calendar position is gone, the gaps between events are not.',
+      'method.3anon.p01.body': 'Swap every entity against a table, then slide all dates by one shared offset — the gaps survive, the calendar does not.',
       'method.3anon.p02.num': '02',
       'method.3anon.p02.title': 'LLM Adversarial Audit Loop',
-      'method.3anon.p02.body.html': 'An auditor LLM hunts for leftover searchable clues (<em>high</em>) and bad substitutions (<em>mid</em>), writes new rules from what it finds, and Phase 01 re-runs. It stops at <strong>high = 0, mid = 0</strong>, at most 5 rounds.',
+      'method.3anon.p02.body.html': 'An auditor LLM hunts for anything still searchable; whatever it finds becomes a new rule and Phase 01 re-runs.',
       'method.3anon.p03.num': '03',
       'method.3anon.p03.title': 'Consistency Check',
-      'method.3anon.p03.body': 'Compare against the original paragraph by paragraph, event by event, and repair whatever the substitutions broke — without undoing them.',
+      'method.3anon.p03.body': 'Compare the result against the original and repair what the swaps broke.',
 
       // Dual-axis evaluation
       'method.dual.title': 'Dual-Axis Evaluation',
@@ -671,13 +671,13 @@ Accepted events join the official catalog and ship in the next benchmark version
       'method.3anon.intro.html': '在任何候选模型看到内容之前,匿名化流水线先把每条合并后的时间线渲染为模拟社会世界。审计循环在 <strong>high = 0 与 mid = 0</strong> 处收敛,最多 5 轮。',
       'method.3anon.p01.num': '01',
       'method.3anon.p01.title': '基于规则的替换',
-      'method.3anon.p01.body': '按事件级替换表最长匹配换掉实体,再把所有日期统一平移一个偏移量 δ ~ U(±180 天)——绝对日历位置没了,事件之间的间隔一天不差。',
+      'method.3anon.p01.body': '按表把实体换掉,再把所有日期平移同一个偏移量——间隔还在,日历没了。',
       'method.3anon.p02.num': '02',
       'method.3anon.p02.title': 'LLM 对抗审计循环',
-      'method.3anon.p02.body.html': '审计 LLM 找残留的可搜线索(<em>high</em>)和替换质量问题(<em>mid</em>),照着结果自动写新规则,阶段 01 重跑。<strong>high = 0、mid = 0</strong> 才停,最多 5 轮。',
+      'method.3anon.p02.body.html': '审计 LLM 找还能被搜到的线索,找到什么就写成新规则,阶段 01 重跑。',
       'method.3anon.p03.num': '03',
       'method.3anon.p03.title': '一致性校验',
-      'method.3anon.p03.body': '逐段、逐事件与原文比对,修好替换造成的破损——但不把替换改回去。',
+      'method.3anon.p03.body': '拿结果和原文比对,修好替换弄坏的地方。',
 
       // Dual-axis evaluation
       'method.dual.title': '双轴评测',
