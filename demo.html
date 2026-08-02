@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Dancing+Script:wght@600;700&family=Archivo+Black&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260803-both2" />
+  <link rel="stylesheet" href="styles.css?v=20260803-notes" />
 </head>
 <body class="layout-pill dark-theme subpage" data-lang="en">
   <header class="topnav-wrap" aria-label="Primary">
@@ -46,8 +46,20 @@
     <section class="page-section reveal" data-page="try" id="try">
       <div class="wrap">
         <h2 class="section-title lb-center"><span data-i18n-html="try.title.html">Try the Benchmark <span style="color: var(--orange);">★</span></span></h2>
-        <p class="mth-intro-center" style="font-size: 15.5px; margin-bottom: 10px;" data-i18n="try.subtitle">Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth. Only points where both exams ran are listed, and only the systems that sat both of them.</p>
-        <p class="anon-note intro-anon" data-i18n="try.anon.note">Anonymized: entities are replaced and every date is shifted by one shared offset, so the names and the calendar here do not match the real world. The ground truth on this page sits on the same shifted timeline.</p>
+        <p class="mth-intro-center" style="font-size: 15.5px; margin-bottom: 22px;" data-i18n="try.subtitle">Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth.</p>
+
+        <!-- The two things a reader has to know before reading a number: what is
+             on the menu, and that none of it is the real world. -->
+        <div class="try-notes">
+          <div class="try-note">
+            <span class="tn-label" data-i18n="try.note.scope.label">WHAT IS LISTED</span>
+            <p data-i18n="try.note.scope">Only prediction points where both exams ran, and only the systems that sat both of them — so no cell on this page is empty.</p>
+          </div>
+          <div class="try-note">
+            <span class="tn-label" data-i18n="try.note.anon.label">ANONYMIZED</span>
+            <p data-i18n="try.anon.note">Anonymized: entities are replaced and every date is shifted by one shared offset, so the names and the calendar here do not match the real world. The ground truth on this page sits on the same shifted timeline.</p>
+          </div>
+        </div>
 
         <!-- Global banner area (fallback messages) -->
         <div id="try-banner-host"></div>
@@ -162,8 +174,8 @@
     </div><!-- /.main-col -->
   </div><!-- /.shell -->
 
-  <script src="i18n.js?v=20260803-both2"></script>
-  <script src="app.js?v=20260803-both2"></script>
-  <script src="demo.js?v=20260803-both2"></script>
+  <script src="i18n.js?v=20260803-notes"></script>
+  <script src="app.js?v=20260803-notes"></script>
+  <script src="demo.js?v=20260803-notes"></script>
 </body>
 </html>

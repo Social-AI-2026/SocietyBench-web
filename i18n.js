@@ -242,7 +242,10 @@
 
       // ---- Try the Benchmark ---------------------------------------------
       'try.title.html': 'Try the Benchmark <span style="color: var(--orange);">★</span>',
-      'try.subtitle': 'Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth. Only points where both exams ran are listed, and only the systems that sat both of them.',
+            'try.note.scope.label': 'WHAT IS LISTED',
+      'try.note.scope': 'Only prediction points where both exams ran, and only the systems that sat both of them — so no cell on this page is empty.',
+      'try.note.anon.label': 'ANONYMIZED',
+'try.subtitle': 'Pick an anonymized event and a prediction point. See exactly what a model sees, what it outputs, and how it compares to the ground truth.',
       'try.tab.cached': '[ CACHED MODE ]',
       'try.tab.live': '[ LIVE MODE ]',
 
@@ -777,7 +780,10 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // ---- Try the Benchmark ---------------------------------------------
       'try.title.html': '在线试玩 <span style="color: var(--orange);">★</span>',
-      'try.subtitle': '选择一个匿名化事件与一个预测点。亲眼看看模型看到了什么、输出了什么,以及与真相相比偏差多大。这里只列两场考试都跑过的预测点,模型也只列两场都参加了的。',
+            'try.note.scope.label': '这里列了什么',
+      'try.note.scope': '只列两场考试都跑过的预测点,模型也只列两场都参加了的——所以页面上不会出现空格子。',
+      'try.note.anon.label': '全部匿名化',
+'try.subtitle': '选择一个匿名化事件与一个预测点。亲眼看看模型看到了什么、输出了什么,以及与真相相比偏差多大。',
       'try.tab.cached': '[ 缓存模式 ]',
       'try.tab.live': '[ 实时模式 ]',
 
