@@ -146,13 +146,13 @@
       'method.3anon.intro.html': 'The anonymization pipeline renders each merged timeline into a counterfactual world before any candidate model sees it. The auditor loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.',
       'method.3anon.p01.num': '01',
       'method.3anon.p01.title': 'Rule-based Replacement',
-      'method.3anon.p01.body': 'Replace entities by longest-match against a per-event substitution table; shift every date uniformly by a single offset δ ~ U(±180 d), destroying absolute calendar position while preserving every inter-event gap.',
+      'method.3anon.p01.body': 'Swap entities by longest match against a per-event table, then shift every date by one offset δ ~ U(±180 d) — the calendar position is gone, the gaps between events are not.',
       'method.3anon.p02.num': '02',
       'method.3anon.p02.title': 'LLM Adversarial Audit Loop',
-      'method.3anon.p02.body.html': 'An auditor LLM reads the anonymized text and reports residual search-key leakage (<em>high</em>) and substitution-quality issues (<em>mid</em>). New replacement rules are auto-derived from findings and Phase 01 re-runs from the raw original. Loop stops at <strong>high = 0 and mid = 0</strong>, max 5 rounds.',
+      'method.3anon.p02.body.html': 'An auditor LLM hunts for leftover searchable clues (<em>high</em>) and bad substitutions (<em>mid</em>), writes new rules from what it finds, and Phase 01 re-runs. It stops at <strong>high = 0, mid = 0</strong>, at most 5 rounds.',
       'method.3anon.p03.num': '03',
       'method.3anon.p03.title': 'Consistency Check',
-      'method.3anon.p03.body': 'Paragraph-, event-, and narrative-level comparison against the original, repairing any substitution damage while preserving anonymized entities and shifted dates.',
+      'method.3anon.p03.body': 'Compare against the original paragraph by paragraph, event by event, and repair whatever the substitutions broke — without undoing them.',
 
       // Dual-axis evaluation
       'method.dual.title': 'Dual-Axis Evaluation',
@@ -247,7 +247,7 @@
       'try.tab.live': '[ LIVE MODE ]',
 
       // Cached mode
-      'try.cached.controls.label': '▸ CONTROLS · CACHED',
+      'try.cached.controls.label': '▸ CONTROLS',
       'try.field.event': 'EVENT',
       'try.field.point': 'PREDICTION POINT',
       'try.field.model': 'MODEL',
@@ -671,13 +671,13 @@ Accepted events join the official catalog and ship in the next benchmark version
       'method.3anon.intro.html': '在任何候选模型看到内容之前,匿名化流水线先把每条合并后的时间线渲染为模拟社会世界。审计循环在 <strong>high = 0 与 mid = 0</strong> 处收敛,最多 5 轮。',
       'method.3anon.p01.num': '01',
       'method.3anon.p01.title': '基于规则的替换',
-      'method.3anon.p01.body': '按事件级替换表用最长匹配规则替换实体;将每个日期统一平移一个偏移量 δ ~ U(±180 天),从而抹去绝对日历位置,但完整保留任意两事件间的间隔。',
+      'method.3anon.p01.body': '按事件级替换表最长匹配换掉实体,再把所有日期统一平移一个偏移量 δ ~ U(±180 天)——绝对日历位置没了,事件之间的间隔一天不差。',
       'method.3anon.p02.num': '02',
       'method.3anon.p02.title': 'LLM 对抗审计循环',
-      'method.3anon.p02.body.html': '由审计 LLM 读取匿名化文本,报告残留的搜索关键词泄露(<em>high</em>)与替换质量问题(<em>mid</em>)。基于审计发现自动生成新的替换规则,阶段 01 从原始文本重新执行。循环在 <strong>high = 0 与 mid = 0</strong> 时收敛,最多 5 轮。',
+      'method.3anon.p02.body.html': '审计 LLM 找残留的可搜线索(<em>high</em>)和替换质量问题(<em>mid</em>),照着结果自动写新规则,阶段 01 重跑。<strong>high = 0、mid = 0</strong> 才停,最多 5 轮。',
       'method.3anon.p03.num': '03',
       'method.3anon.p03.title': '一致性校验',
-      'method.3anon.p03.body': '在段落级、事件级、叙事级与原文对比,修复任何替换造成的损伤,同时保留匿名化后的实体与平移后的日期。',
+      'method.3anon.p03.body': '逐段、逐事件与原文比对,修好替换造成的破损——但不把替换改回去。',
 
       // Dual-axis evaluation
       'method.dual.title': '双轴评测',
@@ -772,7 +772,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       'try.tab.live': '[ 实时模式 ]',
 
       // Cached mode
-      'try.cached.controls.label': '▸ 控制面板 · 缓存',
+      'try.cached.controls.label': '▸ 控制面板',
       'try.field.event': '事件',
       'try.field.point': '预测点',
       'try.field.model': '模型',

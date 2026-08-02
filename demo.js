@@ -443,6 +443,9 @@ function renderLiveQuestions() {
 }
 
 function initLiveSelectors() {
+  // Live mode is not part of this build: its pane is absent from demo.html, so
+  // everything below is a no-op. The code stays put for when it is switched on.
+  if (!el("live-evt-select")) return;
   // We share the cached widget's data for event + prediction-point dropdowns,
   // and read LIVE_QUESTIONS from the same JSON file. Both load asynchronously,
   // so we poll until widgetState.data exists.
@@ -766,9 +769,10 @@ async function safeJson(res) {
 }
 
 function restoreIdleLiveCards() {
+  const a = el("live-card-a"), b = el("live-card-b");
+  if (!a || !b) return;                      // live mode is off in this build
   const idleTagline = t("js.live.idle.tagline");
   const idleNote    = t("js.live.idle.note");
-  const a = el("live-card-a"), b = el("live-card-b");
   for (const [card, side] of [[a, ""], [b, "b"]]) {
     card.classList.remove("thinking");
     const nameLabel = side === "b" ? t("try.live.lc.name.b") : t("try.live.lc.name.a");
@@ -813,7 +817,7 @@ window.SB_DEMO = {
     widgetState.revealed = saved.r;
     renderQuestionPickers();
     buildModelButtons();
-    if (widgetState.data) {
+    if (widgetState.data && el("live-evt-select")) {
       const liveEvSel = el("live-evt-select");
       if (liveEvSel) {
         liveEvSel.innerHTML = widgetState.data.events.map((e, i) =>

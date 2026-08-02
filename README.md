@@ -117,7 +117,7 @@ serving the cached copy.
 | `index.html` · `demo.html` | The two pages |
 | `styles.css` | One stylesheet for all of them |
 | `app.js` | Leaderboard, deep-dive tables, nav, reveal animations |
-| `demo.js` | The interactive page: cached and live modes |
+| `demo.js` | The interactive page (live mode is wired but off in this build) |
 | `i18n.js` | Every user-visible string, English and Chinese |
 | `leaderboard.json` · `.zh.json` | The paper's Table 2, plus agents and baselines |
 | `demo_index.json` · `.zh.json` | Cached mode — the list of events and prediction points |
@@ -172,8 +172,8 @@ the page says so rather than hiding it: the three foreign models ran a cost-savi
 four of the five events, so a point may carry fewer than six models — the point selector says
 how many — and a model that skipped a question shows "—" instead of a number. Temporal events
 beyond the 90-day scoring window were never put to a model; they are listed and marked *not
-scored*. Live mode calls a model API at request time; it is wired but not enabled in this
-build.
+scored*. Live mode — calling a model API at request time — is not part of this build: the
+pane is gone from the page and the code that drives it no-ops.
 
 The anonymized timelines and question banks themselves live at
 [🤗 Social-AI-2026/SocietyBench](https://huggingface.co/datasets/Social-AI-2026/SocietyBench).
