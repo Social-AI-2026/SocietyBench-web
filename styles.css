@@ -4002,8 +4002,11 @@ body[data-lang="zh"] .axis-card h4 { letter-spacing: 0.01em; }
 .mth-head.mth-center .subsection-title { text-align: center; }
 .mth-intro-center {
   text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+  /* !important because these paragraphs carry an inline `margin` shorthand,
+     which would otherwise reset the auto side-margins and leave the 78ch block
+     hugging the left edge with its text merely centred inside it. */
+  margin-left: auto !important;
+  margin-right: auto !important;
   max-width: 78ch;
 }
 
@@ -4038,3 +4041,74 @@ body.dark-theme {
 }
 .figbox { border: var(--border) !important; }
 .callout { border: var(--border) !important; }
+
+/* --- Leaderboard header + table proportions ------------------------------ */
+
+/* Keep the freshness stamp on one line at any width. It is three short
+   label/value pairs; letting them wrap turned a caption into a paragraph. */
+.lb-stamp.lb-center {
+  flex-wrap: nowrap;
+  gap: 14px;
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .lb-stamp.lb-center { font-size: 10.5px; gap: 10px; }
+}
+
+/* The three view tabs sit under a centred title, so centre them too. */
+.tabs { justify-content: center; }
+
+/* The System column was taking 43% of the table (532 of 1236 px) because auto
+   layout hands all slack to the only text column, squeezing every score into
+   101 px. Fixed layout with an explicit first column shares the width out
+   evenly instead. */
+.lb { table-layout: fixed; }
+.lb th:first-child,  .lb td:first-child  { width: 224px; }
+.lb th:nth-child(2), .lb td:nth-child(2) { width: 78px; }
+.lb td:first-child { overflow-wrap: anywhere; }
+
+/* --- Question pickers on the Try-it page --------------------------------- */
+/* Each prediction point carries several calibration questions and several
+   temporal events; these two selects sit on the right of the block labels and
+   choose which one the widget is answering. */
+.qbox-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.q-pick {
+  flex: 0 1 min(340px, 58%);
+  font: inherit;
+  font-size: 11.5px;
+  font-family: var(--mono);
+  padding: 4px 8px;
+  color: var(--ink);
+  background: var(--paper, #fff);
+  border: var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+body.dark-theme .q-pick { color: #e8e8ea; background: rgba(255, 255, 255, 0.05); }
+.q-pick:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+@media (max-width: 720px) {
+  .qbox-head { flex-direction: column; align-items: stretch; }
+  .q-pick { flex: 1 1 auto; }
+}
+
+/* A <select> is intrinsically as wide as its longest option. The point and
+   question pickers now carry long question text, so clear the min-width that
+   would otherwise push the whole grid past the viewport. */
+.q-pick { min-width: 0; max-width: 100%; }
+.select { min-width: 0; max-width: 100%; }
+.field,
+.panel,
+.view-grid,
+.view-block,
+.qbox { min-width: 0; }
+/* When the label and the picker cannot sit side by side, the picker takes its
+   own full-width row rather than shrinking to an unreadable stub. */
+.qbox-head { flex-wrap: wrap; }
+.q-pick { flex: 1 1 190px; }

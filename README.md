@@ -147,7 +147,7 @@ Six JSON files drive everything on the page, and all six are generated, never ha
 | File | Rows | Source |
 |------|------|--------|
 | `leaderboard.json` · `.zh.json` | 6 LLMs + 3 agents + 2 baselines | the paper's Table 2 and agent table |
-| `interactive_demo.json` · `.zh.json` | 5 events, 21–23 prediction points | our real per-question run outputs |
+| `interactive_demo.json` · `.zh.json` | 5 events, 121 prediction points | our real per-question run outputs |
 | `experiments.json` · `.zh.json` | 2 stress cases + 4 ablations | the paper's ablation tables |
 
 **Cached mode is not a mock-up.** For each prediction point the demo shows the real cutoff
@@ -161,10 +161,12 @@ answer, and what each of the six models actually returned:
 | `context_excerpt` | the released `contexts/P<NN>_context.md` |
 | `gt` · `gt_date` | the held-out ground truth |
 
-Points are chosen from the intersection of what all six models covered — the three foreign
-models ran a cost-saving subset on four of the five events, so only that intersection is a
-fair comparison. Live mode calls a model API at request time; it is wired but not enabled in
-this build.
+Every prediction point that has real answers is offered — all 121 of them, each with up to ten
+calibration questions and eight temporal events to pick between. The three foreign models ran
+a cost-saving subset on four of the five events, so a point may carry fewer than six models;
+the selector says how many, and only the models that actually answered are ever compared.
+The four points not listed are the ones where no model had a temporal event to date. Live mode
+calls a model API at request time; it is wired but not enabled in this build.
 
 The anonymized timelines and question banks themselves live at
 [🤗 Social-AI-2026/SocietyBench](https://huggingface.co/datasets/Social-AI-2026/SocietyBench).

@@ -89,13 +89,21 @@
                 </div>
 
                 <div class="view-block qbox">
-                  <span class="vb-label" data-i18n="try.view.cal-q">CALIBRATION QUESTION</span>
+                  <div class="qbox-head">
+                    <span class="vb-label" data-i18n="try.view.cal-q">CALIBRATION QUESTION</span>
+                    <!-- Which of this point's calibration questions to show. The
+                         list is rebuilt whenever the event or the point changes. -->
+                    <select class="q-pick" id="cal-q-pick" aria-label="Pick a calibration question"></select>
+                  </div>
                   <p class="q" id="cal-q">—</p>
                   <p class="qmeta" id="cal-meta">—</p>
                 </div>
 
                 <div class="view-block qbox">
-                  <span class="vb-label" data-i18n="try.view.time-q">TEMPORAL QUESTION</span>
+                  <div class="qbox-head">
+                    <span class="vb-label" data-i18n="try.view.time-q">TEMPORAL QUESTION</span>
+                    <select class="q-pick" id="time-q-pick" aria-label="Pick a temporal event"></select>
+                  </div>
                   <p class="q" id="time-q">—</p>
                   <p class="qmeta" id="time-meta">—</p>
                 </div>

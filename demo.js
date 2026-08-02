@@ -6,6 +6,8 @@ const widgetState = {
   data: null,
   eventIdx: 0,
   pointIdx: 0,
+  calIdx: 0,      // which of this point's calibration questions is shown
+  timeIdx: 0,     // which of its temporal events is shown
   modelIdx: 0,
   revealed: false
 };
@@ -14,7 +16,68 @@ function el(id) { return document.getElementById(id); }
 
 function currentPoint() {
   const ev = widgetState.data.events[widgetState.eventIdx];
-  return { event: ev, point: ev.prediction_points[widgetState.pointIdx] };
+  const raw = ev.prediction_points[widgetState.pointIdx];
+  return { event: ev, point: pointWithSelection(raw) };
+}
+
+// A prediction point carries several calibration questions and several temporal
+// events, each with its own per-model answers. The widget shows one of each, so
+// project the selection down to the shape the renderers already expect.
+function pointWithSelection(raw) {
+  const cals = raw.calibration_questions || [];
+  const times = raw.temporal_events || [];
+  if (!cals.length || !times.length) return raw;          // older data: use as-is
+  const ci = Math.min(widgetState.calIdx, cals.length - 1);
+  const ti = Math.min(widgetState.timeIdx, times.length - 1);
+  const cq = cals[ci], tq = times[ti];
+  const strip = (o, drop) => Object.fromEntries(Object.entries(o).filter(([k]) => !drop.includes(k)));
+  const byModel = new Map(tq.responses.map(r => [r.model, r]));
+  const responses = cq.responses.filter(c => byModel.has(c.model)).map(c => {
+    const tr = byModel.get(c.model);
+    return {
+      model: c.model,
+      is_best_overall: c.is_best_overall,
+      calibration: strip(c, ["model", "is_best_overall"]),
+      temporal: strip(tr, ["model", "is_best_overall"]),
+      score_label: t("js.widget.verdict.fmt", "")
+        ? tfmt(t("js.widget.verdict.fmt"), {
+            dir: c.correct_side ? t("js.widget.verdict.right") : t("js.widget.verdict.wrong"),
+            err: c.abs_error.toFixed(2), days: Math.round(tr.abs_error_days)
+          })
+        : `${c.correct_side ? "✓" : "✗"} ${c.abs_error.toFixed(2)} · ${Math.round(tr.abs_error_days)}d`
+    };
+  });
+  if (widgetState.modelIdx >= responses.length) widgetState.modelIdx = 0;
+  return Object.assign({}, raw, {
+    calibration_question: strip(cq, ["responses"]),
+    temporal_question: strip(tq, ["responses"]),
+    model_responses: responses
+  });
+}
+
+// Fill the two question pickers for the current point.
+function renderQuestionPickers() {
+  const raw = widgetState.data.events[widgetState.eventIdx].prediction_points[widgetState.pointIdx];
+  const cals = raw.calibration_questions || [];
+  const times = raw.temporal_events || [];
+  const clip = (s, n) => (s || "").length > n ? (s || "").slice(0, n - 1) + "…" : (s || "");
+  const zh = currentLang() === "zh";
+  const DIFF = { hard: "难", medium: "中", easy: "易" };
+  const diff = d => (zh ? (DIFF[d] || d || "") : (d || ""));
+  const win = d => (zh ? `${d}天` : `${d}d`);
+  const cs = el("cal-q-pick"), ts = el("time-q-pick");
+  if (cs) {
+    cs.innerHTML = cals.map((q, i) =>
+      `<option value="${i}">${i + 1}/${cals.length} · ${win(q.window_days)} · ${diff(q.difficulty)} — ${clip(q.q, 52)}</option>`).join("");
+    cs.value = String(Math.min(widgetState.calIdx, Math.max(cals.length - 1, 0)));
+    cs.style.display = cals.length > 1 ? "" : "none";
+  }
+  if (ts) {
+    ts.innerHTML = times.map((q, i) =>
+      `<option value="${i}">${i + 1}/${times.length} · ${q.gt_date} — ${clip(q.event_desc, 52)}</option>`).join("");
+    ts.value = String(Math.min(widgetState.timeIdx, Math.max(times.length - 1, 0)));
+    ts.style.display = times.length > 1 ? "" : "none";
+  }
 }
 
 function evalCalibration(p_hat, gt) {
@@ -36,7 +99,8 @@ function renderWidget() {
   el("cal-q").textContent = point.calibration_question.q;
   el("cal-meta").textContent = tfmt(t("js.widget.cal-meta.fmt"), { days: point.calibration_question.window_days });
 
-  el("time-q").textContent = point.temporal_question.q;
+  const tdesc = point.temporal_question.event_desc;
+  el("time-q").textContent = point.temporal_question.q + (tdesc ? " — " + tdesc : "");
   el("time-meta").textContent = t("js.widget.time-meta");
 
   // model output
@@ -97,14 +161,36 @@ function buildSelectors() {
   evSel.addEventListener("change", () => {
     widgetState.eventIdx = parseInt(evSel.value, 10);
     widgetState.pointIdx = 0;
+    widgetState.calIdx = 0;
+    widgetState.timeIdx = 0;
     widgetState.modelIdx = 0;
     widgetState.revealed = false;
     buildPointSelector();
+    renderQuestionPickers();
     buildModelButtons();
     renderWidget();
   });
   buildPointSelector();
+  buildQuestionPickers();
   buildModelButtons();
+}
+
+// Wire the two question pickers once; they are refilled on every point change.
+function buildQuestionPickers() {
+  renderQuestionPickers();
+  const cs = el("cal-q-pick"), ts = el("time-q-pick");
+  if (cs) cs.onchange = () => {
+    widgetState.calIdx = parseInt(cs.value, 10);
+    widgetState.revealed = false;
+    buildModelButtons();
+    renderWidget();
+  };
+  if (ts) ts.onchange = () => {
+    widgetState.timeIdx = parseInt(ts.value, 10);
+    widgetState.revealed = false;
+    buildModelButtons();
+    renderWidget();
+  };
 }
 
 function buildPointSelector() {
@@ -116,7 +202,11 @@ function buildPointSelector() {
   ptSel.value = widgetState.pointIdx;
   ptSel.onchange = () => {
     widgetState.pointIdx = parseInt(ptSel.value, 10);
+    widgetState.calIdx = 0;
+    widgetState.timeIdx = 0;
     widgetState.revealed = false;
+    renderQuestionPickers();
+    buildModelButtons();
     renderWidget();
   };
 }
@@ -179,6 +269,20 @@ const MODEL_OPTIONS = [
 function currentLiveQuestions() {
   if (!widgetState.data) return [];
   const ev = widgetState.data.events?.[liveState.eventIdx];
+  // Presets follow the selected prediction point: the same real questions the
+  // cached mode replays, so a live run is asked exactly what we asked.
+  const pt = ev?.prediction_points?.[liveState.pointIdx];
+  const cals = pt?.calibration_questions || [];
+  const times = pt?.temporal_events || [];
+  if (cals.length || times.length) {
+    return cals.map((q, i) => ({
+      id: `${pt.point_id}·C${i + 1}`, type: "calibration",
+      window: q.window_days, text: q.q
+    })).concat(times.map((e, i) => ({
+      id: `${pt.point_id}·T${i + 1}`, type: "temporal",
+      window: null, text: e.event_desc ? `${e.q} — ${e.event_desc}` : e.q
+    })));
+  }
   if (ev && Array.isArray(ev.live_questions)) return ev.live_questions;
   return Array.isArray(widgetState.data.live_questions) ? widgetState.data.live_questions : [];
 }
@@ -358,6 +462,8 @@ function refreshLivePtSelector() {
   ptSel.value = liveState.pointIdx;
   ptSel.onchange = () => {
     liveState.pointIdx = parseInt(ptSel.value, 10);
+    liveState.questionIdx = 0;
+    renderLiveQuestions();
     refreshLiveContext();
     refreshPreviewGT();
     closePreviewGT();

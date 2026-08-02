@@ -133,7 +133,7 @@ ffmpeg -i source.mp4 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 27 \
 | 文件 | 行数 | 来源 |
 |------|------|------|
 | `leaderboard.json` · `.zh.json` | 6 个 LLM + 3 个智能体 + 2 个基线 | 论文 Table 2 与智能体表 |
-| `interactive_demo.json` · `.zh.json` | 5 个事件、21–23 个预测点 | 我们真实的逐题实验产物 |
+| `interactive_demo.json` · `.zh.json` | 5 个事件、121 个预测点 | 我们真实的逐题实验产物 |
 | `experiments.json` · `.zh.json` | 2 个压力事件 + 4 个消融 | 论文的消融表 |
 
 **缓存模式不是演示样例。** 每个预测点展示的都是真实的截止日期、模型当时真实看到的上下文、
@@ -146,8 +146,10 @@ ffmpeg -i source.mp4 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 27 \
 | `context_excerpt` | 已发布的 `contexts/P<NN>_context.md` |
 | `gt` · `gt_date` | 被扣留的标准答案 |
 
-预测点是从**六个模型共同覆盖的交集**里挑的——三个外文模型在五个事件中的四个上只跑了省钱子集，
-只有交集才是公平比较。实时模式在请求时调用模型 API，代码已接好，本次构建未启用。
+**凡是有真实作答的预测点全都放出来了**——一共 121 个，每个点下还可以在最多 10 道校准题、
+8 个时间题之间切换。三个外文模型在五个事件中的四个上只跑了省钱子集，所以有的点不足六个模型：
+选择器里会写明这个点有几个模型，页面也只比较真正作答了的那几个。剩下 4 个点没有列出，
+是因为它们在所有模型下都没有可定日期的时间题。实时模式在请求时调用模型 API，代码已接好，本次构建未启用。
 
 匿名时间线与题库本身在
 [🤗 Social-AI-2026/SocietyBench](https://huggingface.co/datasets/Social-AI-2026/SocietyBench)。

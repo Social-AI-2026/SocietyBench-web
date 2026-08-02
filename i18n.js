@@ -441,6 +441,9 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // Model-button badges
       'js.widget.tag.best': 'BEST',
+      'js.widget.verdict.fmt': 'Direction {dir}, absolute error {err}; date off by {days} days.',
+      'js.widget.verdict.right': 'right',
+      'js.widget.verdict.wrong': 'wrong',
       'js.widget.tag.proj': 'PROJ',
       'js.widget.tag.llm': 'LLM',
 
@@ -947,6 +950,9 @@ Accepted events join the official catalog and ship in the next benchmark version
 
       // Model-button badges
       'js.widget.tag.best': '最佳',
+      'js.widget.verdict.fmt': '方向{dir}，绝对误差 {err}；日期相差 {days} 天。',
+      'js.widget.verdict.right': '正确',
+      'js.widget.verdict.wrong': '错误',
       'js.widget.tag.proj': '预估',
       'js.widget.tag.llm': 'LLM',
 

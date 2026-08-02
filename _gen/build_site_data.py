@@ -104,24 +104,28 @@ def build_leaderboard(lang):
 
 
 
-def available_points(ev, langdir, want):
-    """Points every model covers on both axes -- the three foreign models only ran
-    a cost-saving subset on events 2-5, so the intersection is what is comparable.
-    Spread the pick evenly across whatever is available."""
+def available_points(ev, langdir, want=None):
+    """Every prediction point of this event that at least one model actually ran on
+    both axes. The three foreign models only ran a cost-saving subset on events 2-5,
+    so a point may carry fewer than six models -- the page states how many it has and
+    only ever compares the models that are really there. Pass `want` to thin the list
+    evenly; the default keeps all of them."""
     root = f"{RUNS}/{ev}/final/{langdir}/results/run_main"
-    common = None
+    allpts = set()
     for mdir, _ in MODELS:
-        ok = set()
         for f in glob.glob(f"{root}/brier/{mdir}/P*_brier.json"):
             pid = os.path.basename(f).split("_")[0]
             tf = f"{root}/time/{mdir}/{pid}_time.json"
             if os.path.exists(tf) and json.load(open(tf, encoding="utf-8")).get("events"):
-                ok.add(pid)
-        common = ok if common is None else (common & ok)
-    common = sorted(common or [])
-    if len(common) <= want: return common
-    step = (len(common) - 1) / (want - 1)
-    return [common[round(i * step)] for i in range(want)]
+                allpts.add(pid)
+    allpts = sorted(allpts)
+    if want is None or len(allpts) <= want: return allpts
+    step = (len(allpts) - 1) / (want - 1)
+    return [allpts[round(i * step)] for i in range(want)]
+
+
+def _by_model(responses, model):
+    return next((r for r in responses if r["model"] == model), None)
 
 
 def days_between(a, b):
@@ -150,31 +154,46 @@ def load_point(ev, langdir, pid):
     return cal, tmp, cutoff
 
 
-def pick_question(cal):
-    """A calibration question every model answered, preferring a hard, near-term one."""
+def pick_questions(cal, k=10):
+    """The calibration questions every model answered, spread over difficulty and
+    window so the selector offers a real range rather than ten near-identical items."""
     names = list(cal)
     if not names: return None
-    common = None
+    pool, seen = {}, {}
     for m in names:
-        idx = {q["q"]: q for q in cal[m] if q.get("prob") is not None and q.get("valid_for_scoring", True)}
-        common = idx if common is None else {k: v for k, v in common.items() if k in idx}
-        if not common: return None
-    ranked = sorted(common.values(), key=lambda q: (q.get("difficulty") != "hard",
-                                                    abs(q.get("days_from_cutoff") or 999)))
-    return ranked[0]["q"] if ranked else None
+        for q in cal[m]:
+            if q.get("prob") is None or not q.get("valid_for_scoring", True): continue
+            pool.setdefault(q["q"], q)
+            seen[q["q"]] = seen.get(q["q"], 0) + 1
+    if not pool: return None
+    # Prefer the questions the most models answered -- those are the comparable ones.
+    top = max(seen.values())
+    ranked = sorted((pool[q] for q, n in seen.items() if n == top),
+                    key=lambda q: (q.get("difficulty") != "hard",
+                                   abs(q.get("days_from_cutoff") or 999)))
+    if not ranked: return []
+    if len(ranked) <= k: return [q["q"] for q in ranked]
+    step = (len(ranked) - 1) / (k - 1)
+    return [ranked[round(i * step)]["q"] for i in range(k)]
 
 
-def pick_event(tmp, cutoff=None):
+def pick_events(tmp, cutoff=None, k=8):
     names = list(tmp)
     if not names: return None
-    common = None
+    recs, seen = {}, {}
     for m in names:
-        idx = {e["eid"]: e for e in tmp[m] if e.get("answered") and e.get("pred_date")}
-        common = idx if common is None else {k: v for k, v in common.items() if k in idx}
-        if not common: return None
-    fut = [e for e in common.values() if (e.get("gt_date") or "") > (cutoff or "")]
-    pool = fut or list(common.values())
-    return sorted(pool, key=lambda e: e.get("gt_date") or "")[0]["eid"]
+        for e in tmp[m]:
+            if not e.get("answered") or not e.get("pred_date"): continue
+            recs.setdefault(e["eid"], e)
+            seen[e["eid"]] = seen.get(e["eid"], 0) + 1
+    if not recs: return None
+    top = max(seen.values())
+    common = [recs[i] for i, n in seen.items() if n == top]
+    fut = [e for e in common if (e.get("gt_date") or "") > (cutoff or "")]
+    pool = sorted(fut or common, key=lambda e: e.get("gt_date") or "")
+    if len(pool) <= k: return [e["eid"] for e in pool]
+    step = (len(pool) - 1) / (k - 1)
+    return [pool[round(i * step)]["eid"] for i in range(k)]
 
 
 def context_excerpt(ev, lang, pid, n=420):
@@ -191,81 +210,112 @@ def build_demo(lang, langdir):
     events_out = []
     for ev, short, dom_en, dom_zh in EVENTS:
         pts = []
-        for pid in available_points(ev, langdir, 5):
+        for pid in available_points(ev, langdir):
             cal, tmp, cutoff = load_point(ev, langdir, pid)
-            if len(cal) < len(MODELS) or len(tmp) < len(MODELS): continue
-            qtext = pick_question(cal)
-            eid = pick_event(tmp, cutoff)
-            if not qtext or not eid: continue
-            any_q = next(q for q in cal[MODELS[0][1]] if q["q"] == qtext)
-            any_e = next(e for e in tmp[MODELS[0][1]] if e["eid"] == eid)
-            resp = []
-            for _, mname in MODELS:
-                q = next((x for x in cal[mname] if x["q"] == qtext), None)
-                e = next((x for x in tmp[mname] if x["eid"] == eid), None)
-                if not q or not e: continue
-                p_hat = round(float(q["prob"]), 3)
-                err = round(abs(p_hat - q["answer"]), 3)
-                side = (p_hat > 0.5) == (q["answer"] == 1)
-                derr = float(e.get("error_days") or 0)
-                w = round(float(q.get("weight") or 0), 3)
-                yes, no = ("是", "否") if zh else ("yes", "no")
-                truth = yes if q["answer"] == 1 else no
-                resp.append({
-                    "model": mname,
-                    "is_best_overall": mname == BEST,
-                    "calibration": {
-                        "p_hat": p_hat, "abs_error": err, "weight": w, "correct_side": side,
-                        "reasoning": (f"答 {p_hat:.0%}；真值{truth}。绝对误差 {err:.2f}，该题权重 {w:.2f}。"
+            # Keep whatever ran. A point with three models is still real data; it is
+            # labelled as such so nobody reads it as a six-way comparison.
+            cal = {m: v for m, v in cal.items() if v}
+            tmp = {m: v for m, v in tmp.items() if v}
+            models_here = [m for m in cal if m in tmp]
+            if not models_here: continue
+            cal = {m: cal[m] for m in models_here}
+            tmp = {m: tmp[m] for m in models_here}
+            qtexts = pick_questions(cal)
+            eids   = pick_events(tmp, cutoff)
+            if not qtexts or not eids: continue
+            yes, no = ("是", "否") if zh else ("yes", "no")
+
+            cal_qs = []
+            for qtext in qtexts:
+                base = next(q for m in models_here for q in cal[m] if q["q"] == qtext)
+                resp = []
+                for _, mname in MODELS:
+                    if mname not in cal: continue
+                    q = next((x for x in cal[mname] if x["q"] == qtext
+                              and x.get("prob") is not None
+                              and x.get("valid_for_scoring", True)), None)
+                    if not q: continue
+                    ph = round(float(q["prob"]), 3)
+                    err = round(abs(ph - q["answer"]), 3)
+                    w = round(float(q.get("weight") or 0), 3)
+                    side = (ph > 0.5) == (q["answer"] == 1)
+                    resp.append({"model": mname, "is_best_overall": mname == BEST,
+                        "p_hat": ph, "abs_error": err, "weight": w, "correct_side": side,
+                        "reasoning": (f"答 {ph:.0%}；真值{yes if q['answer']==1 else no}。绝对误差 {err:.2f}，该题权重 {w:.2f}。"
                                       if zh else
-                                      f"Answered {p_hat:.0%}; ground truth {truth}. "
-                                      f"Absolute error {err:.2f}, question weight {w:.2f}."),
-                    },
-                    "temporal": {
+                                      f"Answered {ph:.0%}; ground truth {yes if q['answer']==1 else no}. "
+                                      f"Absolute error {err:.2f}, question weight {w:.2f}.")})
+                if not resp: continue
+                cal_qs.append({"q": qtext, "window_days": base.get("window_days"),
+                    "days_from_cutoff": base.get("days_from_cutoff"),
+                    "difficulty": base.get("difficulty"), "dimension": base.get("dimension"),
+                    "question_type": base.get("question_type"), "gt": base.get("answer"),
+                    "gt_note": (("该事件在窗口内确实发生" if base.get("answer") == 1 else "该事件在窗口内并未发生")
+                                if zh else
+                                ("the event did occur inside the window" if base.get("answer") == 1
+                                 else "the event did not occur inside the window")),
+                    "responses": resp})
+
+            time_qs = []
+            for eid in eids:
+                base = next(e for m in models_here for e in tmp[m] if e["eid"] == eid)
+                resp = []
+                for _, mname in MODELS:
+                    if mname not in tmp: continue
+                    e = next((x for x in tmp[mname] if x["eid"] == eid
+                              and x.get("answered") and x.get("pred_date")), None)
+                    if not e: continue
+                    derr = float(e.get("error_days") or 0)
+                    resp.append({"model": mname, "is_best_overall": mname == BEST,
                         "pred_date": e["pred_date"], "d_hat_label": e["pred_date"],
-                        "d_hat_day": days_between(cutoff, e["pred_date"]),
-                        "abs_error_days": derr,
+                        "d_hat_day": days_between(cutoff, e["pred_date"]), "abs_error_days": derr,
                         "reasoning": (f"预测 {e['pred_date']}，实际 {e['gt_date']}，相差 {derr:.0f} 天。"
                                       if zh else
-                                      f"Predicted {e['pred_date']}, actual {e['gt_date']}, off by {derr:.0f} days."),
-                    },
-                    "score_label": (f"方向{'正确' if side else '错误'}，绝对误差 {err:.2f}；日期相差 {derr:.0f} 天。"
-                                    if zh else
-                                    f"Direction {'right' if side else 'wrong'}, absolute error {err:.2f}; "
-                                    f"date off by {derr:.0f} days."),
-                })
-            if not resp: continue
+                                      f"Predicted {e['pred_date']}, actual {e['gt_date']}, off by {derr:.0f} days.")})
+                if not resp: continue
+                time_qs.append({"q": ("这个事件会在哪一天发生？" if zh else "On what date does this event happen?"),
+                    "eid": eid, "event_desc": base.get("event_desc"), "gt_date": base.get("gt_date"),
+                    "gt_label": base.get("gt_date"), "gt_day": days_between(cutoff, base.get("gt_date")),
+                    "responses": resp})
+
+            if not cal_qs or not time_qs: continue
             pts.append({
                 "point_id": pid,
-                "cutoff_label": (f"截止日期 {cutoff}" if zh else f"Cutoff {cutoff}"),
+                "cutoff_label": ((f"截止日期 {cutoff}" if zh else f"Cutoff {cutoff}")
+                                 + ("" if len({r["model"] for q in cal_qs for r in q["responses"]}) == len(MODELS)
+                                    else (f" · {len({r['model'] for q in cal_qs for r in q['responses']})} 个模型" if zh
+                                          else f" · {len({r['model'] for q in cal_qs for r in q['responses']})} models"))),
+                "models_covered": len({r["model"] for q in cal_qs for r in q["responses"]}),
                 "cutoff_short": cutoff,
                 "context_excerpt": context_excerpt(ev, lang, pid),
-                "calibration_question": {
-                    "q": qtext, "window_days": any_q.get("window_days"),
-                    "days_from_cutoff": any_q.get("days_from_cutoff"),
-                    "difficulty": any_q.get("difficulty"), "dimension": any_q.get("dimension"),
-                    "question_type": any_q.get("question_type"), "gt": any_q.get("answer"),
-                    "gt_note": (("该事件在窗口内确实发生" if any_q.get("answer") == 1 else "该事件在窗口内并未发生")
-                                if zh else
-                                ("the event did occur inside the window" if any_q.get("answer") == 1
-                                 else "the event did not occur inside the window")),
-                },
-                "temporal_question": {
-                    "q": ("这个事件会在哪一天发生？" if zh else "On what date does this event happen?"),
-                    "event_desc": any_e.get("event_desc"), "gt_date": any_e.get("gt_date"),
-                    "gt_label": any_e.get("gt_date"),
-                    "gt_day": days_between(cutoff, any_e.get("gt_date")),
-                },
-                "model_responses": resp,
+                "calibration_questions": cal_qs,
+                "temporal_events": time_qs,
+                # Mirrors of the first entry so any renderer that predates the
+                # selectors keeps working unchanged.
+                "calibration_question": {k: v for k, v in cal_qs[0].items() if k != "responses"},
+                "temporal_question": {k: v for k, v in time_qs[0].items() if k != "responses"},
+                "model_responses": [
+                    {"model": c["model"], "is_best_overall": c["is_best_overall"],
+                     "calibration": {k: v for k, v in c.items() if k not in ("model", "is_best_overall")},
+                     "temporal": {k: v for k, v in tq.items() if k not in ("model", "is_best_overall")},
+                     "score_label": (f"方向{'正确' if c['correct_side'] else '错误'}，绝对误差 {c['abs_error']:.2f}；"
+                                     f"日期相差 {tq['abs_error_days']:.0f} 天。" if zh else
+                                     f"Direction {'right' if c['correct_side'] else 'wrong'}, absolute error "
+                                     f"{c['abs_error']:.2f}; date off by {tq['abs_error_days']:.0f} days.")}
+                    for c, tq in ((c, _by_model(time_qs[0]["responses"], c["model"]))
+                                  for c in cal_qs[0]["responses"])
+                    if tq],
             })
         if not pts: continue
+        # Fallback preset list for the live tab. The page normally derives its
+        # presets from the selected point; this is only used by older renderers,
+        # so take the first point that actually has questions.
         live = []
-        for pid in ("P05",):
-            cal, _, _ = load_point(ev, langdir, pid)
-            if not cal: continue
-            for q in (cal.get(BEST) or [])[:4]:
-                live.append({"id": f"{pid}-{q.get('question_index')}", "type": "calibration",
+        for p0 in pts:
+            for i, q in enumerate(p0["calibration_questions"][:4], 1):
+                live.append({"id": f"{p0['point_id']}·C{i}", "type": "calibration",
                              "window": q.get("window_days"), "text": q["q"]})
+            if live: break
         events_out.append({
             "id": ev, "short": short,
             "domain_label": dom_zh if zh else dom_en,
