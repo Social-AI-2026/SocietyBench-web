@@ -9,8 +9,8 @@ Forecasting Counterfactual Social-World Evolution
 [![License](https://img.shields.io/badge/License-MIT-2a78d6?style=flat-square)](LICENSE)
 [![Site](https://img.shields.io/badge/Site-static%20HTML-1baf7a?style=flat-square)](index.html)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-SocietyBench-eda100?style=flat-square)](https://huggingface.co/datasets/Social-AI-2026/SocietyBench)
-[![Code](https://img.shields.io/badge/GitHub-SocietyBench--codebase-eb6834?style=flat-square&logo=github&logoColor=white)](https://github.com/Social-AI-2026/SocietyBench-codebase)
-[![Pages](https://img.shields.io/badge/Pages-2-e87ba4?style=flat-square)](https://github.com/Social-AI-2026/SocietyBench-web)
+[![Code](https://img.shields.io/badge/GitHub-SocietyBench--codebase-eb6834?style=flat-square&logo=github&logoColor=white)](https://github.com/co-minder/SocietyBench-codebase)
+[![Pages](https://img.shields.io/badge/Pages-2-e87ba4?style=flat-square)](https://github.com/co-minder/Societybench)
 
 [English](./README.md) | [中文文档](./README-ZH.md)
 
@@ -45,7 +45,7 @@ homepage, right after the leaderboard.
 ## 🔄 How the data flows
 
 1. **Experiments** — the pipeline in
-   [SocietyBench-codebase](https://github.com/Social-AI-2026/SocietyBench-codebase) writes
+   [SocietyBench-codebase](https://github.com/co-minder/SocietyBench-codebase) writes
    per-question outputs under `runs_new/<event>/final/<lang>/results/run_main/`
 2. **Generation** — `_gen/build_site_data.py` and `_gen/build_experiments.py` read those
    outputs and the paper's tables, and emit the six JSON files below
@@ -66,8 +66,8 @@ homepage, right after the leaderboard.
 #### 1. Run it locally
 
 ```bash
-git clone https://github.com/Social-AI-2026/SocietyBench-web
-cd SocietyBench-web
+git clone https://github.com/co-minder/Societybench
+cd Societybench
 
 python3 -m http.server 8000
 ```
@@ -137,8 +137,8 @@ serving the cached copy.
 | [`_gen/build_site_data.py`](_gen/build_site_data.py) | Which run outputs become the leaderboard and the demo, and how points are chosen |
 | [`_gen/build_experiments.py`](_gen/build_experiments.py) | Which paper table becomes which deep-dive block |
 | [`i18n.js`](i18n.js) | Every user-visible string; the key naming scheme is documented at the top |
-| [Methodology](https://github.com/Social-AI-2026/SocietyBench-codebase/blob/main/docs/methodology.md) | The benchmark itself — framework, anonymization, the two axes |
-| [Scoring](https://github.com/Social-AI-2026/SocietyBench-codebase/blob/main/docs/scoring.md) | The exact calibration and temporal formulas the numbers come from |
+| [Methodology](https://github.com/co-minder/SocietyBench-codebase/blob/main/docs/methodology.md) | The benchmark itself — framework, anonymization, the two axes |
+| [Scoring](https://github.com/co-minder/SocietyBench-codebase/blob/main/docs/scoring.md) | The exact calibration and temporal formulas the numbers come from |
 
 ## 💾 Data
 
@@ -185,7 +185,7 @@ exist in both languages in `i18n.js`.
 
 Never commit an entity replacement table, a real-name variant, or a true date offset. The
 benchmark only works while those stay private — see the security policy in
-[SocietyBench-codebase](https://github.com/Social-AI-2026/SocietyBench-codebase).
+[SocietyBench-codebase](https://github.com/co-minder/SocietyBench-codebase).
 
 ## 📄 Citation
 
@@ -194,7 +194,7 @@ benchmark only works while those stay private — see the security policy in
   title  = {SocietyBench: Forecasting Counterfactual Social-World Evolution},
   author = {Wang, Zhenran and Bian, Zhonghan and Li, Jinsong and Qi, Zhangyang},
   year   = {2026},
-  note   = {\url{https://github.com/Social-AI-2026/SocietyBench-codebase}}
+  note   = {\url{https://github.com/co-minder/SocietyBench-codebase}}
 }
 ```
 

@@ -9,8 +9,8 @@ Forecasting Counterfactual Social-World Evolution
 [![License](https://img.shields.io/badge/License-MIT-2a78d6?style=flat-square)](LICENSE)
 [![Site](https://img.shields.io/badge/Site-static%20HTML-1baf7a?style=flat-square)](index.html)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-SocietyBench-eda100?style=flat-square)](https://huggingface.co/datasets/Social-AI-2026/SocietyBench)
-[![Code](https://img.shields.io/badge/GitHub-SocietyBench--codebase-eb6834?style=flat-square&logo=github&logoColor=white)](https://github.com/Social-AI-2026/SocietyBench-codebase)
-[![Pages](https://img.shields.io/badge/Pages-2-e87ba4?style=flat-square)](https://github.com/Social-AI-2026/SocietyBench-web)
+[![Code](https://img.shields.io/badge/GitHub-SocietyBench--codebase-eb6834?style=flat-square&logo=github&logoColor=white)](https://github.com/co-minder/SocietyBench-codebase)
+[![Pages](https://img.shields.io/badge/Pages-2-e87ba4?style=flat-square)](https://github.com/co-minder/Societybench)
 
 [English](./README.md) | [中文文档](./README-ZH.md)
 
@@ -36,7 +36,7 @@ Forecasting Counterfactual Social-World Evolution
 
 ## 🔄 数据是怎么流过来的
 
-1. **实验** —— [SocietyBench-codebase](https://github.com/Social-AI-2026/SocietyBench-codebase)
+1. **实验** —— [SocietyBench-codebase](https://github.com/co-minder/SocietyBench-codebase)
    的流水线把逐题结果写在 `runs_new/<event>/final/<lang>/results/run_main/` 下
 2. **生成** —— `_gen/build_site_data.py` 和 `_gen/build_experiments.py` 读取这些结果和论文表格，
    产出下面那六个 JSON
@@ -56,8 +56,8 @@ Forecasting Counterfactual Social-World Evolution
 #### 1. 本地跑起来
 
 ```bash
-git clone https://github.com/Social-AI-2026/SocietyBench-web
-cd SocietyBench-web
+git clone https://github.com/co-minder/Societybench
+cd Societybench
 
 python3 -m http.server 8000
 ```
@@ -123,8 +123,8 @@ ffmpeg -i source.mp4 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 27 \
 | [`_gen/build_site_data.py`](_gen/build_site_data.py) | 哪些实验产物变成了榜单和演示，预测点是怎么挑的 |
 | [`_gen/build_experiments.py`](_gen/build_experiments.py) | 论文的哪张表对应深入分析的哪一块 |
 | [`i18n.js`](i18n.js) | 所有用户可见文案；键名规则写在文件开头 |
-| [方法](https://github.com/Social-AI-2026/SocietyBench-codebase/blob/main/docs/methodology.md) | 基准本身——框架、匿名化、两条评分轴 |
-| [评分](https://github.com/Social-AI-2026/SocietyBench-codebase/blob/main/docs/scoring.md) | 这些数字背后校准与时间两个公式的确切定义 |
+| [方法](https://github.com/co-minder/SocietyBench-codebase/blob/main/docs/methodology.md) | 基准本身——框架、匿名化、两条评分轴 |
+| [评分](https://github.com/co-minder/SocietyBench-codebase/blob/main/docs/scoring.md) | 这些数字背后校准与时间两个公式的确切定义 |
 
 ## 💾 数据
 
@@ -165,7 +165,7 @@ ffmpeg -i source.mp4 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 27 \
 任何访客能看到的文案，都必须在 `i18n.js` 里中英两套都有。
 
 **永远不要提交实体替换表、真名版本或真实日期偏移量。** 这个基准的有效性完全依赖它们保持私密——
-见 [SocietyBench-codebase](https://github.com/Social-AI-2026/SocietyBench-codebase) 的安全政策。
+见 [SocietyBench-codebase](https://github.com/co-minder/SocietyBench-codebase) 的安全政策。
 
 ## 📄 引用
 
@@ -174,7 +174,7 @@ ffmpeg -i source.mp4 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 27 \
   title  = {SocietyBench: Forecasting Counterfactual Social-World Evolution},
   author = {Wang, Zhenran and Bian, Zhonghan and Li, Jinsong and Qi, Zhangyang},
   year   = {2026},
-  note   = {\url{https://github.com/Social-AI-2026/SocietyBench-codebase}}
+  note   = {\url{https://github.com/co-minder/SocietyBench-codebase}}
 }
 ```
 
