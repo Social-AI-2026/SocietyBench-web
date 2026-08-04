@@ -12,21 +12,6 @@
 </head>
 <body class="layout-pill dark-theme" data-active-page="overview" data-lang="en">
 
-  <!-- Password gate (private preview) -->
-  <div id="auth-gate" aria-hidden="false">
-    <form id="auth-form" autocomplete="off">
-      <div class="auth-brand">
-        <span class="brand-mark"></span>
-        <span data-i18n="auth.brand">SOCIETYBENCH</span>
-      </div>
-      <h1 class="auth-title" data-i18n="auth.title">PRIVATE PREVIEW</h1>
-      <p class="auth-sub" data-i18n="auth.sub">Project page in development. Enter the access password to continue.</p>
-      <input type="password" id="auth-input" placeholder="Password" autocomplete="off" autofocus data-i18n-attr="placeholder:auth.placeholder" />
-      <button type="submit" class="auth-btn" data-i18n="auth.btn">▸ UNLOCK</button>
-      <p class="auth-err" id="auth-err" data-i18n="auth.err">Wrong password.</p>
-    </form>
-  </div>
-
   <!-- Crowd animation container (bottom layer) — temporarily disabled
        (no assets yet). Re-enable by removing the comment markers here and
        around the two crowd-*.js script tags at the bottom of the file. -->
@@ -73,10 +58,8 @@
 
     <!-- ================================ HERO ============================== -->
     <section class="page-section reveal hero" id="about">
-      <!-- Animated WebP background. Browsers treat this as an image, so it
-           plays on every visit without hitting Chrome's autoplay policy — the
-           previous <video> tag stayed paused when the password gate auto-
-           unlocked on returning visitors (page-load is not a user gesture). -->
+      <!-- Hero video background. Muted inline playback allows it to start
+           automatically in browsers that support autoplay. -->
       <div class="hero-video-bg" aria-hidden="true">
         <video class="hero-video" autoplay muted loop playsinline preload="auto">
           <source src="videos/hero.mp4?v=20260802-final" type="video/mp4" />
@@ -397,63 +380,5 @@
   <script src="crowd-links.js"></script>
   -->
 
-  <script>
-    (function () {
-      var EXPECTED = 'e54fc6b51915e222ba6196747a19ebb8dfa651fd2b46a385a0ded647fbfefda0';
-      var STORAGE_KEY = 'sb_pwd_hash';
-      var gate = document.getElementById('auth-gate');
-      var form = document.getElementById('auth-form');
-      var input = document.getElementById('auth-input');
-      var err = document.getElementById('auth-err');
-
-      function unlock() {
-        gate.classList.add('auth-fadeout');
-        setTimeout(function () { gate.remove(); }, 400);
-        document.documentElement.classList.remove('auth-locked');
-        // Nudge the hero video to play. Muted+autoplay should already work,
-        // but if the gate auto-unlocked on page-load (not a user gesture)
-        // some browsers leave it paused — calling play() here, and again on
-        // the next user interaction, covers both cases.
-        var v = document.querySelector('video.hero-video');
-        if (v) {
-          var tryPlay = function () { var p = v.play(); if (p && p.catch) p.catch(function(){}); };
-          tryPlay();
-          window.addEventListener('pointerdown', tryPlay, { once: true });
-        }
-      }
-
-      async function sha256(text) {
-        var buf = new TextEncoder().encode(text);
-        var hash = await crypto.subtle.digest('SHA-256', buf);
-        return Array.from(new Uint8Array(hash))
-          .map(function (b) { return b.toString(16).padStart(2, '0'); })
-          .join('');
-      }
-
-      // Check if stored hash matches current expected hash
-      var storedHash = localStorage.getItem(STORAGE_KEY);
-      if (storedHash === EXPECTED) {
-        unlock();
-        return;
-      }
-      document.documentElement.classList.add('auth-locked');
-
-      form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        var hex = await sha256(input.value);
-        if (hex === EXPECTED) {
-          localStorage.setItem(STORAGE_KEY, hex);
-          unlock();
-        } else {
-          err.style.opacity = '1';
-          input.value = '';
-          input.focus();
-          form.classList.remove('auth-shake');
-          void form.offsetWidth;
-          form.classList.add('auth-shake');
-        }
-      });
-    })();
-  </script>
 </body>
 </html>

@@ -7,7 +7,7 @@
  *        data-i18n-html="some.key"   → replaces innerHTML (use sparingly, only
  *                                       when the string itself contains markup
  *                                       like <strong> / <em>)
- *        data-i18n-attr="placeholder:auth.placeholder,title:nav.foo"
+ *        data-i18n-attr="placeholder:form.placeholder,title:nav.foo"
  *                                     → sets one or more attributes
  *   2. Dynamic strings emitted by app.js call t('some.key').
  *   3. When the user toggles the language, applyLang() rewrites every tagged
@@ -29,14 +29,6 @@
       'lang.en': 'EN',
       'lang.zh': '中',
       'lang.toggle.title': 'Switch language',
-
-      // ---- Auth gate ------------------------------------------------------
-      'auth.brand': 'SOCIETYBENCH',
-      'auth.title': 'PRIVATE PREVIEW',
-      'auth.sub': 'Project page in development. Enter the access password to continue.',
-      'auth.placeholder': 'Password',
-      'auth.btn': '▸ UNLOCK',
-      'auth.err': 'Wrong password.',
 
       // ---- Sidebar --------------------------------------------------------
       'nav.brand': 'SOCIETYBENCH',
@@ -568,14 +560,6 @@ Accepted events join the official catalog and ship in the next benchmark version
       'lang.en': 'EN',
       'lang.zh': '中',
       'lang.toggle.title': '切换语言',
-
-      // ---- Auth gate ------------------------------------------------------
-      'auth.brand': 'SOCIETYBENCH',
-      'auth.title': '私密预览',
-      'auth.sub': '项目主页仍在开发中。请输入访问密码继续。',
-      'auth.placeholder': '密码',
-      'auth.btn': '▸ 解锁',
-      'auth.err': '密码错误。',
 
       // ---- Sidebar --------------------------------------------------------
       'nav.brand': 'SOCIETYBENCH',
@@ -1139,7 +1123,7 @@ Accepted events join the official catalog and ship in the next benchmark version
       if (val != null) el.innerHTML = val;
     });
 
-    // attributes: data-i18n-attr="placeholder:auth.placeholder,title:nav.foo"
+    // attributes: data-i18n-attr="placeholder:form.placeholder,title:nav.foo"
     document.querySelectorAll('[data-i18n-attr]').forEach(function (el) {
       const spec = el.getAttribute('data-i18n-attr');
       spec.split(',').forEach(function (pair) {

@@ -76,9 +76,7 @@ Then open <http://localhost:8000>. Opening `index.html` straight off the filesys
 works for the layout, but the `fetch()` calls that load the JSON are blocked by the browser's
 file-origin rules, so the leaderboard and the demo stay empty. Use the server.
 
-> **The homepage is behind a password gate.** It is a private preview: the page holds a
-> SHA-256 hash and unlocks in the browser, so it keeps the page out of casual view but is not
-> real access control. Remove the `#auth-gate` block from `index.html` to publish openly.
+The homepage is public and does not require an access password.
 
 #### 2. Regenerate the data
 
